@@ -1,0 +1,53 @@
+\ProvidesPackage{macros}
+
+\usepackage[english]{babel}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[hmargin=2cm, vmargin=2.5cm, tmargin=70pt, headsep=30pt, lmargin=2cm, rmargin=2cm, bmargin=80pt]{geometry}
+\usepackage{fancyhdr, amssymb, amsmath, amsthm, tcolorbox, asymptote, hyperref}
+\hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=blue, urlcolor=black}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[EL]{\nouppercase\leftmark}
+\fancyhead[OR]{\nouppercase\rightmark}
+\fancyhead[ER,OL]{\thepage}
+\fancyhead[C]{Su\&Ti\&Am --- BOOk}
+
+\newtheoremstyle{style1}
+{\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+{\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+{\itshape}% name of font to use in the body of the theorem
+{}% measure of space to indent
+{\bfseries}% name of head font
+{\\}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmname{#1}\thmnumber{ #2}\textnormal{\thmnote{ \textbf{(#3)}}}}
+
+\newtheoremstyle{style2}
+{\topsep}
+{\topsep}
+{}
+{}
+{\bfseries}
+{}
+{ }
+{\thmname{#1}\thmnumber{ #2}\textnormal{\thmnote{ \textbf{(#3)}}}}
+
+\theoremstyle{style1}
+\newtheorem{example_t}{Example}[section]
+
+\theoremstyle{style2}
+\newtheorem{problem}{Problem}[section]
+
+\newenvironment{example}{
+    \begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
+        \begin{example_t}
+            }{
+        \end{example_t}
+    \end{tcolorbox}
+}
+
+\newcommand{\sol}{\par \textbf{Solution:}\\}
+
+\setlength\parindent{0pt}

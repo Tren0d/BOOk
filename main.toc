@@ -1,0 +1,19 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Grids and tables}{2}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Invariants}{2}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Invariants as a method of solution}{2}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Invariants as a method of counting or bounding}{8}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}Graphs}{12}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Double counting}{14}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Induction}{16}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Complex numbers}{17}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Problems}{18}{section.1.6}%
+\contentsline {chapter}{\numberline {2}Algorithms}{21}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Greedy algorithms}{21}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Induction + Recursion}{24}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Invariants and Monovariants}{26}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Crazy algorithms}{29}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Information}{33}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Problems}{34}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Games}{37}{chapter.3}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
