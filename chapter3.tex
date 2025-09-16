@@ -1,3 +1,119 @@
-\chapter{Games}
+\chapter{Processes}
+In this chapter, we will consider processes. It might seem that processes and algorithms are similar topics, but the main difference is that we should construct something by ourselves, whereas in processes we can not create something new in problem, instead we can make judgements on which we have.
 
-In the olympiads usually we only considered games with ''complete information''. That means that every player (if there are multiple ones) knows fully what he (and other players) can do at any moment of time, so there is no hidden cards or random events. Some examples of such games are chess, tic-tac-toe and checkers.
+\section{Invariants and monovariants}
+As always, we will start with invariants, and monovariants. Fortunately, the idea of invariants is a very useful approach to practically every process problem: it might be very helpful to make several observations on processes.
+\begin{example}[IMO 1986]
+    To each vertex of a regular pentagon an integer is assigned, so that the sum of all five numbers is positive. If three consecutive vertices are assigned the numbers $x,y,z$ respectively, and $y<0$, then the following operation is allowed: $x,y,z$ are replaced by $x+y,-y,z+y$ respectively. This iteration is performed repeatedly as long as at least one of the five numbers is negative. Determine whether this procedure necessarily comes to an end after a finite number of steps.
+\end{example}
+\sol
+Answer: This procedure is always terminates.
+\\
+First, if all our numbers on the pentagon are labeled $x_i$, all the indices have taken the undo module 5. Let in the first step $(x_1,x_2,x_3,x_4,x_5) \to (x_1,x_2+x_3,-x_3,x_4+x_3,x_5)$
+We will solve this problem using monovariants. It is not hard to see that sum of all numbers written on the pentagon remains invariant. Because the sum is positive and remains invariant and at the end all numbers are also positive, this leads to the thought that pairwise differences should be small, so it can be an idea to consider pairwise differnces.  After several trials we can end with such monovariant:
+$f_0(x_1,x_2,x_3,x_4,x_5)=$
+$ \frac{1}{2} \sum_{i=1}^5 (x_{i+1}-x_i)^2$.
+WlOG assume that $x_4<0$, and after meticulous opening brackets it is not hard to see that our quantitiy is decrasing step by step. Because: $f_{\text{new}}-f_{\text{old}}=Sx_4<0$, where $S$ is sum of all numbers in pentagon. Because our quantity is decreasing, the process terminates after finite number of steps.
+
+
+In previous examples we have seen the problems related to monovariant, and of course we can solve certain algorithmical problems with invariants,
+
+
+\begin{example}[All-Russian 1997]
+There are some stones placed on an infinite (in both
+directions) row of squares labeled by integers. (There can be
+more than one stone on a given square). There are two types
+of moves:
+\\
+(i) Remove one stone from each of the squares n and n – 1
+and place one stone on n + 1
+\\
+(ii) Remove two stones from square n and place one stone on
+each of the squares n + 1 and n – 2.  
+Show that at some point no more moves can be made.
+\end{example}
+\sol
+Give a stone in square $k$ weight $\varphi^k$ with $\varphi= \frac{1+\sqrt{5}}{2}$, and it is not hard to see that the sum of all weights remains invariant due to the relation $\varphi^k = \varphi^{k-1} + \varphi^{k-2}$. Suppose that the process never terminates, from which there exists at least one square that is operated on infinitely many times. Consider the square of least value that is operated on finitely many times, and note that the square to the left of it is operated on infinitely, so arbitrarily many stones build up on the former square, so it must be operated on infinitely, contradiction. Thus all squares are operated on infinitely, so the index of the rightmost square that contains a stone grows arbitrarily large. At some point, the weight of the stone in that square exceeds the initial total weight, contradicting the invariant.
+\begin{example}
+
+
+\end{example}
+
+\section{Induction}
+\begin{example}
+\end{example}
+\section{Chip firing}
+\begin{example}[ISL 1994]
+1994 girls are seated in a circle. Initially one girl is given n coins. 
+In one move, each girl with at least 2 coins passes one coin to each 
+of her two neighbors. 
+(a) Show that if n < 1994, the game must terminate.
+(b) Show that if n = 1994, the game cannot terminate. 
+\end{example}
+\sol 
+Label the girls $G_1, G_2, …, G_{1994}$ and let $G_{1995} = G_1, G_0 = G_{1994}$. 
+Suppose the game doesn’t terminate. Then some girl must 
+pass coins infinitely times. If some girl passes only finitely 
+many times, there exist two adjacent girls, one of whom has 
+passed finitely many times and one of whom has passed 
+infinitely many times. The girl who has passed finitely many 
+times will then indefinitely accumulate coins after her final 
+pass, which is impossible. Hence every girl must pass coins 
+infinitely many times. 
+\\
+Now the key idea is the following: For any two neighboring 
+girls $G_i$ and $G_{i+1}$, let $c_i$ be the first coin ever passed between 
+them. After this, we may assume that $c_i$ always stays stuck 
+between $G_i$ and $G_{i+1}$, because whenever one of them has $c_i$ and 
+makes a move, we can assume the coin passed to the other girl 
+was $c_i$. Therefore, each coin is eventually stuck between two 
+girls. Since there are fewer than 1994 coins, this means there 
+exist two adjacent girls who have never passed a coin to each 
+other. This contradicts the result of the first paragraph. 
+(b) This is simple using invariants. Let a coin with girl i have 
+weight i, and let $G_1$ have all coins initially. In each pass from $G_i$
+to her neighbors, the total weight either doesn’t change or 
+changes by ±1994 (if $G_1$ passes to $G_1994$ or vice versa). So the
+total weight is invariant mod 1994. The initial weight is $1994$, 
+so the weight will always be divisible by $1994$. If the game 
+terminates, then each girl has one coin, so the final weight is 
+$1+2+3+…+ 1994 = (1994 x 1995)/2$ which is not divisible by 
+$1994$. Contradiction.
+\section{Ignore or redefine}
+\begin{example}
+\end{example}
+\section{Graphs}
+\subsection{Diamond lemma}
+\begin{example}
+Pirates have an infinite number of chests, numbered in natural numbers. Initially, the first chest contains 2,023 coins. Every day, the captain selects a chest with the number k, in which there are at least 2 more coins than in the next one, and transfers one coin from it to the next. One of these days, the captain won't be able to find such a chest. How could the coins have been distributed at this point?
+\end{example}
+\section{Discrete continuity}
+\begin{example}[Russia 2009]
+On a circle there are $2009$ nonnegative integers not greater than $100$. If two numbers sit next to each other, we can increase both of them by $1$. We can do this at most $ k$ times. What is the minimum $ k$ so that we can make all the numbers on the circle equal?
+\end{example}
+\section{Problems}
+\begin{problem}[IMO 2019]
+   The Bank of Bath issues coins with an $H$ on one side and a $T$ on the other. Harry has $n$ of these coins arranged in a line from left to right. He repeatedly performs the following operation: if there are exactly $k>0$ coins showing $H$, then he turns over the $k$-th coin from the left; otherwise, all coins show $T$ and he stops. \\ For example, if $n=3$ the process starting with the configuration $THT$ would be $THT \to HHT \to HTT \to TTT$, which stops after three operations. \\ Show that, for each initial configuration, Harry stops after a finite number of operations.
+\end{problem} 
+\begin{problem}[IMO 2022]
+The Bank of Oslo issues two types of coin: aluminum (denoted A) and bronze (denoted B). Marianne has $n$ aluminum coins and $n$ bronze coins arranged in a row in some arbitrary initial order. A chain is any subsequence of consecutive coins of the same type. Given a fixed positive integer $k \leq 2n$, Gilberty repeatedly performs the following operation: he identifies the longest chain containing the $k^{th}$ coin from the left and moves all coins in that chain to the left end of the row. For example, if $n=4$ and $k=4$, the process starting from the ordering $AABBBABA$ would be $AABBBABA \to BBBAAABA \to AAABBBBA \to BBBBAAAA \to ...$
+
+Find all pairs $(n,k)$ with $1 \leq k \leq 2n$ such that for every initial ordering, at some moment during the process, the leftmost $n$ coins will all be of the same type
+\end{problem}
+\begin{problem}[APMO 2025]
+Let $n \geq 3$ be an integer. There are $n$ cells on a circle, and each cell is assigned either $0$ or $1$. There is a rooster on one of these cells, and it repeats the following operation:
+\\\\
+$\bullet$ If the rooster is on a cell assigned $0$, it changes the assigned number to $1$ and moves to the next cell counterclockwise.
+\\\\
+$\bullet$ If the rooster is on a cell assigned $1$, it changes the assigned number to $0$ and moves to the cell after the next cell counterclockwise.
+
+Prove that the following statement holds after sufficiently many operations:
+If the rooster is on a cell $C$, then the rooster would go around the circle exactly three times, stopping again at $C$. Moreover, every cell would be assigned the same number as it was assigned right before the rooster went around the circle three times.
+\end{problem}
+\begin{problem}[Serbia 2022]
+On the board are written $n$ natural numbers, $n\in \mathbb{N}$. In one move it is possible to choose two
+equal written numbers and increase one by $1$ and decrease the other by $1$. Prove that in this
+the game cannot be played more than $\frac{n^3}{6}$ moves.
+\end{problem}
+
+
