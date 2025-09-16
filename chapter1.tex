@@ -9,13 +9,17 @@ Invariants are the most popular and the most efficient method to crack grid prob
 \subsection{Invariants as a method of solution}
 
 The most popular type of problem involving the grids and tables are formulated in the following way:
-\\\\
-\textit{You have some board (not necessary rectangular) and you need to divide/tile it into some pieces (not necessary same type or rectangular by shape). Can you do it?}
-\\\\
+
+\begin{fact}
+    You have some board (not necessary rectangular) and you need to divide/tile it into some pieces (not necessary same type or rectangular by shape). Can you do it?
+\end{fact}
+
 or like this
-\\\\
-\textit{You have some board (again, not necessary rectangular) and you need to place/move figure(s) on the board, so that some criteria are met.}
-\\\\
+
+\begin{fact}
+    You have some board (again, not necessary rectangular) and you need to place/move figure(s) on the board, so that some criteria are met.
+\end{fact}
+
 In this types of problems it is useful to color the board in such a way that some properties are constant -- they are \textit{invariant}.
 
 One of such problems is the following one
@@ -29,9 +33,9 @@ In this problem the thing we want to preserve -- is the content of each $1\times
 \textbf{Solution 1:}
 
 Firstly, to not overcomplicate things, let's try to use as few color as possible -- 2. With such a limitation in colors natural and obvious thing to attach to is the following \textit{invariant}:
-\\\\
-\textit{Every $1\times4$ rectangle contains 2 of red and cyan cells.}
-\\\\
+
+\note \textit{Every $1\times4$ rectangle contains 2 of red and cyan cells.}
+
 With this idea in the mind we need to create the coloring for which this is true. We will construct it dynamically (pretend that we are artist coloring the canvas as we go), start by doing the most general thing you can:
 
 Place the $1\times4$ in the corner of the table and paint 2 cell red and other 2 of cyan. Now shift your $1\times4$ rectangle by 1, new rectangle already has 2 cyan cells and 1 red cell, so the remaining cell must be red.
@@ -65,9 +69,9 @@ Now the board has 52 red cells and 48 cyan ones, i.e. not an equal number. This 
 As you may have noticed, after first 4 cells (in any direction) pattern repeats itself, so we can just focus on the one $4\times4$ board.
 
 As you have the 4-celled figure you also may be tempted to use 4 colors, so if we change our invariant to the following:
-\\\\
-\textit{Every $1\times4$ rectangle contains one cell of each of the 4 colors.}
-\\\\
+
+\note \textit{Every $1\times4$ rectangle contains one cell of each of the 4 colors.}
+
 You can easily get to one of multiple working examples.
 
 \begin{center}
@@ -123,7 +127,7 @@ Now using the same logic as in the previous example, we can use one of such $4\t
 With this coloring, the board has 25 cells of the 1st and 3rd colors, 26 cells of the 2nd, and 24 cells of the 4th, i.e., not same number.
 
 This means that it will not be possible to cut the $10\times 10$ board into $1\times4$ tetrominoes.
-\\\\
+
 This idea of coloring as we go and slightly changing the shape of our focus is the main idea for constructing such colorings.
 
 In the previous example we encountered with the simplest colorings and invariants. The next example with the similar taste
@@ -144,9 +148,13 @@ In the previous example we encountered with the simplest colorings and invariant
     \end{center}
 \end{example}
 
-If you try to make the same steps as in the previous example (using 2 or 4 colors) you will quickly fail, only possible coloring being checkerboards pattern which is simply useless in this problem.
+This problem is a little tricky one, to understand why, try using previous method and obtain coloring such that every figure contains exactly 2 red and 2 cyan cells (or the same but with 4 colors).
 
-So we need to find a little more complex coloring:
+There is an issue with this approach -- only possible coloring is checkerboard pattern, which is simply useless in this problem.
+
+
+
+So we need to find a little more complex coloring: 
 
 Color the columns into red and cyan alternatively.
 
@@ -966,4 +974,3 @@ Determine the smallest number of pieces Paul needs to make in order to accomplis
 \begin{problem}[IZhO 2020]
     Some squares of a $n \times n$ table ($n>2$) are black, the rest are white. In every white square we write the number of all the black squares having at least one common vertex with it. Find the maximum possible sum of all these numbers.
 \end{problem}
-

@@ -4,24 +4,39 @@
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[hmargin=2cm, vmargin=2.5cm, tmargin=70pt, headsep=30pt, lmargin=2cm, rmargin=2cm, bmargin=80pt]{geometry}
-\usepackage{fancyhdr, amssymb, amsmath, amsthm, tcolorbox, asymptote, hyperref}
+\usepackage{tikz, fancyhdr, amssymb, amsmath, amsthm, tcolorbox, asymptote, hyperref}
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=blue, urlcolor=black}
 
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[EL]{\nouppercase\leftmark}
-\fancyhead[OR]{\nouppercase\rightmark}
-\fancyhead[ER,OL]{\thepage}
-\fancyhead[C]{Su\&Ti\&Am --- BOOk}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[ER,OL]{\thepage}
+    \fancyhead[C]{Su\&Ti\&Am --- BOOk}
+}
+
+\fancypagestyle{fancy}{
+    \fancyhf{}
+    \fancyhead[C]{Su\&Ti\&Am --- BOOk}
+    \fancyhead[EL]{\nouppercase\leftmark}
+    \fancyhead[OR]{\nouppercase\rightmark}
+    \fancyhead[ER,OL]{\thepage}
+}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\newcommand{\NN}{\mathbb N}
+\newcommand{\QQ}{\mathbb Q}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\ZZ}{\mathbb Z}
 
 \newtheoremstyle{style1}
-{\topsep}% measure of space to leave above the theorem. E.g.: 3pt
-{\topsep}% measure of space to leave below the theorem. E.g.: 3pt
-{\itshape}% name of font to use in the body of the theorem
-{}% measure of space to indent
-{\bfseries}% name of head font
-{\\}% punctuation between head and body
-{ }% space after theorem head; " " = normal interword space
+{\topsep}                                          % measure of space to leave above the theorem. E.g.: 3pt
+{\topsep}                                          % measure of space to leave below the theorem. E.g.: 3pt
+{\itshape}                                         % name of font to use in the body of the theorem
+{}                                                 % measure of space to indent
+{\bfseries}                                        % name of head font
+{\\}                                               % punctuation between head and body
+{ }                                                % space after theorem head; " " = normal interword space
 {\thmname{#1}\thmnumber{ #2}\textnormal{\thmnote{ \textbf{(#3)}}}}
 
 \newtheoremstyle{style2}
@@ -40,6 +55,8 @@
 \theoremstyle{style2}
 \newtheorem{problem}{Problem}[section]
 
+\newtcolorbox{fact}{colback=green!5!white,colframe=green!75!black, arc=0mm}
+
 \newenvironment{example}{
     \begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
         \begin{example_t}
@@ -49,5 +66,4 @@
 }
 
 \newcommand{\sol}{\par \textbf{Solution:}\\}
-
-\setlength\parindent{0pt}
+\newcommand{\note}{\par $\rightarrow$ }

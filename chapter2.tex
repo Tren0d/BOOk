@@ -93,7 +93,7 @@ In the previous chapter, we have considered the simplest algorithms, without any
     Cards numbered 1 to $n$ are arranged at random in a row with $n \geq 5$. In a move, one may choose any block of consecutive cards whose numbers are in ascending or descending order and switch the block around. \\ For example, if $n=9$, then \\ (9 1 \underline{6 5 3} 2 7 4 8) might be changed to (9 1 \underline{3 5 6} 2 7 4 8). \\ Prove that in at most $2n-6$ moves, one can arrange the $n$ cards so that their numbers are in ascending or descending order.
 \end{example}
 
-\sol Let $f(n)$ be the minimum number of moves required to ‘arrange’ any permutation of the $n$ cards. Suppose we have a permutation with starting card  $k$. In $f(n-1)$ moves we can arrange the remaining $(n-1)$ cards to get either the sequence $(k, 1, 2, \dots, k-1, k+1, \dots, n)$ or $(k, n, n-1, \dots, k+1, k-1, \dots, 2, 1)$. In one move, we can make the former sequence $(k, k-1, k-2, \dots, 1, k+1, k+2, \dots, n)$ and with one more move we get the sequence $(1, 2, 3, \dots, n)$ and we are done. Similarly in the latter case we need only two additional moves to get $(n, n-1, \dots, 1)$. Thus, in either case, we can complete the task using $f(n-1) + 2$ moves, so $f(n) \leq f(n-1) + 2$.
+\sol Let $f(n)$ be the minimum number of moves required to 'arrange' any permutation of the $n$ cards. Suppose we have a permutation with starting card  $k$. In $f(n-1)$ moves we can arrange the remaining $(n-1)$ cards to get either the sequence $(k, 1, 2, \dots, k-1, k+1, \dots, n)$ or $(k, n, n-1, \dots, k+1, k-1, \dots, 2, 1)$. In one move, we can make the former sequence $(k, k-1, k-2, \dots, 1, k+1, k+2, \dots, n)$ and with one more move we get the sequence $(1, 2, 3, \dots, n)$ and we are done. Similarly in the latter case we need only two additional moves to get $(n, n-1, \dots, 1)$. Thus, in either case, we can complete the task using $f(n-1) + 2$ moves, so $f(n) \leq f(n-1) + 2$.
 \\\\
 Now, to prove the bound for general $n \geq 5$, it suffices to prove it for $n=5$ and then induct using $f(n) \leq f(n-1) + 2$. The proof of $f(5)=4$ we left to the reader as an exercise.
 
@@ -118,7 +118,6 @@ Induction step:  Split the row of players into $N$ segments, each with $N+1$ peo
 \\\\
 Then we can remove all the other players in the first segment (apart from Amir and Timur), which gives $N-1$ players deleted. Next, we remove the rest of the $N+1$ tallest players (again, excluding Timur and Amir), which gives at most another $N-1$ players deleted. Hence, at most $2(N-1)$ players were removed and we still have at least $N(N-1)$ people. (excluding Timur and Amir), so we can apply the induction hypothesis to get $2(N-1)$ players, and we can get the desired result. Lastly, since Amir and Timur will now be taller than these $2(N-1)$ players (and they will be next to each other), we can add them in and all the conditions still hold. This completes the induction.
 
-
 \newpage
 
 \section{Invariants and Monovariants}
@@ -128,26 +127,23 @@ Here, we will introduce another crucial idea in algorithm problems: invariants a
 \begin{example}
     Some numbers are written in the cells of the table $m \times n$. It is allowed to change the sign of all numbers in one column or in one row at the same time. Prove that by several such operations it is possible to ensure that the sums of the numbers in any row and in any column are nonnegative.
 \end{example}
-\sol
-Consider the following algorithm: if the sum of the numbers in a row (or in a column) is negative, then we will change the sign of the numbers in this row (column). To prove that this process stops, we will find some characteristics of the table, which increases monotonously with each step. The desired characteristic is the sum of all cells. This amount increases at each step. The process will end, since the number of character arrangements for numbers is finite.
+
+\sol Consider the following algorithm: if the sum of the numbers in a row (or in a column) is negative, then we will change the sign of the numbers in this row (column). To prove that this process stops, we will find some characteristics of the table, which increases monotonously with each step. The desired characteristic is the sum of all cells. This amount increases at each step. The process will end, since the number of character arrangements for numbers is finite.
 
 \begin{example}[Canada 2014]
     A number of robots are placed on the squares of a finite, rectangular grid of squares. A square can hold any number of robots. Every edge of each square of the grid is classified as either passable or impassable. All edges on the boundary of the grid are impassable. You can give any of the commands up, down, left, or right.\\
     All of the robots then simultaneously try to move in the specified direction. If the edge adjacent to a robot in that direction is passable, the robot moves across the edge and into the next square. Otherwise, the robot remains on its current square. You can then give another command of up, down, left, or right, then another, for as long as you want. Suppose that for any individual robot, and any square on the grid, there is a finite sequence of commands that will move that robot to that square. Prove that you can also give a finite sequence of commands such that all of the robots end up on the same square at the same time.
 \end{example}
 
-\sol
-Clearly, it suffices to consider the case where two robots are on the grid. Define the distance between two robots to be the minimum number of commands needed for a robot to travel from one of the squares to the other.
+\sol Clearly, it suffices to consider the case where two robots are on the grid. Define the distance between two robots to be the minimum number of commands needed for a robot to travel from one of the squares to the other.
 \\\\
 Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a 'faster' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
-
 
 \begin{example} [APMO 1997]
     n people are seated in a circle. A total of nk coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
 \end{example}
-\sol
-We want each person to end up with k coins. Let the people be 
-labeled from $1, 2, \dots, n$ in order (note that $n$ is next to 1 since they are sitting in a circle). Suppose that person $i$ has $c_i$ coins. Now, we introduce the variable $d_i = c_i - k$, since this indicates how close a person is to having the desired number of coins. Consider the quantity $X = |d_1| + |d_1 + d_2| + |d1 + d_2 + d_3| + \dots + |d_1 + d_2 + \dots + d_{n-1}|$
+
+\sol We want each person to end up with k coins. Let the people be labeled from $1, 2, \dots, n$ in order (note that $n$ is next to 1 since they are sitting in a circle). Suppose that person $i$ has $c_i$ coins. Now, we introduce the variable $d_i = c_i - k$, since this indicates how close a person is to having the desired number of coins. Consider the quantity $X = |d_1| + |d_1 + d_2| + |d1 + d_2 + d_3| + \dots + |d_1 + d_2 + \dots + d_{n-1}|$
 \\\\
 Clearly $X = 0$ if and only if everyone has k coins, so our goal is to make $X = 0$. The reason for this choice of $X$ is that moving a coin between person $j$ and person $j + 1$ for $1 \leq j \leq n -1$ changes $X$ by exactly 1 as only the term $|d_1 + d_2 + \dots + d_j|$ will be affected. Hence, $X$ is a monovariant and is fairly easy to control (except when moving a coin from 1 to n or vice versa). Let $s_j = d_1 + d_2 + \dots + d_j$.
 \\\\
@@ -158,12 +154,15 @@ Thus, at any stage, we can always decrease $X$ by at least one by moving between
 \newpage
 
 \section{Information}
+
 In previous examples, we encountered problems that required us just to prove something or bound something by reference to smaller cases, like in the case of induction or recursion, but in this section we will get acquainted with other methods of bounding, primarily by using common sense, and methods of constructing algorithms.  
+
 \begin{example} [Russia 2005]
     Different numbers are written on the backs of the 2005 cards (one on each one). In one question, you can point to any three cards and find out the set of numbers written on them. What is the minimum number of questions to find out which numbers are written on each card?
 \end{example}
-\sol
-Okay, problem statement is clear, but how can we approach bounding? In such situations, we will examine the minor facts or observations that might seem obvious and useless. First of all, it is clear that each card is involved in at least one inquiry, otherwise we will not determine the number on it. Assume that we asked $N$ questions. Let there be $k$ cards that participated in exactly one question. Then, there cannot be two such cards in one question. Indeed, if two of such cards participated in the same question, then swapping the numbers on these cards would not change the answers to the questions; therefore, it is impossible to determine which number is written on which of them. Therefore, $k\leq N$ . The rest of the cards participated in at least two questions. Also, if we sum up the number the number of questions for each card in which it participated, we get a tripled number of questions.
+
+\sol Okay, problem statement is clear, but how can we approach bounding? In such situations, we will examine the minor facts or observations that might seem obvious and useless. First of all, it is clear that each card is involved in at least one inquiry, otherwise we will not determine the number on it. Assume that we asked $N$ questions. Let there be $k$ cards that participated in exactly one question. Then, there cannot be two such cards in one question. Indeed, if two of such cards participated in the same question, then swapping the numbers on these cards would not change the answers to the questions; therefore, it is impossible to determine which number is written on which of them. Therefore, $k\leq N$ . The rest of the cards participated in at least two questions. Also, if we sum up the number the number of questions for each card in which it participated, we get a tripled number of questions.
+
 Therefore, $3N \geq k + 2(2005-k) = 4010-k \geq 4010-N ,$ so, $2N \geq 2005 \rightarrow  N\geq 1003$. 
 \\\\
 Now we will present an algorithm to find the numbers on the cards for 1003 questions. Let's put aside one card, and divide the rest into 334 groups of 6 cards. In each group, we will number the cards with numbers from 1 to 6 and ask three questions: (1,2,3) , (3,4,5) and (5,6,1) .
@@ -174,8 +173,8 @@ It remains to ask about the deferred card along with any two already known ones.
 \begin{example} [Russia 1997]
     Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
 \end{example}
-\sol
-Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
+
+\sol Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
 
 In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
 
@@ -183,12 +182,11 @@ Strategy for $n=101$:
 
 Let the sum of all the digits in the odd positions have a remainder $s$ divided by 10, and the sum of all the digits in the even positions have a remainder $t$ divided by 10 (the positions are numbered from left to right by numbers from 0 to 100). Let's assume $p = 10s + t$. At this moment, assistant closes the numbers at positions $p$ and $p + 1$.  After seeing which numbers are closed, the magician will determine $p$, and therefore $s$ and $t$. Note that one closed digit is in an odd position, and the other is in an even position. Thus, by calculating the sum of the open digits in the odd positions and knowing $s$, the magician will determine the closed digit in the odd position. Similarly, a closed digit is determined in an even position.
 
-\begin{example} [IMSC 2025!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]
-
+\begin{example} [IMSC 2025]
 There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
 \end{example}
-\sol
-In general, there are $3^n$ possible positions for our \textbf{fat} pair. In addition, every inquiry gives us information about the number of fat stones in the selected set. Assume that there are $k$ inquires, so there is maximum $3^k$ cases, so $3^k \geq 3^n \rightarrow k\geq n$. 
+
+\sol In general, there are $3^n$ possible positions for our \textbf{fat} pair. In addition, every inquiry gives us information about the number of fat stones in the selected set. Assume that there are $k$ inquires, so there is maximum $3^k$ cases, so $3^k \geq 3^n \rightarrow k\geq n$. 
 
 \section{Crazy algorithms}
 
@@ -423,6 +421,34 @@ no segments (two segments can intersect only if they have a common vertex, but t
 
 \newpage
 
+\section{Information}
+\textit{In this chapter, we will see problems that needs to count some information that we can get after several moves to be able to solve problems.}
+\begin{example}
+    Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
+\end{example}
+\sol
+Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
+
+In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
+
+Strategy for $n=101$:
+
+Let $a_{0},a_{1}, \dots,a_{99},a_{100}$ be the first $101$ ordered numbers written by the spectator. At first, helper computes $S_{1}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$. Next, helper puts the black disc on numbers $a_{S_{1}}$ and $a_{(S_{1}+1)}$
+\\\\
+Magician first looks at the position of the black disc and knows $S_{1}$. Next, magician computes $S_{2}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$, using $0$ and $0$ for the two hidden positions. Magician computes $S_{3}=S_{1}-S_{2}\pmod{100}$ and the final step is elementary :
+$S_{3}$ is a number between $0$ and $99$ and so $S_{3}=10a+b$
+\\\\
+Then, if $S_{1}$ is even, the ordered two hidden numbers are $(a,b)$
+And if $S_{1}$ is odd, the ordered two hidden numbers are $(b,a)$
+
+\begin{example} [IMSC 2025]
+
+There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are fat and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
+\end{example}
+\sol
+
+\newpage
+
 \section{Problems}
 
 \begin{problem} [APMO 2022]
@@ -511,4 +537,3 @@ In a $9\times 9$ table, all cells contain zeros. The following operations can be
 \end{enumerate}
 Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
 \end{problem}
-\end{document}
