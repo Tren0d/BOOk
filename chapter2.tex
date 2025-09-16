@@ -1,5 +1,5 @@
 \chapter{Algorithms}
-
+ 
 Algorithms are vast part of olympiad combinatorics. It might seem that algorithms are not so important, or even algorithms are full intuition, but this is only part of the story. In this chapter, we will present crucial ideas for cracking complicated algorithm problems. However, as usual, we will start with the most intuitive approach to crack algorithms.  
 
 \section{Greedy algorithms}
@@ -141,37 +141,6 @@ Clearly, it suffices to consider the case where two robots are on the grid. Defi
 \\\\
 Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a 'faster' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
 
-\begin{example}[IMO 1986]
-    To each vertex of a regular pentagon an integer is assigned, so that the sum of all five numbers is positive. If three consecutive vertices are assigned the numbers $x,y,z$ respectively, and $y<0$, then the following operation is allowed: $x,y,z$ are replaced by $x+y,-y,z+y$ respectively. This iteration is performed repeatedly as long as at least one of the five numbers is negative. Determine whether this procedure necessarily comes to an end after a finite number of steps.
-\end{example}
-\sol
-Answer: This procedure is always terminates.
-\\
-First, if all our numbers on the pentagon are labeled $x_i$, all the indices have taken the undo module 5. Let in the first step $(x_1,x_2,x_3,x_4,x_5) \to (x_1,x_2+x_3,-x_3,x_4+x_3,x_5)$
-We will solve this problem using monovariants. It is not hard to see that sum of all numbers written on the pentagon remains invariant. Because the sum is positive and remains invariant and at the end all numbers are also positive, this leads to the thought that pairwise differences should be small, so it can be an idea to consider pairwise differnces.  After several trials we can end with such monovariant:
-$f_0(x_1,x_2,x_3,x_4,x_5)=$
-$ \frac{1}{2} \sum_{i=1}^5 (x_{i+1}-x_i)^2$.
-WlOG assume that $x_4<0$, and after meticulous opening brackets it is not hard to see that our quantitiy is decrasing step by step. Because: $f_{\text{new}}-f_{\text{old}}=Sx_4<0$, where $S$ is sum of all numbers in pentagon. Because our quantity is decreasing, the process terminates after finite number of steps. 
-
-In previous examples we have seen the problems related to monovariant, and of course we can solve certain algorithmical problems with invariants, 
-
-\begin{example}[All-Russian 1997]
-There are some stones placed on an infinite (in both 
-directions) row of squares labeled by integers. (There can be 
-more than one stone on a given square). There are two types 
-of moves: 
-\\
-(i) Remove one stone from each of the squares n and n – 1 
-and place one stone on n + 1 
-\\
-(ii) Remove two stones from square n and place one stone on 
-each of the squares n + 1 and n – 2.   
-Show that at some point no more moves can be made.
-\end{example}
-\sol
-
-Give a stone in square $k$ weight $\varphi^k$ with $\varphi= \frac{1+\sqrt{5}}{2}$, and it is not hard to see that the sum of all weights remains invariant due to the relation $\varphi^k = \varphi^{k-1} + \varphi^{k-2}$. Suppose that the process never terminates, from which there exists at least one square that is operated on infinitely many times. Consider the square of least value that is operated on finitely many times, and note that the square to the left of it is operated on infinitely, so arbitrarily many stones build up on the former square, so it must be operated on infinitely, contradiction. Thus all squares are operated on infinitely, so the index of the rightmost square that contains a stone grows arbitrarily large. At some point, the weight of the stone in that square exceeds the initial total weight, contradicting the invariant.
-
 
 \begin{example} [APMO 1997]
     n people are seated in a circle. A total of nk coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
@@ -187,6 +156,43 @@ We claim that as long as $X > 0$ it is always possible to reduce $X$ by 1 by a m
 Thus, at any stage, we can always decrease $X$ by at least one by moving between $j$ and $j +1$ for some $1 \le j \le n -1$. We have not yet considered the effect of a move between 1 and n. Thus our full algorithm is as follows: At any point of time, if we can decrease $X$ by moving a coin from 1 to n or n to 1, do this. Otherwise, decrease $X$ by 1 by the algorithm described in the above paragraph.
 
 \newpage
+
+
+\newpage
+
+\section{Information}
+In previous examples, we encountered problems that required us just to prove something or bound something by reference to smaller cases, like in the case of induction or recursion, but in this section we will get acquainted with other methods of bounding, primarily by using common sense, and methods of constructing algorithms.  
+\begin{example} [Russia 2005]
+    Different numbers are written on the backs of the 2005 cards (one on each one). In one question, you can point to any three cards and find out the set of numbers written on them. What is the minimum number of questions to find out which numbers are written on each card?
+\end{example}
+\sol
+Okay, problem statement is clear, but how can we approach bounding? In such situations, we will examine the minor facts or observations that might seem obvious and useless. First of all, it is clear that each card is involved in at least one inquiry, otherwise we will not determine the number on it. Assume that we asked $N$ questions. Let there be $k$ cards that participated in exactly one question. Then, there cannot be two such cards in one question. Indeed, if two of such cards participated in the same question, then swapping the numbers on these cards would not change the answers to the questions; therefore, it is impossible to determine which number is written on which of them. Therefore, $k\leq N$ . The rest of the cards participated in at least two questions. Also, if we sum up the number the number of questions for each card in which it participated, we get a tripled number of questions.
+Therefore, $3N \geq k + 2(2005-k) = 4010-k \geq 4010-N ,$ so, $2N \geq 2005 \rightarrow  N\geq 1003$. 
+\\\\
+Now we will present an algorithm to find the numbers on the cards for 1003 questions. Let's put aside one card, and divide the rest into 334 groups of 6 cards. In each group, we will number the cards with numbers from 1 to 6 and ask three questions: (1,2,3) , (3,4,5) and (5,6,1) .
+
+Then the numbers on cards 1, 3, and 5 occur in two answers (for different cards, in different pairs), and they are uniquely determined. Also, the numbers on cards 2, 4, and 6 are the remaining numbers in each of the answers. So for $\frac{2004}{6} * 3 = 1002$ questions, we will find the numbers on the 2004 cards.
+It remains to ask about the deferred card along with any two already known ones.
+
+\begin{example} [Russia 1997]
+    Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
+\end{example}
+\sol
+Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
+
+In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
+
+Strategy for $n=101$:
+
+Let the sum of all the digits in the odd positions have a remainder $s$ divided by 10, and the sum of all the digits in the even positions have a remainder $t$ divided by 10 (the positions are numbered from left to right by numbers from 0 to 100). Let's assume $p = 10s + t$. At this moment, assistant closes the numbers at positions $p$ and $p + 1$.  After seeing which numbers are closed, the magician will determine $p$, and therefore $s$ and $t$. Note that one closed digit is in an odd position, and the other is in an even position. Thus, by calculating the sum of the open digits in the odd positions and knowing $s$, the magician will determine the closed digit in the odd position. Similarly, a closed digit is determined in an even position.
+
+\begin{example} [IMSC 2025!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]
+
+There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
+\end{example}
+\sol
+In general, there are $3^n$ possible positions for our \textbf{fat} pair. In addition, every inquiry gives us information about the number of fat stones in the selected set. Assume that there are $k$ inquires, so there is maximum $3^k$ cases, so $3^k \geq 3^n \rightarrow k\geq n$. 
+
 
 \section{Crazy algorithms}
 
@@ -417,35 +423,7 @@ Let's define the operation $\oplus $ on a triangle $2B$ or $2R$ as follows:
     \item Since any triangle $2R$ or $2B$ contains only a finite number of points inside, the operation will end at some point.
 \end{itemize}
 Let's take the original graph and connect all neighboring vertices of the convex hull with an edge. Then we take any black point inside a convex 100-gon and divide the graph into 100 triangles of the form 2R, and perform $\oplus $ for each of them. From the construction, it can be understood that the newly found points inside the triangles have an edge with at least one previous vertex of the same color. From this we can conclude that the red and black dots are connected. In addition, no two multicolored edges intersect because we have performed a triangulation that does not allow for intersection.
-no segments (two segments can intersect only if they have a common vertex, but then all the ends of these two segments are the same color).
-
-\newpage
-
-\section{Information}
-\textit{In this chapter, we will see problems that needs to count some information that we can get after several moves to be able to solve problems.}
-\begin{example}
-    Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
-\end{example}
-\sol
-Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
-
-In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
-
-Strategy for $n=101$:
-
-Let $a_{0},a_{1}, \dots,a_{99},a_{100}$ be the first $101$ ordered numbers written by the spectator. At first, helper computes $S_{1}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$. Next, helper puts the black disc on numbers $a_{S_{1}}$ and $a_{(S_{1}+1)}$
-\\\\
-Magician first looks at the position of the black disc and knows $S_{1}$. Next, magician computes $S_{2}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$, using $0$ and $0$ for the two hidden positions. Magician computes $S_{3}=S_{1}-S_{2}\pmod{100}$ and the final step is elementary :
-$S_{3}$ is a number between $0$ and $99$ and so $S_{3}=10a+b$
-\\\\
-Then, if $S_{1}$ is even, the ordered two hidden numbers are $(a,b)$
-And if $S_{1}$ is odd, the ordered two hidden numbers are $(b,a)$
-
-\begin{example} [IMSC 2025]
-
-There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are fat and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
-\end{example}
-\sol
+no segments (two segments can intersect only if they have a common vertex, but then all the ends of these two segments are the same color).%
 
 \newpage
 
@@ -536,4 +514,5 @@ In a $9\times 9$ table, all cells contain zeros. The following operations can be
     \item Choose an arbitrary column, subtract one from all its numbers, and shift all these numbers one cell down (and place the bottommost number in the top cell).
 \end{enumerate}
 Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
+
 \end{problem}
