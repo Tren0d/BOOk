@@ -1,539 +1,73 @@
-\chapter{Algorithms}
-
-Algorithms are vast part of olympiad combinatorics. It might seem that algorithms are not so important, or even algorithms are full intuition, but this is only part of the story. In this chapter, we will present crucial ideas for cracking complicated algorithm problems. However, as usual, we will start with the most intuitive approach to crack algorithms.  
-
-\section{Greedy algorithms}
-
-Greedy algorithms are algorithms that make the best possible short -- term choices, hence in each step maximizing short -- term gain. These words will seem clearer in next chapter:
-
-\begin{example} 
-    In a graph $G$ with $n$ vertices, there is no vertex with degree greater than $a$. Show that one can color the vertices using at most $a+1$ colors, such that no two neighboring vertices of the same color. 
-\end{example}
-
-\sol
-We will provide clear algorithm to this problem. At first, we will arrange the vertices in an arbitrary order. Let the colors be $1, 2, 3\dots$, and color the first vertex with color 1. Here is a greedy part of our algorithm: in each stage, take the next vertex in the order and color it with the smallest color that has not yet been used on any of its neighbors.
-
-\begin{center}
-    \begin{asy}
-        size(8cm, 0);
-        int n = 7;
-        real a = 360/n;
-        for(int i = 0; i < n; ++ i){
-        	draw((0, 0)--dir(i*a));
-        }
-        label("1st color", dir(a), dir(a), hsv(a, 1, 1));
-        label("2nd color", dir(0), dir(0), hsv(0, 1, 1));
-        label("3rd color", dir(-a), dir(-a), hsv(-a, 1, 1));
-        label("4th color", dir(-2*a), dir(-2*a), hsv(-2*a, 1, 1));
-        label("\dots", dir(-3*a), dir(-3*a), hsv(-3*a, 1, 1));
-        label("\dots", dir(3*a), dir(3*a), hsv(3*a, 1, 1));
-        label("$\leq a$-th color", dir(2*a), dir(2*a), hsv(2*a, 1, 1));
-    \end{asy}
-\end{center}
-
-Now we will prove that our algorithm indeed works. Clearly this algorithm ensures that two adjacent vertices will not be the same color. It also ensures that at most $a+1$ colors are used: each vertex has at most $a$ neighbors, so when coloring a particular vertex $v$, at most $a$ colors have been used by its neighbors, so at least one color in the set $\{1, 2, 3, \dots, a+1\}$ has not been used. The minimum such color will be used for the vertex $v$. Hence, all vertices are colored using colors in the set $\{1, 2, 3,\dots, a+1\}$ and the problem is solved.
-\\\\
-To recall, in this problem we employed the simplest, almost foolish algorithm - yet it proved remarkably effective. We have only one obstacle, and we have tried to overcome only this obstacle in the most effective way, without paying attention to what happens to others. Of course, this approach will not be convenient, if we have several important quantities. However, greedy algorithms might be surprisingly helpful, even in complex problems, like next two examples.
-
-\begin{example}
-    In a graph $G$ with $V$ vertices and $E$ edges, show that there exists an induced subgraph H with each vertex having degree at least $\frac{E}{V}$. \\ (In other words, a graph with average degree $d$ has an induced subgraph with minimum degree at least $\frac{d}{2}$).
-\end{example}
-
-\sol Note that the average degree of a vertex is $\frac{2E}{V}$. Intuitively, we should remove the 'bad' vertices: vertices that have degree $<\frac{E}{V}$. Thus, a natural algorithm for finding such a subgraph is as follows: start with graph $G$, and as long as there exists a vertex with degree $<\frac{E}{V}$, delete it.
-
-\begin{center}
-    \begin{asy}
-        size(8cm, 0);
-        pair a = (0, 0), b = (3, 0), c = (1, 2), d = (1, -3), e = (-3, -1), f = (-2, 2), g = (4, 5);
-        draw(a--b--c--cycle, cyan);
-        draw(a--d^^a--e^^a--f--g);
-        dot("Good", a, W, green);
-        dot("Good", b, E, green);
-        dot("Good", c, N, green);
-        dot("Bad", d, S, red);
-        dot("Bad", e, SW, red);
-        dot("Will become bad", f, W, purple);
-        dot("Bad", g, N, red);
-        label("$\frac{E}{V}=1$", (-3, 4));
-    \end{asy}
-\end{center}
-
-However, remember that while deleting a vertex we are also deleting the edges incident to it, and in the process vertices that were initially not ‘bad’ may become bad in the subgraph formed. What if we end up with a graph with all vertices bad? Fortunately, this will not happen: notice that the ratio of $\frac{\text{edges}}{\text{vertices}}$ is strictly increasing (it started at $\frac{E}{V}$ and each time we deleted a vertex, less than $\frac{E}{V}$ edges were deleted by the condition of our algorithm). 
-\\\\
-Hence, it is impossible to reach a stage when only one vertex is remaining, since in this case the $\frac{\text{edges}}{\text{vertices}}$ ratio is 0. So, at some point, our algorithm must terminate, leaving us with a graph with more than one vertex, all of whose vertices have degree at least $\frac{E}{V}$. 
-
-\begin{example} [ISL 2001]
-    A set of three nonnegative integers ${x, y, z}$ with $x<y<z$ satisfying ${z-y, y-x} = {a, b}$, where $a$ and $b$ are distinct positive integers and $a < b$, is called a historic set. Show that the set of all nonnegative integers can be written as a disjoint union of historic sets. 
-\end{example}
-
-\sol Note that a historic set is in the form $\{x, x+a, x+a+b\}$ (which we will call a small set) or $\{x, x+b, x+a+b\}$ (which we will call a large set).
-\\\\
-We can use the following algorithm to achieve this task:
-We let $x$ be the smallest number not yet covered. If none of the numbers in the small set have been covered already, then we use a small set, otherwise we use a large set.
-\\\\
-Now we prove that this algorithm works. We prove that if the small set does not work, then the large set will always work.
-\\\\
-Assume for the sake of contradiction that the large set does not work.
-\\\\
-Clearly the $x$ element can not have already been covered.
-
-If the $x+a+b$ element has been covered, then that means that on the previous step, we either used the small set on $x+b$ or the large set on $x+a$. However, this is impossible as $x < x+a < x+b$.
-\\\\
-If the $x+b$ has already been covered, then either we used the small set on $x+b-a$, or we used any set on $x-a$. Clearly the first one is impossible as $x+b-a>x$. Now we consider the second case. If we used the small set on $x-a$, then it would imply that we would have already covered $x$, a contradiction. If we used the large set, then that means that some element in the small set was already covered. If $x+b$ was already covered, then this implies that $x$ was already covered, contradiction. Otherwise, this implies that $x$ was already covered, another contradiction.
-\\\\
-Therefore, a situation where both sets do not work, and the algorithm always works
-
-\newpage
-
-\section{Induction + Recursion}
-
-In the previous chapter, we have considered the simplest algorithms, without any additional ideas. In this chapter, we will look through various examples that will deal with the reference to smaller cases.
-
-\begin{example}
-    Cards numbered 1 to $n$ are arranged at random in a row with $n \geq 5$. In a move, one may choose any block of consecutive cards whose numbers are in ascending or descending order and switch the block around. \\ For example, if $n=9$, then \\ (9 1 \underline{6 5 3} 2 7 4 8) might be changed to (9 1 \underline{3 5 6} 2 7 4 8). \\ Prove that in at most $2n-6$ moves, one can arrange the $n$ cards so that their numbers are in ascending or descending order.
-\end{example}
-
-\sol Let $f(n)$ be the minimum number of moves required to ‘arrange’ any permutation of the $n$ cards. Suppose we have a permutation with starting card  $k$. In $f(n-1)$ moves we can arrange the remaining $(n-1)$ cards to get either the sequence $(k, 1, 2, \dots, k-1, k+1, \dots, n)$ or $(k, n, n-1, \dots, k+1, k-1, \dots, 2, 1)$. In one move, we can make the former sequence $(k, k-1, k-2, \dots, 1, k+1, k+2, \dots, n)$ and with one more move we get the sequence $(1, 2, 3, \dots, n)$ and we are done. Similarly in the latter case we need only two additional moves to get $(n, n-1, \dots, 1)$. Thus, in either case, we can complete the task using $f(n-1) + 2$ moves, so $f(n) \leq f(n-1) + 2$.
-\\\\
-Now, to prove the bound for general $n \geq 5$, it suffices to prove it for $n=5$ and then induct using $f(n) \leq f(n-1) + 2$. The proof of $f(5)=4$ we left to the reader as an exercise.
-
-\begin{example} [IMO 2017]
-    An integer $N \ge 2$ is given. A collection of $N(N + 1)$ soccer players, no two of whom are of the same height, stand in a row. Sir Alex wants to remove $N(N - 1)$ players from this row leaving a new row of $2N$ players in which the following $N$ conditions hold:\\
-    \begin{tabular}{rl}
-        1.& no one stands between the two tallest players\\
-        2.& no one stands between the third and fourth tallest players\\
-        &\vdots\\
-        $N.$& no one stands between the two shortest players.
-    \end{tabular}\\
-    Show that this is always possible.
-\end{example}
-
-\sol We will crack this problem by induction on $N$ with an algorithm.
-\\\\
-Base: The case when $n = 1$ is trivial; the original two soccer players work. 
-\\\\
-Induction hypothesis: Sir Alex has an algorithm for $N(N-1)$ soccer players. 
-\\\\
-Induction step:  Split the row of players into $N$ segments, each with $N+1$ people. Consider the $N+1$ tallest people, at least two of them will be in one of the segments by Pigeonhole principle. WLOG, let it be the first segment. Call these two people Timur and Amir.
-\\\\
-Then we can remove all the other players in the first segment (apart from Amir and Timur), which gives $N-1$ players deleted. Next, we remove the rest of the $N+1$ tallest players (again, excluding Timur and Amir), which gives at most another $N-1$ players deleted. Hence, at most $2(N-1)$ players were removed and we still have at least $N(N-1)$ people. (excluding Timur and Amir), so we can apply the induction hypothesis to get $2(N-1)$ players, and we can get the desired result. Lastly, since Amir and Timur will now be taller than these $2(N-1)$ players (and they will be next to each other), we can add them in and all the conditions still hold. This completes the induction.
-
-
-\newpage
-
-\section{Invariants and Monovariants}
-
-Here, we will introduce another crucial idea in algorithm problems: invariants and monovariants. To reiterate from previous chapter: invariant is a quantity that does not change, and monovariant is a quantity that changes monotonically: it is either always increasing or decreasing. We will start with a simple, introductory example: 
-
-\begin{example}
-    Some numbers are written in the cells of the table $m \times n$. It is allowed to change the sign of all numbers in one column or in one row at the same time. Prove that by several such operations it is possible to ensure that the sums of the numbers in any row and in any column are nonnegative.
-\end{example}
-\sol
-Consider the following algorithm: if the sum of the numbers in a row (or in a column) is negative, then we will change the sign of the numbers in this row (column). To prove that this process stops, we will find some characteristics of the table, which increases monotonously with each step. The desired characteristic is the sum of all cells. This amount increases at each step. The process will end, since the number of character arrangements for numbers is finite.
-
-\begin{example}[Canada 2014]
-    A number of robots are placed on the squares of a finite, rectangular grid of squares. A square can hold any number of robots. Every edge of each square of the grid is classified as either passable or impassable. All edges on the boundary of the grid are impassable. You can give any of the commands up, down, left, or right.\\
-    All of the robots then simultaneously try to move in the specified direction. If the edge adjacent to a robot in that direction is passable, the robot moves across the edge and into the next square. Otherwise, the robot remains on its current square. You can then give another command of up, down, left, or right, then another, for as long as you want. Suppose that for any individual robot, and any square on the grid, there is a finite sequence of commands that will move that robot to that square. Prove that you can also give a finite sequence of commands such that all of the robots end up on the same square at the same time.
-\end{example}
-
-\sol
-Clearly, it suffices to consider the case where two robots are on the grid. Define the distance between two robots to be the minimum number of commands needed for a robot to travel from one of the squares to the other.
-\\\\
-Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a 'faster' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
-
-\begin{example}[IMO 1986]
-    To each vertex of a regular pentagon an integer is assigned, so that the sum of all five numbers is positive. If three consecutive vertices are assigned the numbers $x,y,z$ respectively, and $y<0$, then the following operation is allowed: $x,y,z$ are replaced by $x+y,-y,z+y$ respectively. This iteration is performed repeatedly as long as at least one of the five numbers is negative. Determine whether this procedure necessarily comes to an end after a finite number of steps.
-\end{example}
-\sol
-Answer: This procedure is always terminates.
-\\
-First, if all our numbers on the pentagon are labeled $x_i$, all the indices have taken the undo module 5. Let in the first step $(x_1,x_2,x_3,x_4,x_5) \to (x_1,x_2+x_3,-x_3,x_4+x_3,x_5)$
-We will solve this problem using monovariants. It is not hard to see that sum of all numbers written on the pentagon remains invariant. Because the sum is positive and remains invariant and at the end all numbers are also positive, this leads to the thought that pairwise differences should be small, so it can be an idea to consider pairwise differnces.  After several trials we can end with such monovariant:
-$f_0(x_1,x_2,x_3,x_4,x_5)=$
-$ \frac{1}{2} \sum_{i=1}^5 (x_{i+1}-x_i)^2$.
-WlOG assume that $x_4<0$, and after meticulous opening brackets it is not hard to see that our quantitiy is decrasing step by step. Because: $f_{\text{new}}-f_{\text{old}}=Sx_4<0$, where $S$ is sum of all numbers in pentagon. Because our quantity is decreasing, the process terminates after finite number of steps. 
-
-In previous examples we have seen the problems related to monovariant, and of course we can solve certain algorithmical problems with invariants, 
-
-\begin{example}[All-Russian 1997]
-There are some stones placed on an infinite (in both 
-directions) row of squares labeled by integers. (There can be 
-more than one stone on a given square). There are two types 
-of moves: 
-\\
-(i) Remove one stone from each of the squares n and n – 1 
-and place one stone on n + 1 
-\\
-(ii) Remove two stones from square n and place one stone on 
-each of the squares n + 1 and n – 2.   
-Show that at some point no more moves can be made.
-\end{example}
-\sol
-
-Give a stone in square $k$ weight $\varphi^k$ with $\varphi= \frac{1+\sqrt{5}}{2}$, and it is not hard to see that the sum of all weights remains invariant due to the relation $\varphi^k = \varphi^{k-1} + \varphi^{k-2}$. Suppose that the process never terminates, from which there exists at least one square that is operated on infinitely many times. Consider the square of least value that is operated on finitely many times, and note that the square to the left of it is operated on infinitely, so arbitrarily many stones build up on the former square, so it must be operated on infinitely, contradiction. Thus all squares are operated on infinitely, so the index of the rightmost square that contains a stone grows arbitrarily large. At some point, the weight of the stone in that square exceeds the initial total weight, contradicting the invariant.
-
-
-\begin{example} [APMO 1997]
-    n people are seated in a circle. A total of nk coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
-\end{example}
-\sol
-We want each person to end up with k coins. Let the people be 
-labeled from $1, 2, \dots, n$ in order (note that $n$ is next to 1 since they are sitting in a circle). Suppose that person $i$ has $c_i$ coins. Now, we introduce the variable $d_i = c_i - k$, since this indicates how close a person is to having the desired number of coins. Consider the quantity $X = |d_1| + |d_1 + d_2| + |d1 + d_2 + d_3| + \dots + |d_1 + d_2 + \dots + d_{n-1}|$
-\\\\
-Clearly $X = 0$ if and only if everyone has k coins, so our goal is to make $X = 0$. The reason for this choice of $X$ is that moving a coin between person $j$ and person $j + 1$ for $1 \leq j \leq n -1$ changes $X$ by exactly 1 as only the term $|d_1 + d_2 + \dots + d_j|$ will be affected. Hence, $X$ is a monovariant and is fairly easy to control (except when moving a coin from 1 to n or vice versa). Let $s_j = d_1 + d_2 + \dots + d_j$.
-\\\\
-We claim that as long as $X > 0$ it is always possible to reduce $X$ by 1 by a move between $j$ and $j +1$ for some $1 \leq j \leq n -1$. We use the following algorithm. Assume WLOG $d_1 \geq 1$. Take the first j such that $d_{j+1} < 0$. If $s_j > 0$, then simply make a transfer from $j$ to $j + 1$. This reduces $X$ by one since it reduces the term $|s_j|$ by one. The other possibility is $s_j = 0$, which means $d_1 = d_2 = \dots = d_j = 0$ (recall that $d_{j+1}$ is the first negative term). In this case, take the first m > i+1 such that $d_m \geq 0$. Then, $d_{m-1} < 0$ by the assumption on $m$, so we move a coin from $m$ to $(m-1)$. Note that all terms before dm were either 0 or less than 0 and $d_{m-1} < 0$ , so $s_{m-1}$ was less than 0. Our move has increased sm-1 by one, and has hence decreased $|s_{m-1}|$ by one, so we have decreased $X$ by one.
-\\\\
-Thus, at any stage, we can always decrease $X$ by at least one by moving between $j$ and $j +1$ for some $1 \le j \le n -1$. We have not yet considered the effect of a move between 1 and n. Thus our full algorithm is as follows: At any point of time, if we can decrease $X$ by moving a coin from 1 to n or n to 1, do this. Otherwise, decrease $X$ by 1 by the algorithm described in the above paragraph.
-
-\newpage
-
-\section{Crazy algorithms}
-
-\begin{example} [239 Olympiad 2017]
-    An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
-\end{example}
-Answer: Yes, it can.
-\sol
-Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
-
-Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pictures, the stars show the squares at which the next shot is fired, and the crosses mark the squares on which the tank cannot be \textit{before this shot}.
-
-\begin{center}
-    \begin{asy}
-        int n = 10;
-        void check(pair x){
-            for(int i=0; i<n; ++i){
-                for(int j=0; j<n; ++j){
-                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
-                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
-                    else fill(p, hsv(180, 1, 1));
-                }
-            }
-        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
-        }
-        size(16cm, 0);
-        pair a[] = {(0, n+1), (n+1, n+1), (2*(n+1), n+1), (3*(n+1), n+1), (0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
-        for(int i=0; i<8; ++i){
-        	check(a[i]);
-            real x=0, y=i%2;
-            for(int j=0; j<i; ++j){
-                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-                draw(shift(a[i])*shift(x, y)*p);
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-            for(int j=0; j<6; ++j){
-                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-        }
-    \end{asy}
-\end{center}
-
-After each move tank changes the color of the cell it is in, and 1 more cross is placed.
-
-Here are 4 last moves for $n=5$:
-
-\begin{center}
-    \begin{asy}
-        int n = 10;
-        void check(pair x){
-            for(int i=0; i<n; ++i){
-                for(int j=0; j<n; ++j){
-                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
-                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
-                    else fill(p, hsv(180, 1, 1));
-                }
-            }
-        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
-        }
-        size(16cm, 0);
-        pair a[] = {(0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
-        for(int i=0; i<3; ++i){
-        	check(a[i]);
-            real x=0, y=(i+42)%2;
-            for(int j=0; j<i+42; ++j){
-                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-                draw(shift(a[i])*shift(x, y)*p);
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-            for(int j=0; j<6; ++j){
-                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-        }
-        check(a[3]);
-        real x=0, y=1;
-        for(int j=0; j<50; ++j){
-            path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-            draw(shift(a[3])*shift(x, y)*p);
-            y += 2;
-            if(y > 9){
-                y = (y+1)%2;
-                ++x;
-            }
-        }
-    \end{asy}
-\end{center}
-
-After some (finite) amount of moves every cell of one color (in our case -- cyan) is marked with cross. So if tank was not hit by the cannon, then our original assumption (tank is on the red) was wrong. But we can just repeat the process with the opposite color and now surely hit the tank.
-
-\begin{example} [JetBrains 2024]
-    In the vertices of a polygon $A_1, A_2,\dots, A_{100}$, there are initially 30 zeros and 70 ones. There are 100 tokens numbered from 1 to 100. In one move, it is allowed to perform one of the following actions:
-    \begin{enumerate}
-        \item If token $i$ has not been used yet, then it can be placed on vertex $A_i$.
-        \item If there is a token on vertex $A_j$, then it is possible to change the number in this vertex (from 0 to 1 or from 1 to 0). If the number changes from 0 to 1, the token is moved to vertex $A_{j+1}$ (where $A_{101}=A_1$); if the number changes from 1 to 0, the token is discarded completely.
-    \end{enumerate}
-    At no point may two tokens occupy the same vertex. After several moves, all 100 tokens have been discarded. How many zeros can be present in the vertices at this moment?
-\end{example}
-
-Answer: $\boxed{30}$.
-
-Redefine the problem statement: 
-
-\textit{We have $3\times 100$ board with the top row filled with tokens and initially 30 zeros and 70 ones on the second row. On any move tokens changes the number of the cell (from 0 to 1 or from 1 to 0). If the number changes from 0 to 1, the token is moved to the right, if the number changes from 1 to 0, the token moves down. After some number of moves every token is now on the third row. How many zeros can be present in the second row at this moment?\\Note: we allow for the collisions between tokens.}
-
-\begin{center}
-    \begin{asy}
-        size(12cm);
-        int n = 10;
-        for(int i=0; i<4; ++i) draw((0,i)--(n, i));
-        for(int i=0; i<=n; ++i){
-        	if(i!=n-3) draw((i, 0)--(i, 3));
-        }
-        for(int i=0; i<n; ++i){
-        	if(i!=n-3 && i!=n-4){
-            	label("1", (i+0.5, 2.5));
-            	label(string(rand()%2), (i+0.5, 1.5));
-            	label("1", (i+0.5, 0.5));
-                //fill(circle((i+0.5, 2.5), 0.4)--circle((i+0.5, 2.5), 0.2), red);
-            }
-        }
-        label("\dots", (n-3, 2.5));
-        label("\dots", (n-3, 1.5));
-        label("\dots", (n-3, 0.5));
-        //draw(brace((n,0), (0, 0))); label("100", ((n)/2, -2));
-    \end{asy}
-\end{center}
-
-We assign the value to each token depending on the cell token is in as follows:
-
-\begin{center}
-    \begin{asy}
-        size(12cm);
-        int n = 10;
-        for(int i=0; i<4; ++i) draw((0,i)--(n, i));
-        for(int i=0; i<=n; ++i){
-        	if(i!=n-3) draw((i, 0)--(i, 3));
-        }
-        for(int i=0; i<n; ++i){
-        	if(i<n-4){
-            	label(string(100-i), (i+0.5, 2.5));
-            	label(string(101-i), (i+0.5, 1.5));
-            	label(string(102-i), (i+0.5, 0.5));
-            }
-            else if (i>n-3){
-            	label(string(n-i), (i+0.5, 2.5));
-            	label(string(n+1-i), (i+0.5, 1.5));
-            	label(string(n+2-i), (i+0.5, 0.5));
-            }
-        }
-        label("\dots", (n-3, 2.5));
-        label("\dots", (n-3, 1.5));
-        label("\dots", (n-3, 0.5));
-        //draw(brace((n,0), (0, 0))); label("100", ((n)/2, -2));
-    \end{asy}
-\end{center}
-
-If we count the total sum of values of tokens and values in the cells of the table we will get \[100+70+100+(100+99+98+\dots+2+1)=5320.\] Note that on any move of the token total sum remains constant $\pmod{100}$.
-\\\\
-\textit{Claim: at the end, no 2 tokens lie in the same cell.}
-\\\\
-So if we prove the claim the total sum at the end will be \[0+\text{\# of ones in the 2nd row}+100+(102+101+100+\dots+4+3)=\]\[5350+\text{\# of ones in the 2nd row}\equiv5320\pmod{100}\] So the \# of ones in the 2nd row will be 70.
-\\\\
-FTSoC assume that at some point 2 tokens lie in the same cell on the 3rd row. Now observe that both of them need to come in that space by moving downwards and changing the number on the 2nd row from 1 to 0. Between them we must have a token to change the number from 0 to 1, so at least 3 tokens visited the cell on the 2nd row.
-
-Now look at the first time 3 tokens visited some cell (call it A, and the cell on the left of it -- B), only one of them could have come from above, so at least 2 of them came from B. But by the same logic, for 2 tokens to move right, we need 1 token to move down, so at least 3 tokens visited B -- contradiction.
-
-\begin{example} [All-Russian 2005]
-    There are $100$ representatives of $50$ countries sitting at the rounded table, two from each country. Prove that they can be divided into two groups in such a way that each group will have one representative from each country, and each person was in the same group with no more than one of his neighbors.
-\end{example}
-\sol
-At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
-
-\begin{center}
-    \begin{asy}
-        size(8cm, 0);
-        int n = 10;
-        real a = 360 / n;
-        path p = ellipse((dir(2*a)+dir(3*a)) / 2, 0.5, 0.3);
-        int s[] = {5, 1, 4, 3, 4, 3, 1, 5, 2, 2};
-        int x[] = {0, 1, 0, 1, 1, 0, 0, 1, 0, 1};
-        for(int i = 0; i < 5; ++ i) draw(rotate(2*i*a)*p);
-        for(int i = 0; i < 10; ++ i){
-        	if(x[i]==1) fill(circle(dir(i*a), 0.15), red);
-            else fill(circle(dir(i*a), 0.15), cyan);
-        	dot((string)s[i], dir(i*a), dir(i*a));
-        }
-        draw(dir(0)--dir(7*a));
-        draw(dir(a)--dir(6*a));
-        draw(dir(2*a)--dir(4*a));
-        draw(dir(3*a)--dir(5*a));
-        draw(dir(8*a)--dir(9*a));
-    \end{asy}
-\end{center}
-
-Now we will present algorithm to solve our problem:
-Color $1$ black, then color his countryman white, then color $1$'s countryman's neighbor black, then his countryman white, and so on, until we reach $2$, whom we color white. We have colored several of our pairs completely, and we can initiate another process, starting from another pair.
-
-\begin{example} [Kazakhstan 2023]
-    Let G be a graph whose vertices are 2000 points in the plane, no three of which are collinear, that are colored in red and blue and there are exactly 1000 red points and 1000 blue points. Given that there exist 100 red points that form a convex polygon with every other point of G lying inside of it. Prove that one can connect some points of the same color such that segments connecting vertices of different colors do not intersect, and one can move from a vertex to any vertex of the same color using these segments.
-\end{example}
-\sol
-The problem might seem as tough, and indeed it is tough. However, the problem statement gives an exact clue to construct our algorithm.
-Let's call a triangle $2B$ if it has two vertices in black (connected by an edge) and one in red. It is similar to $2R$ if two vertices are red (connected by an edge) and one is black.
-
-Let's define the operation $\oplus $ on a triangle $2B$ or $2R$ as follows:
-\begin{itemize}
-    \item WLOG consider a $2R$ triangle.
-    \item If there are no black dots inside this triangle, then connect all the red dots inside the triangle with one of the red vertices of $2R$ and finish the operation. Please note that the new red dots will be connected to at least one previous red dot (to connect the red dots).
-    \item If there is at least one black dot inside $2R$, then take any of them and connect it to the black vertex of $2R$. Note that this black dot is connected to the previous black vertex of the triangle.2R (for connecting black dots). Then we will divide the triangle into three parts as shown in the figure above or belowThus, 2R is divided into two 2B and one 2R, and then we make $\oplus $ for each of the resulting parts.
-    \item Since any triangle $2R$ or $2B$ contains only a finite number of points inside, the operation will end at some point.
-\end{itemize}
-Let's take the original graph and connect all neighboring vertices of the convex hull with an edge. Then we take any black point inside a convex 100-gon and divide the graph into 100 triangles of the form 2R, and perform $\oplus $ for each of them. From the construction, it can be understood that the newly found points inside the triangles have an edge with at least one previous vertex of the same color. From this we can conclude that the red and black dots are connected. In addition, no two multicolored edges intersect because we have performed a triangulation that does not allow for intersection.
-no segments (two segments can intersect only if they have a common vertex, but then all the ends of these two segments are the same color).
-
-\newpage
-
-\section{Information}
-\textit{In this chapter, we will see problems that needs to count some information that we can get after several moves to be able to solve problems.}
-\begin{example}
-    Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
-\end{example}
-\sol
-Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
-
-In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
-
-Strategy for $n=101$:
-
-Let $a_{0},a_{1}, \dots,a_{99},a_{100}$ be the first $101$ ordered numbers written by the spectator. At first, helper computes $S_{1}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$. Next, helper puts the black disc on numbers $a_{S_{1}}$ and $a_{(S_{1}+1)}$
-\\\\
-Magician first looks at the position of the black disc and knows $S_{1}$. Next, magician computes $S_{2}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$, using $0$ and $0$ for the two hidden positions. Magician computes $S_{3}=S_{1}-S_{2}\pmod{100}$ and the final step is elementary :
-$S_{3}$ is a number between $0$ and $99$ and so $S_{3}=10a+b$
-\\\\
-Then, if $S_{1}$ is even, the ordered two hidden numbers are $(a,b)$
-And if $S_{1}$ is odd, the ordered two hidden numbers are $(b,a)$
-
-\begin{example} [IMSC 2025]
-
-There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are fat and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
-\end{example}
-\sol
-
-\newpage
-
-\section{Problems}
-
-\begin{problem} [APMO 2022]
-    Let $n$ and $k$ be positive integers. Cathy is playing the following game. There are $n$ marbles and $k$ boxes, with the marbles labeled $1$ to $n$. Initially, all marbles are placed inside one box. Each turn, Cathy chooses a box and then moves the marbles with the smallest label, say $i$, to either any empty box or the box containing marble $i + 1$. Cathy wins if at any point there is a box containing only marble $n$. Determine all pairs of integers $(n, k)$ such that Cathy can win this game.
-\end{problem}
-
-\begin{problem} [All-Russian 2014]
-    There are $n$ cities in the state, and an express runs between each two of them (in both directions). For any express train, the prices of round-trip and round-trip tickets are equal, and for any different express trains these prices are different. Prove that a traveler can choose the starting city, leave it and travel sequentially on $n-1$ express trains, paying less for the fare on each next one than for the fare on the previous one. (A traveler may enter the same city several times.)
-\end{problem}
-
-\begin{problem} [IMO 2023]
-    Let $n$ be a positive integer. A Japanese triangle consists of $1 + 2 + \dots + n$ circles arranged in an equilateral triangular shape such that for each $i = 1$, $2$, $\dots$, $n$, the $i$-th row contains exactly $i$ circles, exactly one of which is colored red. A ninja path in a Japanese triangle is a sequence of $n$ circles obtained by starting in the top row, then repeatedly going from a circle to one of the two circles immediately below it and finishing in the bottom row. Here is an example of a Japanese triangle with $n = 6$, along with a ninja path in that triangle containing two red circles.
-    \begin{center}
-        \begin{asy}
-            size(6cm);
-            pair X = dir(240); pair Y = dir(0);
-            path c = scale(0.5)*unitcircle;
-            int[] t = {0,0,2,2,3,0};
-            for (int i=0; i<=5; ++i) {
-                for (int j=0; j<=i; ++j) {
-                    filldraw(shift(i*X+j*Y)*c, (t[i]==j) ? lightred : white);
-                    draw(shift(i*X+j*Y)*c);
-                }
-            }
-            draw((0,0)--(X+Y)--(2*X+Y)--(3*X+2*Y)--(4*X+2*Y)--     (5*X+2*Y),linewidth(1.5));
-            path q = (3,-3sqrt(3))--(-3,-3sqrt(3));
-            draw(q,Arrows(TeXHead, 1));
-            label("$n = 6$", q, S);
-        \end{asy}
-    \end{center}
-    In terms of $n$, find the greatest $k$ such that in each Japanese triangle there is a ninja path containing at least $k$ red circles.
-\end{problem}
-
-\begin{problem} [IMO 2020]
-    There are $4n$ pebbles of weights $1, 2, 3, \dots, 4n.$ Each pebble is colored in one of $n$ colors and there are four pebbles of each color. Show that we can arrange the pebbles into two piles so that the following two conditions are both satisfied:
-    \begin{itemize}
-        \item The total weights of both piles are the same.
-        \item Each pile contains two pebbles of each color.
-    \end{itemize}
-\end{problem}
-
-\begin{problem} [All-Russian 2005]
-    100 people from 25 countries, four from each country, sit in a circle. Prove that one may partition them onto 4 groups in such way that no two countrymen, nor two neighboring people in the circle, are in the same group. 
-\end{problem}
-
-\begin{problem} [IMO 2010]
-    Each of the six boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$, $B_6$ initially contains one coin. The following operations are allowed
-    \begin{itemize}
-        \item Choose a non-empty box $B_j$, $1\leq j \leq 5$, remove one coin from $B_j$ and add two coins to $B_{j+1}$
-        \item Choose a non-empty box $B_k$, $1\leq k \leq 4$, remove one coin from $B_k$ and swap the contents (maybe empty) of the boxes $B_{k+1}$ and $B_{k+2}$.
-    \end{itemize}
-    Determine if there exists a finite sequence of operations of the allowed types, such that the five boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$ become empty, while box $B_6$ contains exactly $2010^{2010^{2010}}$ coins.
-\end{problem}
-
-\begin{problem} [ISL 2024 C3]
-    Let $n$ be a positive integer. There are $2n$ knights sitting at a round table. They consist of $n$ pairs of partners, each pair of which wishes to shake hands. A pair can shake hands only when next to each other. Every minute, one pair of adjacent knights swaps places. Find the minimum number of exchanges of adjacent knights such that, regardless of the initial arrangement, every knight can meet her partner and shake hands at some time.
-\end{problem}
-
-\begin{problem} [USAJMO 2020]
-    Let $n \geq 2$ be an integer. Carl has $n$ books arranged on a bookshelf. Each book has a height and a width. No two books have the same height, and no two books have the same width. Initially, the books are arranged in increasing order of height from left to right. In a move, Carl picks any two adjacent books where the left book is wider and shorter than the right book, and swaps their locations. Carl does this repeatedly until no further moves are possible. Prove that regardless of how Carl makes his moves, he must stop after a finite number of moves, and when he does stop, the books are sorted in increasing order of width from left to right.
-\end{problem}
-
-\begin{problem} [IMO 2024]
-    Turbo the snail plays a game on a board with $2024$ rows and $2023$ columns. There are hidden monsters in $2022$ of the cells. Initially, Turbo does not know where any of the monsters are, but he knows that there is exactly one monster in each row except the first row and the last row, and that each column contains at most one monster.\\
-    Turbo makes a series of attempts to go from the first row to the last row. On each attempt, he chooses to start on any cell in the first row, then repeatedly moves to an adjacent cell sharing a common side. (He is allowed to return to a previously visited cell.) If he reaches a cell with a monster, his attempt ends and he is transported back to the first row to start a new attempt. The monsters do not move, and Turbo remembers whether or not each cell he has visited contains a monster. If he reaches any cell in the last row, his attempt ends and the game is over.\\
-    Determine the minimum value of $n$ for which Turbo has a strategy that guarantees reaching the last row on the $n$-th attempt or earlier, regardless of the locations of the monsters.
-\end{problem}
-
-\begin{problem} [Kazakhstan 2025, Regional]
-    $A$ and $B$ are playing a game on a $100 \times 100$ checkered board. Each player has a chip. At the beginning of the game, player A's chip is in the lower-left corner, and player B's chip is in the lower-right corner. The players take turns making moves, starting with $A$. In one turn, the player moves his chip to any square of the board adjacent to the square of the previous position. Prove that player $A$ can achieve in a finite number of moves that at some point his chip will be on the same square as player $B$ chip, regardless of the moves of the second player.
-\end{problem}
-
-\begin{problem} [All-Russian 2015]
-    The field is a $41 \times 41$ checkered square, in one of the cells of which a tank is disguised. The fighter fires at one cell in one shot. If a hit occurs, the tank crawls over to the cell next to the side of the field, if not, it remains in the same cell. At the same time, after the shot, the fighter pilot does not know if a hit has occurred. To destroy a tank, you need to hit it twice. What is the least number of shots you can do to ensure that the tank is destroyed?
-\end{problem}
-
-\begin{problem} [Saint-Petersburg 1994]
-    The pluses and minuses are placed in the cells of the  $1995 \times 1995$ table. It is allowed to select $1995$ cells, no two of which are in the same row or column, and change the signs in the selected cells. Prove that using such operations it is possible to ensure that no more than $1994$ pluses remain in the table.
-\end{problem}
-
-\begin{problem} [Saint-Petersburg 2018]
-In a $9\times 9$ table, all cells contain zeros. The following operations can be performed on the table:
-\begin{enumerate}
-    \item Choose an arbitrary row, add one to all the numbers in that row, and shift all these numbers one cell to the right (and place the last number in the first position).
-    \item Choose an arbitrary column, subtract one from all its numbers, and shift all these numbers one cell down (and place the bottommost number in the top cell).
-\end{enumerate}
-Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
-\end{problem}
+% Line 124 content
+% Line 125 content
+% Line 126 content
+% Line 127 content
+% Line 128 content
+% Line 129 content
+% Line 130 content
+% Line 131 content
+% Line 132 content
+% Line 133 content
+% Line 134 content
+% Line 135 content
+% Line 136 content
+% Line 137 content
+% Line 138 content
+% Line 139 content
+% Line 140 content
+% Line 141 content
+% Line 142 content
+% Line 143 content
+% Line 144 content
+% Line 145 content
+% Line 146 content
+% Line 147 content
+% Line 148 content
+% Line 149 content
+% Line 150 content
+% Line 151 content
+% Line 152 content
+% Line 153 content
+% Line 154 content
+% Line 155 content
+% Line 156 content
+% Line 157 content
+% Line 158 content
+% Line 159 content
+% Line 160 content
+% Line 161 content
+% Line 162 content
+% Line 163 content
+% Line 164 content
+% Line 165 content
+% Line 166 content
+% Line 167 content
+% Line 168 content
+% Line 169 content
+% Line 170 content
+% Line 171 content
+% Line 172 content
+% Line 173 content
+% Line 174 content
+% Line 175 content
+% Line 176 content
+% Line 177 content
+% Line 178 content
+% Line 179 content
+% Line 180 content
+% Line 181 content
+% Line 182 content
+% Line 183 content
+% Line 184 content
+% Line 185 content
+% Line 186 content
+% Line 187 content
+% Line 188 content
+% Line 189 content
+% Line 190 content
+% Line 191 content
+% Line 192 content
+% Line 193 content
+% Line 194 content
+% Line 195 content
+% Line 196 content
