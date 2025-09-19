@@ -421,34 +421,6 @@ no segments (two segments can intersect only if they have a common vertex, but t
 
 \newpage
 
-\section{Information}
-\textit{In this chapter, we will see problems that needs to count some information that we can get after several moves to be able to solve problems.}
-\begin{example}
-    Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
-\end{example}
-\sol
-Suppose that we can perform such a trick on a certain N. If so, a magician can uniquely restore the original sequence of digits from each variant that can be written by the spectator. 
-
-In other words, the number of variants that can be written on the board should be less than number of sequences with 2 hidden digits. Magician helper may have in front of magician $(N-1)10^{N-2}$ different configurations ($N-1$ positions for the disc and $10^{N-2}$ for the reminder), and spectator can choose $10^{N}$ configurations. So $(N-1)10^{N-2}\geq 10^{N}$ and $N\geq 101$
-
-Strategy for $n=101$:
-
-Let $a_{0},a_{1}, \dots,a_{99},a_{100}$ be the first $101$ ordered numbers written by the spectator. At first, helper computes $S_{1}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$. Next, helper puts the black disc on numbers $a_{S_{1}}$ and $a_{(S_{1}+1)}$
-\\\\
-Magician first looks at the position of the black disc and knows $S_{1}$. Next, magician computes $S_{2}=10a_{0}+a_{1}+10a_{2}+a_{3}+\cdots+10a_{100}\pmod{100}$, using $0$ and $0$ for the two hidden positions. Magician computes $S_{3}=S_{1}-S_{2}\pmod{100}$ and the final step is elementary :
-$S_{3}$ is a number between $0$ and $99$ and so $S_{3}=10a+b$
-\\\\
-Then, if $S_{1}$ is even, the ordered two hidden numbers are $(a,b)$
-And if $S_{1}$ is odd, the ordered two hidden numbers are $(b,a)$
-
-\begin{example} [IMSC 2025]
-
-There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are fat and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
-\end{example}
-\sol
-
-\newpage
-
 \section{Problems}
 
 \begin{problem} [APMO 2022]
@@ -540,6 +512,6 @@ Is it possible to obtain a table in which all cells, except two, contain zeros, 
 \begin{problem} [USAMO 2011]
 An integer is assigned to each vertex of a regular pentagon so that the sum of the five integers is 2011. A turn of a solitaire game consists of subtracting an integer $m$ from each of the integers at two neighboring vertices and adding $2m$ to the opposite vertex, which is not adjacent to either of the first two vertices. (The amount $m$ and the vertices chosen can vary from turn to turn.) The game is won at a certain vertex if, after some number of turns, that vertex has the number 2011 and the other four vertices have the number 0. Prove that for any choice of the initial integers, there is exactly one vertex at which the game can be won.
 \end{problem} 
-\begin{problem} [239 olympiad]
+\begin{problem} [239 olympiad 2025]
 The numbers from $1$ to $2025$ are arranged in some order in the cells of the $1 \times 2025$ strip. Let's call a flip an operation that takes two arbitrary cells of a strip and swaps the numbers written in them, but only if the larger of these numbers is located to the left of the smaller one. A flop is a set of several flips that do not contain common cells that are executed simultaneously. (For example, a simultaneous flip between the 2nd and 8th cells and a flip between the 5th and 101st cells.) Prove that there exists a sequence of $66$ flops such that for any initial arrangement, applying this sequence of flops to it will result in the numbers being ordered from left to right in ascending order.
 \end{problem}
