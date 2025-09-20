@@ -6,6 +6,19 @@ In this chapter, we will consider processes. It might seem that processes and al
 
 As always, we will start with invariants, and monovariants. Fortunately, the idea of invariants is a very useful approach to practically every process problem: it might be very helpful to make several observations on processes.
 
+\begin{example} [ISL 2014]
+We have $2^m$ sheets of paper, with the number $1$ written on each of them. We perform the following operation. In every step we choose two distinct sheets; if the numbers on the two sheets are $a$ and $b$, then we erase these numbers and write the number $a + b$ on both sheets. Prove that after $m2^{m -1}$ steps, the sum of the numbers on all the sheets is at least $4^m$ .
+\end{example}
+
+\sol 
+Ok, this problem is felt like it can be fully cracked by invariants, so let us try to find this. The first thought that comes to mind is to consider the sum of numbers written on cards, but it is a wrong approach; rather, we should consider the product of the $2^m$ numbers, instead of the sum.
+
+Claim: Whenever the operation is performed, the resulting product of the $2^m$ increases by at least $4$ times.
+
+Proof: $(a+b)^2 \geq 4ab$.
+
+Now, at the end of the $m2^{m-1}$ steps, the product will be at least $4^{m2^{m-1}} = 2^{2^m}$, so by AM-GM, the sum of the $2^m$ sheets of paper is at least $2^m \cdot 2^m = 4^m$, as desired.
+
 \begin{example}[IMO 1986]
     To each vertex of a regular pentagon an integer is assigned, so that the sum of all five numbers is positive. If three consecutive vertices are assigned the numbers $x,y,z$ respectively, and $y<0$, then the following operation is allowed: $x,y,z$ are replaced by $x+y,-y,z+y$ respectively. This iteration is performed repeatedly as long as at least one of the five numbers is negative. Determine whether this procedure necessarily comes to an end after a finite number of steps.
 \end{example}
@@ -157,3 +170,4 @@ Also note that if such a node u was deficient then $T$ actually decreases; if no
     On the board are written $n$ natural numbers, $n\in \NN$. In one move it is possible to choose two equal written numbers and increase one by $1$ and decrease the other by $1$. Prove that in this the game cannot be played more than $\frac{n^3}{6}$ moves.
 
 \end{problem}
+
