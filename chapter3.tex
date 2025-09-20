@@ -47,7 +47,11 @@ In previous examples we have seen the problems related to monovariant, and of co
 
 \end{example}
 
+
+
 \section{Chip firing}
+
+Here we will introduce with a tough topic from "adult" mathematics. Despite this fact, many problem proposers assumed that it is a good idea to give such problems on school Olympiads. As usual, we will start with easy, demonstrative example. 
 
 \begin{example}[ISL 1994]
     $1994$ girls are seated in a circle. Initially one girl is given $n$ coins. In one move, each girl with at least 2 coins passes one coin to each of her two neighbors. 
@@ -58,13 +62,51 @@ In previous examples we have seen the problems related to monovariant, and of co
     \end{itemize}
 \end{example}
 
-\sol Label the girls $G_1, G_2, \dots, G_{1994}$ and let $G_{1995} = G_1, G_0 = G_{1994}$. 
+\sol 
+Solution for part a): Okay, the problem statement looks very familiar, for example at APMO 1997 we have faced with similar problem. As usual let's label the girls $G_1, G_2, \dots, G_{1994}$ all indices under modulo 1994.
 
-For part (a) Suppose the game doesn't terminate. Then some girl must pass coins infinitely times. If some girl passes only finitely many times, there exist two adjacent girls, one of whom has passed finitely many times and one of whom has passed infinitely many times. The girl who has passed finitely many times will then indefinitely accumulate coins after her final pass, which is impossible. Hence every girl must pass coins infinitely many times. 
+Suppose that the game does not terminate. Then some girl must pass coins infinitely times. If some girl passes only finitely many times, there exist two adjacent girls, one of whom has passed finitely many times and one of whom has passed infinitely many times. The girl who has passed finitely many times will then accumulate coins indefinitely after her final pass, which is impossible. Hence,every girl must pass coins infinitely many times. 
+\\\\
+Now the key idea is the following: For any two neighboring girls $G_i$ and $G_{i+1}$, let $c_i$ be the first coin ever passed between them. After this, we may assume that $c_i$ always stays stuck between $G_i$ and $G_{i+1}$, because whenever one of them has $c_i$ and makes a move, we can assume that the coin passed to the other girl was $c_i$. Therefore, each coin is eventually stuck between two girls. Since there are fewer than $1994$ coins, this means that there exist two adjacent girls who have never passed a coin to each other. This contradicts the result of the first paragraph.
+\\\\
+Solution for part b) This is simple using invariants. Let a coin with girl $i$ have weight $i$, and let $G_1$ initially have all the coins. In each pass from $G_i$to her neighbors, the total weight either does not change or changes by $\pm 1994$ (if $G_1$ passes to $G_{1994}$ or vice versa). So, the total weight is invariant $\pmod{1994}$. The initial weight is $1994$, so the weight will always be divisible by $1994$. If the game terminates, then each girl has one coin, so the final weight is $1+2+3+\dots+1994 = \frac{1994\cdot1995}{2}$ which is not divisible by $1994$ -- contradiction.
 
-Now the key idea is the following: For any two neighboring girls $G_i$ and $G_{i+1}$, let $c_i$ be the first coin ever passed between them. After this, we may assume that $c_i$ always stays stuck between $G_i$ and $G_{i+1}$, because whenever one of them has $c_i$ and makes a move, we can assume the coin passed to the other girl was $c_i$. Therefore, each coin is eventually stuck between two girls. Since there are fewer than $1994$ coins, this means there exist two adjacent girls who have never passed a coin to each other. This contradicts the result of the first paragraph.
+\\\\
 
-For part (b) This is simple using invariants. Let a coin with girl $i$ have weight $i$, and let $G_1$ have all coins initially. In each pass from $G_i$to her neighbors, the total weight either doesn't change or changes by $\pm 1994$ (if $G_1$ passes to $G_1994$ or vice versa). So the total weight is invariant $\pmod{1994}$. The initial weight is $1994$, so the weight will always be divisible by $1994$. If the game terminates, then each girl has one coin, so the final weight is $1+2+3+\dots+1994 = \frac{1994\cdot1995}{2}$ which is not divisible by $1994$ -- contradiction.
+For the experienced combinatorics solver the problem might seem cropped. Definitely, there exists generalization of this problem: what if graph is not a mere cycle, but an arbitrary, connected graph? Or what if the graph is disconnected? Now, we will provide a generalized version of problem:
+
+\begin{example}
+Let us fix a connected graph \( G \) with $n$ nodes and $m$ edges,
+and let us have N chips (without loops or multiple edges) on node set \( 1, \dots, n \), and start by putting \( a_i \) chips on node \( i \), \( i = 1, \dots, n \). So \( a \in \mathbb{Z}^n_+ \) and \( \sum_i a_i = N \). Recall that firing the node \( i \) means that we decrease \( a_i \) by the degree \( \text{deg}(i) \) of node \( i \), and increase \( a_j \) by 1 for each neighbor \( j \) of \( i \).  Which chip firing games are infinite and which are finite?.
+\end{example}
+
+\sol 
+
+\begin{itemize}
+    \item[a] If $N > 2m - n$ then the game is infinite.
+    \item[b] If $m \leq N \leq 2m - n$ then there exists an initial configuration guaranteeing finite termination and also one guaranteeing infinite game.
+    \item[c] If $N < m$ then the game is finite
+\end{itemize}
+
+\begin{proof}
+It is obvious that if $N > 2m-n$ then the game cannot terminate: there is always a node $v$ with at least $\deg(v)$ chips on it. It is also obvious that if $N \leq 2m-n$ then we can place at most $\deg(v)-1$ chips on each node $v$, and so there are configurations with no legal move.
+\\\\
+Next we show that if the number of chips is at least $m$ then there is an initial configuration that leads to an infinite game. Clearly it suffices to show this for $N=m$. Consider any acyclic orientation of $G$, and let $\deg^+(v)$ denote the out-degree of node $v$. Let us place $\deg^+(v)$ chips on each node $v$; this is clearly possible since there are $m$ chips altogether. We claim that this game is infinite.
+\\\\
+Observe first that there must exist a node that can be fired in the first step. In fact, the orientation is acyclic, which implies that there is a source, i.e., a node $v$ with $\deg(v) = \deg^+(v)$. Now fire this node, and observe that the resulting distribution of chips can also be obtained from an orientation: if we reverse the edges incident with $v$, we decrease the outdegree of $v$ by $\deg^+(v)$, and increase the outdegree of each of its neighbors by $1$. Since reversing the edges incident with a source does not create any directed cycle, we can find a source in the resulting digraph which can again be fired, etc.
+
+The proof of (c) is motivated by the previous construction. Consider any distribution of $N < m$ chips on the nodes; let $f(v)$ denote the number of chips on node $v$. Also consider an acyclic orientation of the graph $G$ and the quantity
+\[
+T = \sum_{v \in V(G)} \max \{ 0, f(v) - \deg^+(v) \}.
+\]
+
+We say that a node $u$ is \emph{deficient} if $f(u) < \deg^+(u)$; by our hypothesis that $N < m$, there must exist a deficient node. We are going to show that we can modify the orientation during the game so that $T$ never increases and if the set of deficient nodes changes then $T$ must actually decrease. If the game is infinite then every node gets fired infinitely often, and hence the set of deficient nodes must change infinitely often (since a deficient node cannot be fired). Since $T$ cannot decrease infinitely often, this implies that the game is finite.
+
+Consider the node $v$ that is first fired; we have $f(v) \geq \deg(v)$. Fire $v$ and reverse the orientation of all edges leaving $v$. We do not create any cycle. Moreover, we do not increase T since the term in T corresponding to $v$ decreases by $\deg(v) − \deg^+(v)$ while each of the $\deg(v) − \deg^+(v)$ terms corresponding to the nodes u for which $uv \in E(G)$ increases by at most 1.
+
+Also note that if such a node u was deficient then $T$ actually decreases; if none of these was deficient then the set of deficient nodes did not change. As remarked, this proves the theorem
+\end{proof}
+
 
 \section{Ignore or redefine}
 
@@ -113,4 +155,5 @@ For part (b) This is simple using invariants. Let a coin with girl $i$ have weig
 
 \begin{problem} [Serbia 2022]
     On the board are written $n$ natural numbers, $n\in \NN$. In one move it is possible to choose two equal written numbers and increase one by $1$ and decrease the other by $1$. Prove that in this the game cannot be played more than $\frac{n^3}{6}$ moves.
+
 \end{problem}
