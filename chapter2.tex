@@ -10,8 +10,7 @@ Greedy algorithms are algorithms that make the best possible short -- term choic
     In a graph $G$ with $n$ vertices, there is no vertex with degree greater than $a$. Show that one can color the vertices using at most $a+1$ colors, such that no two neighboring vertices of the same color. 
 \end{example}
 
-\sol
-We will provide clear algorithm to this problem. At first, we will arrange the vertices in an arbitrary order. Let the colors be $1, 2, 3\dots$, and color the first vertex with color 1. Here is a greedy part of our algorithm: in each stage, take the next vertex in the order and color it with the smallest color that has not yet been used on any of its neighbors.
+\sol We will provide clear algorithm to this problem. At first, we will arrange the vertices in an arbitrary order. Let the colors be $1, 2, 3\dots$, and color the first vertex with color 1. Here is a greedy part of our algorithm: in each stage, take the next vertex in the order and color it with the smallest color that has not yet been used on any of its neighbors.
 
 \begin{center}
     \begin{asy}
@@ -32,18 +31,19 @@ We will provide clear algorithm to this problem. At first, we will arrange the v
 \end{center}
 
 Now we will prove that our algorithm indeed works. Clearly this algorithm ensures that two adjacent vertices will not be the same color. It also ensures that at most $a+1$ colors are used: each vertex has at most $a$ neighbors, so when coloring a particular vertex $v$, at most $a$ colors have been used by its neighbors, so at least one color in the set $\{1, 2, 3, \dots, a+1\}$ has not been used. The minimum such color will be used for the vertex $v$. Hence, all vertices are colored using colors in the set $\{1, 2, 3,\dots, a+1\}$ and the problem is solved.
-\\\\
+
 To recall, in this problem we employed the simplest, almost foolish algorithm - yet it proved remarkably effective. We have only one obstacle, and we have tried to overcome only this obstacle in the most effective way, without paying attention to what happens to others. Of course, this approach will not be convenient, if we have several important quantities. However, greedy algorithms might be surprisingly helpful, even in complex problems, like next two examples.
 
 \begin{example}
-    In a graph $G$ with $V$ vertices and $E$ edges, show that there exists an induced subgraph H with each vertex having degree at least $\frac{E}{V}$. \\ (In other words, a graph with average degree $d$ has an induced subgraph with minimum degree at least $\frac{d}{2}$).
+    In a graph $G$ with $V$ vertices and $E$ edges, show that there exists an induced subgraph H with each vertex having degree at least $\frac{E}{V}$.
+    
+    (In other words, a graph with average degree $d$ has an induced subgraph with minimum degree at least $\frac{d}{2}$).
 \end{example}
 
-\sol Note that the average degree of a vertex is $\frac{2E}{V}$. Intuitively, we should remove the 'bad' vertices: vertices that have degree $<\frac{E}{V}$. Thus, a natural algorithm for finding such a subgraph is as follows: start with graph $G$, and as long as there exists a vertex with degree $<\frac{E}{V}$, delete it.
+\sol Note that the average degree of a vertex is $\frac{2E}{V}$. Intuitively, we should remove the ''bad'' vertices: vertices that have degree $<\frac{E}{V}$. Thus, a natural algorithm for finding such a subgraph is as follows: start with graph $G$, and as long as there exists a vertex with degree $<\frac{E}{V}$, delete it.
 
 \begin{center}
     \begin{asy}
-        size(8cm, 0);
         pair a = (0, 0), b = (3, 0), c = (1, 2), d = (1, -3), e = (-3, -1), f = (-2, 2), g = (4, 5);
         draw(a--b--c--cycle, cyan);
         draw(a--d^^a--e^^a--f--g);
@@ -59,7 +59,7 @@ To recall, in this problem we employed the simplest, almost foolish algorithm - 
 \end{center}
 
 However, remember that while deleting a vertex we are also deleting the edges incident to it, and in the process vertices that were initially not ‘bad’ may become bad in the subgraph formed. What if we end up with a graph with all vertices bad? Fortunately, this will not happen: notice that the ratio of $\frac{\text{edges}}{\text{vertices}}$ is strictly increasing (it started at $\frac{E}{V}$ and each time we deleted a vertex, less than $\frac{E}{V}$ edges were deleted by the condition of our algorithm). 
-\\\\
+
 Hence, it is impossible to reach a stage when only one vertex is remaining, since in this case the $\frac{\text{edges}}{\text{vertices}}$ ratio is 0. So, at some point, our algorithm must terminate, leaving us with a graph with more than one vertex, all of whose vertices have degree at least $\frac{E}{V}$. 
 
 \begin{example} [ISL 2001]
@@ -67,20 +67,21 @@ Hence, it is impossible to reach a stage when only one vertex is remaining, sinc
 \end{example}
 
 \sol Note that a historic set is in the form $\{x, x+a, x+a+b\}$ (which we will call a small set) or $\{x, x+b, x+a+b\}$ (which we will call a large set).
-\\\\
+
 We can use the following algorithm to achieve this task:
+
 We let $x$ be the smallest number not yet covered. If none of the numbers in the small set have been covered already, then we use a small set, otherwise we use a large set.
-\\\\
+
 Now we prove that this algorithm works. We prove that if the small set does not work, then the large set will always work.
-\\\\
+
 Assume for the sake of contradiction that the large set does not work.
-\\\\
+
 Clearly the $x$ element can not have already been covered.
 
 If the $x+a+b$ element has been covered, then that means that on the previous step, we either used the small set on $x+b$ or the large set on $x+a$. However, this is impossible as $x < x+a < x+b$.
-\\\\
+
 If the $x+b$ has already been covered, then either we used the small set on $x+b-a$, or we used any set on $x-a$. Clearly the first one is impossible as $x+b-a>x$. Now we consider the second case. If we used the small set on $x-a$, then it would imply that we would have already covered $x$, a contradiction. If we used the large set, then that means that some element in the small set was already covered. If $x+b$ was already covered, then this implies that $x$ was already covered, contradiction. Otherwise, this implies that $x$ was already covered, another contradiction.
-\\\\
+
 Therefore, a situation where both sets do not work, and the algorithm always works
 
 \newpage
@@ -94,28 +95,28 @@ In the previous chapter, we have considered the simplest algorithms, without any
 \end{example}
 
 \sol Let $f(n)$ be the minimum number of moves required to 'arrange' any permutation of the $n$ cards. Suppose we have a permutation with starting card  $k$. In $f(n-1)$ moves we can arrange the remaining $(n-1)$ cards to get either the sequence $(k, 1, 2, \dots, k-1, k+1, \dots, n)$ or $(k, n, n-1, \dots, k+1, k-1, \dots, 2, 1)$. In one move, we can make the former sequence $(k, k-1, k-2, \dots, 1, k+1, k+2, \dots, n)$ and with one more move we get the sequence $(1, 2, 3, \dots, n)$ and we are done. Similarly in the latter case we need only two additional moves to get $(n, n-1, \dots, 1)$. Thus, in either case, we can complete the task using $f(n-1) + 2$ moves, so $f(n) \leq f(n-1) + 2$.
-\\\\
+
 Now, to prove the bound for general $n \geq 5$, it suffices to prove it for $n=5$ and then induct using $f(n) \leq f(n-1) + 2$. The proof of $f(5)=4$ we left to the reader as an exercise.
 
 \begin{example} [IMO 2017]
     An integer $N \ge 2$ is given. A collection of $N(N + 1)$ soccer players, no two of whom are of the same height, stand in a row. Sir Alex wants to remove $N(N - 1)$ players from this row leaving a new row of $2N$ players in which the following $N$ conditions hold:\\
-    \begin{tabular}{rl}
-        1.& no one stands between the two tallest players\\
-        2.& no one stands between the third and fourth tallest players\\
-        &\vdots\\
-        $N.$& no one stands between the two shortest players.
-    \end{tabular}\\
+    \begin{itemize}
+        \item[1.] no one stands between the two tallest players
+        \item[2.] no one stands between the third and fourth tallest players
+        \item[] \vdots
+        \item[$N$.] no one stands between the two shortest players.
+    \end{itemize}
     Show that this is always possible.
 \end{example}
 
 \sol We will crack this problem by induction on $N$ with an algorithm.
-\\\\
+
 Base: The case when $n = 1$ is trivial; the original two soccer players work. 
-\\\\
+
 Induction hypothesis: Sir Alex has an algorithm for $N(N-1)$ soccer players. 
-\\\\
-Induction step:  Split the row of players into $N$ segments, each with $N+1$ people. Consider the $N+1$ tallest people, at least two of them will be in one of the segments by Pigeonhole principle. WLOG, let it be the first segment. Call these two people Timur and Amir.
-\\\\
+
+Induction step: Split the row of players into $N$ segments, each with $N+1$ people. Consider the $N+1$ tallest people, at least two of them will be in one of the segments by Pigeonhole principle. WLOG, let it be the first segment. Call these two people Timur and Amir.
+
 Then we can remove all the other players in the first segment (apart from Amir and Timur), which gives $N-1$ players deleted. Next, we remove the rest of the $N+1$ tallest players (again, excluding Timur and Amir), which gives at most another $N-1$ players deleted. Hence, at most $2(N-1)$ players were removed and we still have at least $N(N-1)$ people. (excluding Timur and Amir), so we can apply the induction hypothesis to get $2(N-1)$ players, and we can get the desired result. Lastly, since Amir and Timur will now be taller than these $2(N-1)$ players (and they will be next to each other), we can add them in and all the conditions still hold. This completes the induction.
 
 \newpage
@@ -131,31 +132,48 @@ Here, we will introduce another crucial idea in algorithm problems: invariants a
 \sol Consider the following algorithm: if the sum of the numbers in a row (or in a column) is negative, then we will change the sign of the numbers in this row (column). To prove that this process stops, we will find some characteristics of the table, which increases monotonously with each step. The desired characteristic is the sum of all cells. This amount increases at each step. The process will end, since the number of character arrangements for numbers is finite.
 
 \begin{example}[Canada 2014]
-    A number of robots are placed on the squares of a finite, rectangular grid of squares. A square can hold any number of robots. Every edge of each square of the grid is classified as either passable or impassable. All edges on the boundary of the grid are impassable. You can give any of the commands up, down, left, or right.\\
-    All of the robots then simultaneously try to move in the specified direction. If the edge adjacent to a robot in that direction is passable, the robot moves across the edge and into the next square. Otherwise, the robot remains on its current square. You can then give another command of up, down, left, or right, then another, for as long as you want. Suppose that for any individual robot, and any square on the grid, there is a finite sequence of commands that will move that robot to that square. Prove that you can also give a finite sequence of commands such that all of the robots end up on the same square at the same time.
+    A number of robots are placed on the squares of a finite, rectangular grid of squares. A square can hold any number of robots. Every edge of each square of the grid is classified as either passable or impassable. All edges on the boundary of the grid are impassable. You can give any of the commands up, down, left, or right.
+
+    ll of the robots then simultaneously try to move in the specified direction. If the edge adjacent to a robot in that direction is passable, the robot moves across the edge and into the next square. Otherwise, the robot remains on its current square. You can then give another command of up, down, left, or right, then another, for as long as you want. Suppose that for any individual robot, and any square on the grid, there is a finite sequence of commands that will move that robot to that square. Prove that you can also give a finite sequence of commands such that all of the robots end up on the same square at the same time.
 \end{example}
 
 \sol Clearly, it suffices to consider the case where two robots are on the grid. Define the distance between two robots to be the minimum number of commands needed for a robot to travel from one of the squares to the other.
-\\\\
-Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a 'faster' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
+
+Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a ''faster'' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
 
 \begin{example} [APMO 1997]
-    n people are seated in a circle. A total of nk coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
+    $n$ people are seated in a circle. A total of $nk$ coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
 \end{example}
 
-\sol We want each person to end up with k coins. Let the people be labeled from $1, 2, \dots, n$ in order (note that $n$ is next to 1 since they are sitting in a circle). Suppose that person $i$ has $c_i$ coins. Now, we introduce the variable $d_i = c_i - k$, since this indicates how close a person is to having the desired number of coins. Consider the quantity $X = |d_1| + |d_1 + d_2| + |d1 + d_2 + d_3| + \dots + |d_1 + d_2 + \dots + d_{n-1}|$
-\\\\
-Clearly $X = 0$ if and only if everyone has k coins, so our goal is to make $X = 0$. The reason for this choice of $X$ is that moving a coin between person $j$ and person $j + 1$ for $1 \leq j \leq n -1$ changes $X$ by exactly 1 as only the term $|d_1 + d_2 + \dots + d_j|$ will be affected. Hence, $X$ is a monovariant and is fairly easy to control (except when moving a coin from 1 to n or vice versa). Let $s_j = d_1 + d_2 + \dots + d_j$.
-\\\\
-We claim that as long as $X > 0$ it is always possible to reduce $X$ by 1 by a move between $j$ and $j +1$ for some $1 \leq j \leq n -1$. We use the following algorithm. Assume WLOG $d_1 \geq 1$. Take the first j such that $d_{j+1} < 0$. If $s_j > 0$, then simply make a transfer from $j$ to $j + 1$. This reduces $X$ by one since it reduces the term $|s_j|$ by one. The other possibility is $s_j = 0$, which means $d_1 = d_2 = \dots = d_j = 0$ (recall that $d_{j+1}$ is the first negative term). In this case, take the first m > i+1 such that $d_m \geq 0$. Then, $d_{m-1} < 0$ by the assumption on $m$, so we move a coin from $m$ to $(m-1)$. Note that all terms before dm were either 0 or less than 0 and $d_{m-1} < 0$ , so $s_{m-1}$ was less than 0. Our move has increased sm-1 by one, and has hence decreased $|s_{m-1}|$ by one, so we have decreased $X$ by one.
-\\\\
-Thus, at any stage, we can always decrease $X$ by at least one by moving between $j$ and $j +1$ for some $1 \le j \le n -1$. We have not yet considered the effect of a move between 1 and n. Thus our full algorithm is as follows: At any point of time, if we can decrease $X$ by moving a coin from 1 to n or n to 1, do this. Otherwise, decrease $X$ by 1 by the algorithm described in the above paragraph.
+\sol We want each person to end up with $k$ coins. Let the people be labeled from $1, 2, \dots, n$ in order (note that $n$ is next to 1 since they are sitting in a circle). Suppose that person $i$ has $c_i$ coins. Now, we introduce the variable $d_i = c_i - k$, since this indicates how close a person is to having the desired number of coins. Consider the quantity $X = |d_1| + |d_1 + d_2| + |d1 + d_2 + d_3| + \dots + |d_1 + d_2 + \dots + d_{n-1}|$.
+
+Clearly $X = 0$ if and only if everyone has $k$ coins, so our goal is to make $X = 0$. The reason for this choice of $X$ is that moving a coin between person $j$ and person $j + 1$ for $1 \leq j \leq n-1$ changes $X$ by exactly 1 as only the term $|d_1 + d_2 + \dots + d_j|$ will be affected. Hence, $X$ is a monovariant and is fairly easy to control (except when moving a coin from 1 to n or vice versa). Let $s_j = d_1 + d_2 + \dots + d_j$.
+
+We claim that as long as $X > 0$ it is always possible to reduce $X$ by 1 by a move between $j$ and $j +1$ for some $1 \leq j \leq n -1$.
+
+We use the following algorithm. Assume WLOG $d_1 \geq 1$. Take the first j such that $d_{j+1} < 0$. If $s_j > 0$, then simply make a transfer from $j$ to $j + 1$. This reduces $X$ by one since it reduces the term $|s_j|$ by one.
+
+The other possibility is $s_j = 0$, which means $d_1 = d_2 = \dots = d_j = 0$ (recall that $d_{j+1}$ is the first negative term). In this case, take the first m > i+1 such that $d_m \geq 0$. Then, $d_{m-1} < 0$ by the assumption on $m$, so we move a coin from $m$ to $(m-1)$.
+
+Note that all terms before dm were either 0 or less than 0 and $d_{m-1} < 0$ , so $s_{m-1}$ was less than 0. Our move has increased sm-1 by one, and has hence decreased $|s_{m-1}|$ by one, so we have decreased $X$ by one.
+
+Thus, at any stage, we can always decrease $X$ by at least one by moving between $j$ and $j +1$ for some $1 \le j \le n -1$. We have not yet considered the effect of a move between 1 and $n$. Thus our full algorithm is as follows: At any point of time, if we can decrease $X$ by moving a coin from 1 to $n$ or $n$ to 1, do this. Otherwise, decrease $X$ by 1 by the algorithm described in the above paragraph.
 
 \newpage
 
 \section{Information}
 
 In previous examples, we encountered problems that required us just to prove something or bound something by reference to smaller cases, like in the case of induction or recursion, but in this section we will get acquainted with other methods of bounding, primarily by using common sense, and methods of constructing algorithms.  
+
+Let's start with easy one:
+
+\begin{example}
+    You have 9 coins that look the same, one of them is fake, and weights less than real ones. Can you find the fake coin in 2 weightings on a balance scale.
+\end{example}
+
+First, split coins in 3 groups of 3 coins each, and compare first group with the second.
+
+If the first 
 
 \begin{example} [Russia 2005]
     Different numbers are written on the backs of the 2005 cards (one on each one). In one question, you can point to any three cards and find out the set of numbers written on them. What is the minimum number of questions to find out which numbers are written on each card?
@@ -164,10 +182,11 @@ In previous examples, we encountered problems that required us just to prove som
 \sol Okay, problem statement is clear, but how can we approach bounding? In such situations, we will examine the minor facts or observations that might seem obvious and useless. First of all, it is clear that each card is involved in at least one inquiry, otherwise we will not determine the number on it. Assume that we asked $N$ questions. Let there be $k$ cards that participated in exactly one question. Then, there cannot be two such cards in one question. Indeed, if two of such cards participated in the same question, then swapping the numbers on these cards would not change the answers to the questions; therefore, it is impossible to determine which number is written on which of them. Therefore, $k\leq N$ . The rest of the cards participated in at least two questions. Also, if we sum up the number the number of questions for each card in which it participated, we get a tripled number of questions.
 
 Therefore, $3N \geq k + 2(2005-k) = 4010-k \geq 4010-N ,$ so, $2N \geq 2005 \rightarrow  N\geq 1003$. 
-\\\\
+
 Now we will present an algorithm to find the numbers on the cards for 1003 questions. Let's put aside one card, and divide the rest into 334 groups of 6 cards. In each group, we will number the cards with numbers from 1 to 6 and ask three questions: (1,2,3) , (3,4,5) and (5,6,1) .
 
 Then the numbers on cards 1, 3, and 5 occur in two answers (for different cards, in different pairs), and they are uniquely determined. Also, the numbers on cards 2, 4, and 6 are the remaining numbers in each of the answers. So for $\frac{2004}{6} * 3 = 1002$ questions, we will find the numbers on the 2004 cards.
+
 It remains to ask about the deferred card along with any two already known ones.
 
 \begin{example} [Russia 1997]
@@ -183,7 +202,7 @@ Strategy for $n=101$:
 Let the sum of all the digits in the odd positions have a remainder $s$ divided by 10, and the sum of all the digits in the even positions have a remainder $t$ divided by 10 (the positions are numbered from left to right by numbers from 0 to 100). Let's assume $p = 10s + t$. At this moment, assistant closes the numbers at positions $p$ and $p + 1$.  After seeing which numbers are closed, the magician will determine $p$, and therefore $s$ and $t$. Note that one closed digit is in an odd position, and the other is in an even position. Thus, by calculating the sum of the open digits in the odd positions and knowing $s$, the magician will determine the closed digit in the odd position. Similarly, a closed digit is determined in an even position.
 
 \begin{example} [IMSC 2025]
-There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
+    There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
 \end{example}
 
 \sol In general, there are $3^n$ possible positions for our \textbf{fat} pair. In addition, every inquiry gives us information about the number of fat stones in the selected set. Assume that there are $k$ inquires, so there is maximum $3^k$ cases, so $3^k \geq 3^n \rightarrow k\geq n$. 
@@ -193,9 +212,10 @@ There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} a
 \begin{example} [239 Olympiad 2017]
     An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
 \end{example}
-Answer: Yes, it can.
-\sol
-Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
+
+\anst{Yes, it can}
+
+\sol Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
 
 Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pictures, the stars show the squares at which the next shot is fired, and the crosses mark the squares on which the tank cannot be \textit{before this shot}.
 
@@ -322,13 +342,11 @@ Redefine the problem statement:
             	label("1", (i+0.5, 2.5));
             	label(string(rand()%2), (i+0.5, 1.5));
             	label("1", (i+0.5, 0.5));
-                //fill(circle((i+0.5, 2.5), 0.4)--circle((i+0.5, 2.5), 0.2), red);
             }
         }
         label("\dots", (n-3, 2.5));
         label("\dots", (n-3, 1.5));
         label("\dots", (n-3, 0.5));
-        //draw(brace((n,0), (0, 0))); label("100", ((n)/2, -2));
     \end{asy}
 \end{center}
 
@@ -362,11 +380,13 @@ We assign the value to each token depending on the cell token is in as follows:
 \end{center}
 
 If we count the total sum of values of tokens and values in the cells of the table we will get \[100+70+100+(100+99+98+\dots+2+1)=5320.\] Note that on any move of the token total sum remains constant $\pmod{100}$.
-\\\\
-\textit{Claim: at the end, no 2 tokens lie in the same cell.}
-\\\\
+
+\begin{fact}
+    Claim: at the end, no 2 tokens lie in the same cell.
+\end{fact}
+
 So if we prove the claim the total sum at the end will be \[0+\text{\# of ones in the 2nd row}+100+(102+101+100+\dots+4+3)=\]\[5350+\text{\# of ones in the 2nd row}\equiv5320\pmod{100}\] So the \# of ones in the 2nd row will be 70.
-\\\\
+
 FTSoC assume that at some point 2 tokens lie in the same cell on the 3rd row. Now observe that both of them need to come in that space by moving downwards and changing the number on the 2nd row from 1 to 0. Between them we must have a token to change the number from 0 to 1, so at least 3 tokens visited the cell on the 2nd row.
 
 Now look at the first time 3 tokens visited some cell (call it A, and the cell on the left of it -- B), only one of them could have come from above, so at least 2 of them came from B. But by the same logic, for 2 tokens to move right, we need 1 token to move down, so at least 3 tokens visited B -- contradiction.
@@ -374,8 +394,8 @@ Now look at the first time 3 tokens visited some cell (call it A, and the cell o
 \begin{example} [All-Russian 2005]
     There are $100$ representatives of $50$ countries sitting at the rounded table, two from each country. Prove that they can be divided into two groups in such a way that each group will have one representative from each country, and each person was in the same group with no more than one of his neighbors.
 \end{example}
-\sol
-At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
+
+\sol At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
 
 \begin{center}
     \begin{asy}
@@ -405,19 +425,23 @@ Color $1$ black, then color his countryman white, then color $1$'s countryman's 
 \begin{example} [Kazakhstan 2023]
     Let G be a graph whose vertices are 2000 points in the plane, no three of which are collinear, that are colored in red and blue and there are exactly 1000 red points and 1000 blue points. Given that there exist 100 red points that form a convex polygon with every other point of G lying inside of it. Prove that one can connect some points of the same color such that segments connecting vertices of different colors do not intersect, and one can move from a vertex to any vertex of the same color using these segments.
 \end{example}
-\sol
-The problem might seem as tough, and indeed it is tough. However, the problem statement gives an exact clue to construct our algorithm.
+
+\sol The problem might seem as tough, and indeed it is tough. However, the problem statement gives an exact clue to construct our algorithm.
+
 Let's call a triangle $2B$ if it has two vertices in black (connected by an edge) and one in red. It is similar to $2R$ if two vertices are red (connected by an edge) and one is black.
 
 Let's define the operation $\oplus $ on a triangle $2B$ or $2R$ as follows:
+
 \begin{itemize}
     \item WLOG consider a $2R$ triangle.
     \item If there are no black dots inside this triangle, then connect all the red dots inside the triangle with one of the red vertices of $2R$ and finish the operation. Please note that the new red dots will be connected to at least one previous red dot (to connect the red dots).
     \item If there is at least one black dot inside $2R$, then take any of them and connect it to the black vertex of $2R$. Note that this black dot is connected to the previous black vertex of the triangle.2R (for connecting black dots). Then we will divide the triangle into three parts as shown in the figure above or belowThus, 2R is divided into two 2B and one 2R, and then we make $\oplus $ for each of the resulting parts.
     \item Since any triangle $2R$ or $2B$ contains only a finite number of points inside, the operation will end at some point.
 \end{itemize}
+
 Let's take the original graph and connect all neighboring vertices of the convex hull with an edge. Then we take any black point inside a convex 100-gon and divide the graph into 100 triangles of the form 2R, and perform $\oplus $ for each of them. From the construction, it can be understood that the newly found points inside the triangles have an edge with at least one previous vertex of the same color. From this we can conclude that the red and black dots are connected. In addition, no two multicolored edges intersect because we have performed a triangulation that does not allow for intersection.
-no segments (two segments can intersect only if they have a common vertex, but then all the ends of these two segments are the same color).
+
+No segments (two segments can intersect only if they have a common vertex, but then all the ends of these two segments are the same color).
 
 \newpage
 
@@ -485,7 +509,9 @@ no segments (two segments can intersect only if they have a common vertex, but t
 
 \begin{problem} [IMO 2024]
     Turbo the snail plays a game on a board with $2024$ rows and $2023$ columns. There are hidden monsters in $2022$ of the cells. Initially, Turbo does not know where any of the monsters are, but he knows that there is exactly one monster in each row except the first row and the last row, and that each column contains at most one monster.\\
+
     Turbo makes a series of attempts to go from the first row to the last row. On each attempt, he chooses to start on any cell in the first row, then repeatedly moves to an adjacent cell sharing a common side. (He is allowed to return to a previously visited cell.) If he reaches a cell with a monster, his attempt ends and he is transported back to the first row to start a new attempt. The monsters do not move, and Turbo remembers whether or not each cell he has visited contains a monster. If he reaches any cell in the last row, his attempt ends and the game is over.\\
+
     Determine the minimum value of $n$ for which Turbo has a strategy that guarantees reaching the last row on the $n$-th attempt or earlier, regardless of the locations of the monsters.
 \end{problem}
 
@@ -502,20 +528,18 @@ no segments (two segments can intersect only if they have a common vertex, but t
 \end{problem}
 
 \begin{problem} [Saint-Petersburg 2018]
-In a $9\times 9$ table, all cells contain zeros. The following operations can be performed on the table:
-\begin{enumerate}
-    \item Choose an arbitrary row, add one to all the numbers in that row, and shift all these numbers one cell to the right (and place the last number in the first position).
-    \item Choose an arbitrary column, subtract one from all its numbers, and shift all these numbers one cell down (and place the bottommost number in the top cell).
-\end{enumerate}
-Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
+    In a $9\times 9$ table, all cells contain zeros. The following operations can be performed on the table:
+    \begin{enumerate}
+        \item Choose an arbitrary row, add one to all the numbers in that row, and shift all these numbers one cell to the right (and place the last number in the first position).
+        \item Choose an arbitrary column, subtract one from all its numbers, and shift all these numbers one cell down (and place the bottommost number in the top cell).
+    \end{enumerate}
+    Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
 \end{problem}
+
 \begin{problem} [USAMO 2011]
-An integer is assigned to each vertex of a regular pentagon so that the sum of the five integers is 2011. A turn of a solitaire game consists of subtracting an integer $m$ from each of the integers at two neighboring vertices and adding $2m$ to the opposite vertex, which is not adjacent to either of the first two vertices. (The amount $m$ and the vertices chosen can vary from turn to turn.) The game is won at a certain vertex if, after some number of turns, that vertex has the number 2011 and the other four vertices have the number 0. Prove that for any choice of the initial integers, there is exactly one vertex at which the game can be won.
-\end{problem} 
-\begin{problem} [239 Olympiad 2025]
-The numbers from $1$ to $2025$ are arranged in some order in the cells of the $1 \times 2025$ strip. Let's call a flip an operation that takes two arbitrary cells of a strip and swaps the numbers written in them, but only if the larger of these numbers is located to the left of the smaller one. A flop is a set of several flips that do not contain common cells that are executed simultaneously. (For example, a simultaneous flip between the 2nd and 8th cells and a flip between the 5th and 101st cells.) Prove that there exists a sequence of $66$ flops such that for any initial arrangement, applying this sequence of flops to it will result in the numbers being ordered from left to right in ascending order.
+    An integer is assigned to each vertex of a regular pentagon so that the sum of the five integers is 2011. A turn of a solitaire game consists of subtracting an integer $m$ from each of the integers at two neighboring vertices and adding $2m$ to the opposite vertex, which is not adjacent to either of the first two vertices. (The amount $m$ and the vertices chosen can vary from turn to turn.) The game is won at a certain vertex if, after some number of turns, that vertex has the number 2011 and the other four vertices have the number 0. Prove that for any choice of the initial integers, there is exactly one vertex at which the game can be won.
 \end{problem}
-\begin{problem} [Russia 2004]
-On the table there are $2004$ boxes, each containing one ball. It is known that some of the balls are white, and their total number is even. You are allowed to point to any two boxes and ask whether there is at least one white ball among them. What is the minimum number of questions that is sufficient to guarantee identifying at least one box that contains a white ball?
+
+\begin{problem} [239 olympiad 2025]
+    The numbers from $1$ to $2025$ are arranged in some order in the cells of the $1 \times 2025$ strip. Let's call a flip an operation that takes two arbitrary cells of a strip and swaps the numbers written in them, but only if the larger of these numbers is located to the left of the smaller one. A flop is a set of several flips that do not contain common cells that are executed simultaneously. (For example, a simultaneous flip between the 2nd and 8th cells and a flip between the 5th and 101st cells.) Prove that there exists a sequence of $66$ flops such that for any initial arrangement, applying this sequence of flops to it will result in the numbers being ordered from left to right in ascending order.
 \end{problem}
-\begin{problem} [
