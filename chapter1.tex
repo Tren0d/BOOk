@@ -46,19 +46,18 @@ Fortunately, simply by rotating obtained coloring and sometimes inverting the co
 
 \begin{center}
     \begin{asy}
-        size(6cm, 0);
-        int k = 2, n = 10;
+        size(6cm);
+        int n = 10;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
+                path sq = shift(i,j)*unitsquare;
                 int c = (quotient(i, 2) + quotient(j, 2)) % 2;
-                filldraw(p, hsv(360/k*c, 1, 1));
+                filldraw(sq, col2[c]);
         	}
         }
-        draw((1, 1)--(1, 5)--(2, 5)--(2, 1)--cycle, linewidth(3.5)+white);
-        draw((1, 1)--(1, 5)--(2, 5)--(2, 1)--cycle, linewidth(1.5));
-        draw((4, 4)--(4, 5)--(8, 5)--(8, 4)--cycle, linewidth(3.5)+white);
-        draw((4, 4)--(4, 5)--(8, 5)--(8, 4)--cycle, linewidth(1.5));
+        path p = (0,0)--(4,0)--(4,1)--(0,1)--cycle;
+        ddraw(p, 4, 4);
+        ddraw(p, 2, 1, 90);
     \end{asy}
 \end{center}
 
@@ -80,23 +79,23 @@ You can easily get to one of multiple working examples.
         int n = 4;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = (i + j) % 4;
-                filldraw(p, hsv(90 * c, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                int c = (i+j) % 4;
+                filldraw(sq, col4[c]);
             }
         }
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = (i + 2 * j) % 4;
-                filldraw(shift(5, 0)*p, hsv(90 * c, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                int c = (i+2*j) % 4;
+                filldraw(sq, col4[c]);
             }
         }
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = (i + 3 * j) % 4;
-                filldraw(shift(10, 0)*p, hsv(90 * c, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                int c = (i+3*j) % 4;
+                filldraw(sq, col4[c]);
             }
         }
     \end{asy}
@@ -106,21 +105,18 @@ Now using the same logic as in the previous example, we can use one of such $4\t
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        size(6cm, 0);
-        int k = 4, n = 10;
+        size(6cm);
+        int n = 10;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = (i + j) % k;
-                filldraw(p, hsv(360 / k * c, 1, 1));
-            }
+                path sq = shift(i,j)*unitsquare;
+                int c = (i+j)%4;
+                filldraw(sq, col4[c]);
+        	}
         }
-        ddraw((1, 1)--(1, 5)--(2, 5)--(2, 1)--cycle);
-        ddraw((4, 4)--(4, 5)--(8, 5)--(8, 4)--cycle);
+        path p = (0,0)--(4,0)--(4,1)--(0,1)--cycle;
+        ddraw(p, 4, 4);
+        ddraw(p, 2, 1, 90);
     \end{asy}
 \end{center}
 
@@ -133,17 +129,15 @@ This idea of coloring as we go and slightly changing the shape of our focus is t
 In the previous example we encountered with the simplest colorings and invariants. The next example with the similar taste
 
 \begin{example}
-    Is it possible to cover a $10\times 10$ board with the following pieces without them overlapping?\\Note: The pieces \textbf{can} be flipped and/or turned.
+    Is it possible to cover a $10\times 10$ board with the following pieces without them overlapping?
+    
+    Note: The pieces \textbf{can} be flipped and/or turned.
     \begin{center}
         \begin{asy}
             size(3cm, 0);
-            int [][] x = {{1, 1, 1},{0, 0, 1}};
-            for(int i=0; i<2; ++i){
-                for(int j=0; j<3; ++j){
-                    path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                    if(x[i][j] == 1) draw(p);
-                }
-            }
+            path p = (0, 0)--(3, 0)--(3, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+            draw((0, 1)--(1, 1)--(1, 0)^^(2, 0)--(2, 1));
+            ddraw(p);
         \end{asy}
     \end{center}
 \end{example}
@@ -152,35 +146,59 @@ This problem is a little tricky one, to understand why, try using previous metho
 
 There is an issue with this approach -- only possible coloring is checkerboard pattern, which is simply useless in this problem.
 
-
-
 So we need to find a little more complex coloring: 
 
-Color the columns into red and cyan alternatively.
+Try coloring such that every figure has 3 cyan and 1 red cell:
 
 \begin{center}
     \begin{asy}
-        size(6cm, 0);
-        int k = 2, n = 10;
-        for(int i=0; i<n; ++i){
-            for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = i % 2;
-                filldraw(p, hsv(360/k*c, 1, 1));
-        	}
-        }
-        draw((1, 1)--(3, 1)--(3, 2)--(2, 2)--(2, 4)--(1, 4)--cycle, linewidth(3.5)+white);
-        draw((1, 1)--(3, 1)--(3, 2)--(2, 2)--(2, 4)--(1, 4)--cycle, linewidth(1.5));
-        draw((5, 3)--(6, 3)--(6, 4)--(8, 4)--(8, 5)--(5, 5)--cycle, linewidth(3.5)+white);
-        draw((5, 3)--(6, 3)--(6, 4)--(8, 4)--(8, 5)--(5, 5)--cycle, linewidth(1.5));
+        path p = (0, 0)--(3, 0)--(3, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+        filldraw(unitsquare, col2[0]);
+        filldraw(shift(1,0)*unitsquare, col2[0]);
+        filldraw(shift(2,0)*unitsquare, col2[0]);
+        filldraw(shift(0,1)*unitsquare, col2[1]);
+        ddraw(p);
+        label("$\Rightarrow$", (3.5,1));
+        filldraw(shift(4,0)*unitsquare, col2[0]);
+        filldraw(shift(4,0)*shift(1,0)*unitsquare, col2[0]);
+        filldraw(shift(4,0)*shift(2,0)*unitsquare, col2[0]);
+        filldraw(shift(4,0)*shift(0,1)*unitsquare, col2[1]);
+        filldraw(shift(4,0)*shift(0,-1)*unitsquare, col2[1]);
+        ddraw(reflect((0,0.5), (1,0.5))*p, 4, 0);
+        label("$\Rightarrow$", (7.5,1));
+        filldraw(shift(8,0)*unitsquare, col2[0]);
+        filldraw(shift(8,0)*shift(1,0)*unitsquare, col2[0]);
+        filldraw(shift(8,0)*shift(2,0)*unitsquare, col2[0]);
+        filldraw(shift(8,0)*shift(0,1)*unitsquare, col2[1]);
+        filldraw(shift(8,0)*shift(1,1)*unitsquare, col2[1]);
+        filldraw(shift(8,0)*shift(0,-1)*unitsquare, col2[1]);
+        ddraw(p, 8, 2, -90);
     \end{asy}
 \end{center}
 
-There are 50 cyan squares and 50 red squares. We can see that, regardless of how we place a piece, figure always covers 3 squares of one color and 1 of the other.
+You fail on the third figure, so try to color the board in such a way that every figure has either 1 or 3 red cells.
 
-We call the piece cyan if it covers 3 cyan squares, and red if it covers three red squares.
+Continuing the logic you get to the following coloring.
 
-The number of cyan pieces is equal to the number of red pieces. This tells us that the total number of pieces must be even. This would mean that the number of squares should be divisible by 8. Since there are 100 squares, there is no possible cover.
+\begin{center}
+    \begin{asy}
+        size(6cm);
+        int n = 10;
+        path p = (0, 0)--(3, 0)--(3, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+                int c = j % 2;
+                filldraw(shift(i, j)*unitsquare, col2[c]);
+        	}
+        }
+        ddraw(reflect((0,0.5), (1,0.5))*p, 2, 1, 90);
+        ddraw(p, 6, 5);
+    \end{asy}
+\end{center}
+
+There are 50 cyan squares and 50 red squares. We call the figure cyan if it covers 3 cyan squares, and red if it covers three red squares.
+
+The number of cyan figure is equal to the number of red figure. This tells us that the total number of figure must be even. This would mean that the number of squares should be divisible by 8. Since there are 100 squares, there is no possible cover.
 
 \begin{example} [ISL 2023 C1]
     Let $m$ and $n$ be positive integers greater than 1. In each unit square of an $m\times n$ grid lies a coin with its tail side up. A move consists of the following steps.
@@ -192,36 +210,61 @@ The number of cyan pieces is equal to the number of red pieces. This tells us th
     Determine all pairs $(m, n)$ for which it is possible that every coin shows head-side up after a finite number of moves.
 \end{example}
 
-Answer: $\boxed{3\mid m \text{ or } 3\mid n}$.
-\\\\
-Only two possible moves consist of changing the state 3 cell corners with only difference between them being top-right or bottom-left cell.
+\ansf{3\mid m \text{ or } 3\mid n}
 
-And, as in the first example, we want to make a coloring such that every move is \textit{invariant}, so we can make the top right and bottom left cells the same color. So we get to the following rule:
-\\\\
-\textit{Make top right and bottom left cells in every $2\times 2$ the same color}
-\\\\
-Continuously using this rule we get to the following coloring:
+If we do changes within the moves simultaneously, then there are only 2 types of moves:
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        size(6cm, 0);
-        int k = 3, n = 6;
+        path p = (0, 0)--(2, 0)--(2, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+		draw((0, 1)--(1, 1)--(1, 0));
+        ddraw(p);
+		draw((5, 1)--(4, 1)--(4, 2));
+        ddraw(p, 5, 2, 180);
+    \end{asy}
+\end{center}
+
+And, as in the first example, we want to make a coloring such that every move is \textit{invariant}. So we color every cell of figure in unique color:
+
+\begin{center}
+    \begin{asy}
+        path p = (0, 0)--(2, 0)--(2, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+        fill(unitsquare, col3[0]);
+        fill(shift(0,1)*unitsquare, col3[1]);
+        fill(shift(1,0)*unitsquare, col3[2]);
+        ddraw(p);
+        label("$\Rightarrow$", (2.5,1));
+        filldraw(shift(3,0)*unitsquare, col3[0]);
+        filldraw(shift(3,0)*shift(0,1)*unitsquare, col3[1]);
+        filldraw(shift(3,0)*shift(1,0)*unitsquare, col3[2]);
+        filldraw(shift(3,0)*shift(1,1)*unitsquare, col3[0]);
+        ddraw(p, 5, 2, 180);
+        label("$\Rightarrow$", shift(3,0)*(2.5,1));
+        filldraw(shift(6,0)*unitsquare, col3[0]);
+        filldraw(shift(6,0)*shift(0,1)*unitsquare, col3[1]);
+        filldraw(shift(6,0)*shift(1,0)*unitsquare, col3[2]);
+        filldraw(shift(6,0)*shift(1,1)*unitsquare, col3[0]);
+        filldraw(shift(6,0)*shift(2,0)*unitsquare, col3[1]);
+        ddraw(shift(7,0)*p);
+    \end{asy}
+\end{center}
+
+Continuing this we get to the following coloring:
+
+\begin{center}
+    \begin{asy}
+        size(6cm);
+        int n = 6;
+        path p = (0, 0)--(2, 0)--(2, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                int c = (i - j) % k;
-                fill(p, hsv(360 / k * c, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                int c = (i-j)%3;
+                filldraw(sq, col3[c]);
             }
         }
-        for(int i=0; i<=n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
-        }
-        ddraw((1, 1)--(3, 1)--(3, 2)--(2, 2)--(2, 3)--(1, 3)--cycle);
-        ddraw((4, 3)--(5, 3)--(5, 2)--(6, 2)--(6, 4)--(4, 4)--cycle);
+        ddraw(p, 1, 1);
+        ddraw(p, 6, 4, 180);
     \end{asy}
 \end{center}
 
@@ -231,46 +274,46 @@ For construction, it is easy to see we can always change the state of $2\times3$
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
         size(15cm);
         pair x = (0, 0);
-        
-        path p1 = (0, 0)--(2, 0)--(2, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
-        path p2 = (0, 0)--(-2, 0)--(-2, -1)--(-1, -1)--(-1, -2)--(-0, -2)--cycle;
-        
-        fill((0, 0)--(3, 0)--(3, 2)--(0, 2)--cycle, hsv(0, 1, 1));
-        
-        fill((4, 0)--(5, 0)--(5, 1)--(4, 1)--cycle^^(6, 0)--(7, 0)--(7, 2)--(6, 2)--cycle, hsv(0, 1, 1));
-        fill(shift(6, 2)*p2, hsv(180, 1, 1));
-        
-        fill((8, 1)--(9, 1)--(9, 2)--(8, 2)--cycle^^shift(11, 0)*rotate(90)*p1, hsv(0, 1, 1));
-        fill((8, 0)--(9, 0)--(9, 1)--(8, 1)--cycle^^(9, 1)--(10, 1)--(10, 2)--(9, 2)--cycle, hsv(180, 1, 1));
-        
-        fill((12, 1)--(15, 1)--(15, 2)--(12, 2)--cycle, hsv(0, 1, 1));
-        fill((12, 0)--(15, 0)--(15, 1)--(12, 1)--cycle, hsv(180, 1, 1));
-        
-        for(int i=0; i<3; ++i) draw((x + (0, i))--(x + (3, i)));
-        for(int i=0; i<4; ++i) draw((x + (i, 0))--(x + (i, 2)));
-        x += (4, 0);
-        for(int i=0; i<3; ++i) draw((x + (0, i))--(x + (3, i)));
-        for(int i=0; i<4; ++i) draw((x + (i, 0))--(x + (i, 2)));
-        x += (4, 0);
-        for(int i=0; i<3; ++i) draw((x + (0, i))--(x + (3, i)));
-        for(int i=0; i<4; ++i) draw((x + (i, 0))--(x + (i, 2)));
-        x += (4, 0);
-        for(int i=0; i<3; ++i) draw((x + (0, i))--(x + (3, i)));
-        for(int i=0; i<4; ++i) draw((x + (i, 0))--(x + (i, 2)));
-        
+        path p = (0, 0)--(2, 0)--(2, 1)--(1, 1)--(1, 2)--(0, 2)--cycle;
+        for(int i=0; i<3; ++i){
+        	for(int j=0; j<2; ++j){
+              	path sq = shift(x)*shift(i,j)*unitsquare;
+				filldraw(sq, col2[0]);
+            }
+        }
+        x+=(4,0);
+        for(int i=0; i<3; ++i){
+        	for(int j=0; j<2; ++j){
+              	path sq = shift(x)*shift(i,j)*unitsquare;
+				if((i,j)==(0,0)||i==2) filldraw(sq, col2[0]);
+				else filldraw(sq, col2[1]);
+            }
+        }
+        x+=(4,0);
+        for(int i=0; i<3; ++i){
+        	for(int j=0; j<2; ++j){
+              	path sq = shift(x)*shift(i,j)*unitsquare;
+				if(i==j) filldraw(sq, col2[1]);
+				else filldraw(sq, col2[0]);
+            }
+        }
+        x+=(4,0);
+        for(int i=0; i<3; ++i){
+        	for(int j=0; j<2; ++j){
+              	path sq = shift(x)*shift(i,j)*unitsquare;
+				if(j==1) filldraw(sq, col2[0]);
+				else filldraw(sq, col2[1]);
+            }
+        }
         label((3.5, 1), "$\Rightarrow$");
         label((7.5, 1), "$\Rightarrow$");
         label((11.5, 1), "$\Rightarrow$");
 
-        ddraw(p2, 2, 2);
-        ddraw(p1, 4, 0);
-        ddraw(p1, 9, 0);
+        ddraw(p, 2, 2, 180);
+        ddraw(p, 4, 0);
+        ddraw(p, 9, 0);
     \end{asy}
 \end{center}
 
@@ -280,35 +323,34 @@ However, invariants are not only about colorings; rather, invariants about cuts 
     A $60\times 60$ checkered square is divided into $2\times 5$ tiles. Prove that it is possible to partition the square into $1\times 3$ rectangles such that each $2\times 5$ tile contains at least one rectangle entirely.
 \end{example}
 
-First, let us draw a marking that divides the original $60\times 60$ square into $3\times 3$ squares.
+Problems wants us to cut everything into $1\times3$ rectangles, one of the ways to do so is cut everything into $3\times3$ squares and divide each of them into $1\times3$ rectangles after.
+
+Draw a marking that divides the original $60\times 60$ square into $3\times 3$ squares.
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        size(6cm, 0);
+        size(6cm);
         int n = 9;
-        fill((2, 0)--(2, 3)--(3, 3)--(3, 0)--cycle, hsv(0, 1, 1));
-        fill((3, 5)--(3, 6)--(6, 6)--(6, 5)--cycle, hsv(180, 1, 1));
+        fill((2, 0)--(2, 3)--(3, 3)--(3, 0)--cycle, col2[0]);
+        fill((3, 5)--(3, 6)--(6, 6)--(6, 5)--cycle, col2[1]);
         for(int i=0; i<=n; ++i){
         	if(i % 3 == 0) draw((i, 0)--(i, n)^^(0, i)--(n, i));
         	else draw((i, 0)--(i, n)^^(0, i)--(n, i), dashed);
         }
-        ddraw((2, 0)--(2, 5)--(4, 5)--(4, 0)--cycle);
-        ddraw((2, 5)--(2, 7)--(7, 7)--(7, 5)--cycle);
+        path p = (0,0)--(5,0)--(5,2)--(0,2)--cycle;
+        ddraw(p, 2, 5);
+        ddraw(p, 4, 0, 90);
     \end{asy}
 \end{center}
 
 Note that each $2\times 5$ tile has a side of length 5 divided by this marking into either two parts (their lengths are 2 and 3) or three parts (with lengths 1, 3, 1).
-\\\\
+
 Therefore, on each tile there is a $1\times 3$ rectangle that is not divided into parts by the marking lines (the figure shows examples of such rectangles), we will paint one such rectangle at each point. Obviously, the painted rectangles do not intersect, since they lie in different tiles.
-\\\\
+
 If in some $3\times 3$ square more than one $1\times 3$ rectangle is painted, then they lie in the same direction (all horizontally or all vertically), so they do not intersect.
-\\\\
+
 Therefore, each square of the $3\times 3$ marking can be divided into $1\times 3$ rectangles in such a way that all the painted rectangles will belong to this division.
-\\\\
+
 It might seem that invariant problems are kinda easy: just spam one of the basic colorings or cuts. However, invariant problems frequently can be extremely non-obvious and tricky, with mind-blowing colorings or cuts. In next 2 examples that idea will be clearer. 
 
 \begin{example} [APMO 2007]
@@ -319,30 +361,28 @@ Consider the following coloring:
 
 \begin{center} 
     \begin{asy}
-        size(12cm, 0);
-        int k = 2, n = 5;
+        size(12cm);
+        int n = 5;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
             	int c = 0;
-                path p = (i,j)--(i,j+1)--(i+1,j+1)--(i+1,j)--cycle;
-                if(j % 2 == 0 && i != 2)
-                {
+                path sq = shift(i,j)*unitsquare;
+                if(j % 2 == 0 && i != 2){
                 	c = 1;
                     label((i + 0.5, j + 0.5), "$\star$");
                 }
-                filldraw(p, hsv(360/k*c, 1, 1));
+                filldraw(sq, col2[c]);
         	}
         }
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
             	int c = 0;
-                path p = (i,j)--(i,j+1)--(i+1,j+1)--(i+1,j)--cycle;
-                if(abs(2 - i) <= 1 && abs(2 - j) <= 1 && (i + j) % 2 == 0)
-                {
+                path sq = shift(6,0)*shift(i,j)*unitsquare;
+                if(abs(2 - i) <= 1 && abs(2 - j) <= 1 && (i + j) % 2 == 0){
                 	c = 1;
                     label(shift(6, 0)*(i + 0.5, j + 0.5), "$\star$");
                 }
-                filldraw(shift(6, 0)*p, hsv(360/k*c, 1, 1));
+                filldraw(sq, col2[c]);
         	}
         }
     \end{asy}
@@ -352,62 +392,119 @@ There are 12 cyan cells, and it is easily verifiable that any move on the board 
 
 Rotating this coloring by 90 degrees eliminates all except for the 5 points.
 
+Example for $(2, 2)$ cell, star is the cells that we switch:
+
+\begin{center} 
+    \begin{asy}
+        size(12cm);
+        int n = 5;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+            	filldraw(shift(i,j)*unitsquare, col2[0]);
+        	}
+        }
+        label((0.5,4.5), "$\star$");
+        label((0.5,1.5), "$\star$");
+        label((2.5,0.5), "$\star$");
+        label((2.5,2.5), "$\star$");
+        label((3.5,4.5), "$\star$");
+        label((3.5,1.5), "$\star$");
+        label((4.5,0.5), "$\star$");
+        label((4.5,2.5), "$\star$");
+        label((5.5,2.5), "$\Rightarrow$");
+        //path p2 = (0,0)--(2,0)--(2,1)--(1,1)--(1,2)--(0,2)--cycle;
+        //path p3 = (0,0)--(3,0)--(3,1)--(2,1)--(2,2)--(1,2)--(1,1)--(0,1)--cycle;
+        //path p4 = (0,1)--(1,1)--(1,0)--(2,0)--(2,1)--(3,1)--(3,2)--(2,2)--(2,3)--(1,3)--(1,2)--(0,2)--cycle;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+            	path sq = shift(6, 0)*shift(i,j)*unitsquare;
+            	if((i,j)==(1,3)) filldraw(sq, col2[0]);
+                else filldraw(sq, col2[1]);
+        	}
+        }
+    \end{asy}
+\end{center}
+
+Example for the middle cell:
+
+\begin{center} 
+    \begin{asy}
+        size(12cm);
+        int n = 5;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+            	filldraw(shift(i,j)*unitsquare, col2[0]);
+        		if((i+j)%2==0&&(i,j)!=(2,2)) label(shift(0.5,0.5)*(i,j), "$\star$");
+        	}
+        }
+        label((5.5,2.5), "$\Rightarrow$");
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+            	path sq = shift(6, 0)*shift(i,j)*unitsquare;
+            	if((i,j)==(2,2)) filldraw(sq, col2[0]);
+                else filldraw(sq, col2[1]);
+        	}
+        }
+    \end{asy}
+\end{center}
+
 \begin{example} [ISL 2014 C4]
-    Construct a tetromino by attaching two $2\times 1$ dominoes along their longer sides such that the midpoint of the longer side of one domino is a corner of the other domino. This construction yields two kinds of tetrominoes with opposite orientations. Let us call them $S-$ and $Z-$tetrominoes, respectively.\\Assume that a lattice polygon $P$ can be tiled with $S-$ tetrominoes. Prove that no matter how we tile $P$ using only $S-$ and $Z-$tetrominoes, we always use an even number of $Z-$tetrominoes.\\Note: tetrominoes cannot be rotated.
+    Construct a tetromino by attaching two $2\times 1$ dominoes along their longer sides such that the midpoint of the longer side of one domino is a corner of the other domino. This construction yields two kinds of tetrominoes with opposite orientations. Let us call them $S-$ and $Z-$tetrominoes, respectively.
+    
+    Assume that a lattice polygon $P$ can be tiled with $S-$ tetrominoes. Prove that no matter how we tile $P$ using only $S-$ and $Z-$tetrominoes, we always use an even number of $Z-$tetrominoes.
+    
+    Note: tetrominoes cannot be rotated.
     \begin{center}
         \begin{asy}
-            size(8cm, 0);
-            int [][] x = {{1, 1, 0},{0, 1, 1}};
-            for(int i=0; i<2; ++i){
-                for(int j=0; j<3; ++j){
-                    path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                    if(x[i][j] == 1) draw(p);
-                }
-            }
+            size(6cm);
+            path p = (0,0)--(2,0)--(2,1)--(3,1)--(3,2)--(1,2)--(1,1)--(0,1)--cycle;
+            path q = (1,0)--(1,1)--(2,1)--(2,2);
+            draw(q);
+            ddraw(p);
     		label((1.5, -0.5), "$S-$tetromino");
-            int [][] x = {{0, 1, 1},{1, 1, 0}};
-            for(int i=0; i<2; ++i){
-                for(int j=0; j<3; ++j){
-                    path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                    if(x[i][j] == 1) draw(shift(4, 0)*p);
-                }
-            }
+            draw(shift(4,1)*reflect((0,0.5),(1,0.5))*q);
+            ddraw(reflect((0,0.5),(1,0.5))*p, 4, 1);
     		label(shift(4, 0)*(1.5, -0.5), "$Z-$tetromino");
         \end{asy}
     \end{center}
 \end{example}
 
-Color some cells of grid cyan, as a repeating of coloring below.
+One of the main differences between $S-$ and $Z-$tetrominoes is the fact that every cell in the $Z-$tetromino lies on unique (/) diagonal. We will abuse this by making a diagonal coloring.
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        size(8cm);
-        int n = 8;
-        for(int i=0; i<n; ++i){
-            for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                if((i - j) % 4 == 0) fill(p, hsv(180, 1, 1));
-                else fill(p, hsv(0, 1, 1));
+        size(6cm);
+        int [][] x = {{0, 1, 1},{1, 1, 0}};
+        for(int i=0; i<2; ++i){
+            for(int j=0; j<3; ++j){
+                path[] p = shift(j, i)*(unitsquare^^(-0.2,-0.2)--(1.2,1.2));
+                if(x[i][j] == 1) draw(p);
             }
         }
-        ++n;
-        for(int i=0; i<n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
-        }
-        path p = (1, 1)--(3, 1)--(3, 2)--(4, 2)--(4, 3)--(2, 3)--(2, 2)--(1, 2)--cycle;
-        ddraw(p);
-        ddraw(p, -1, 3);
-        p = (0, 0)--(1, 0)--(1, 1)--(2, 1)--(2, 3)--(1, 3)--(1, 2)--(0, 2)--cycle;
-        ddraw(p, 8, 0, 90);
-        ddraw(p, 8, 6, 90);
     \end{asy}
 \end{center}
 
-Observe that any $S-$tetramino covers even number of cyan cells, so $P$ also cover even number of cyan. But any $Z-$tetramino covers an odd number of cyan cells, so the conclusion follows.
+Color some cells of grid cyan and red, as a repeating of coloring below.
+
+\begin{center}
+    \begin{asy}
+        int n = 8;
+        path p = (0,0)--(2,0)--(2,1)--(3,1)--(3,2)--(1,2)--(1,1)--(0,1)--cycle;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+                path sq = shift(i,j)*unitsquare;
+                if((i - j) % 4 == 0) filldraw(sq, col2[1]);
+                else filldraw(sq, col2[0]);
+            }
+        }
+        ddraw(p, 1, 1);
+        ddraw(p, 1, 4);
+        ddraw(reflect((0,0.5),(1,0.5))*p, 5, 2);
+        ddraw(reflect((0,0.5),(1,0.5))*p, 4, 6);
+    \end{asy}
+\end{center}
+
+Observe that any $S-$tetromino covers even number of cyan cells, so $P$ also cover even number of cyan. But any $Z-$tetromino covers an odd number of cyan cells, so the conclusion follows.
 
 \subsection{Invariants as a method of counting or bounding}
 
@@ -417,31 +514,38 @@ Observe that any $S-$tetramino covers even number of cyan cells, so $P$ also cov
 
 Bound:
 
-Consider the following coloring
+Every domino actually represents the following region:
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        size(8cm);
-        int n = 8;
+        size(6cm);
+        path p = (0,0)--(2,0)--(2,1)--(0,1)--cycle;
+        path[] q = (0,0)--(0,-1)--(2,-1)--(2,0)--(3,0)--(3,1)--(2,1)--(2,2)--(0,2)--(0,1)--(-1,1)--(-1,0)--cycle^^(1,-1)--(1,2);
+        draw(q);
+        ddraw(p);
+    \end{asy}
+\end{center}
+
+But the outer squares can be cut off if the domino lies on the outer region of the board. This motivates us to imaginary ''color'' extra space around board in one color, and continuing this logic color the table in layers as follows:
+
+\begin{center}
+    \begin{asy}
+        int n = 10;
+        path p = (0,0)--(2,0)--(2,1)--(0,1)--cycle;
+        path q = (1,1)--(9,1)--(9,9)--(1,9)--cycle;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                if(min(i, j) == 0 || max(i, j) == 7 || (min(i, j) == 2 && 1 < max(i, j) && max(i, j) < 6) || (max(i, j) == 5 && 1 < min(i, j) && min(i, j) < 6)) fill(p, hsv(348, 0.91, 0.90));
-                else fill(p, rgb(0.08, 0.27, 0.67));
+                path sq = shift(i,j)*unitsquare;
+                if((max(abs(i-(n-1)/2), abs(j-(n-1)/2))+0.5)%2==0) filldraw(sq, col2[0]);
+                else if((max(abs(i-(n-1)/2), abs(j-(n-1)/2))+0.5)==5) fill(sq, white+col2[1]);
+                else filldraw(sq, col2[1]);
             }
         }
-        for(int i=0; i<=n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
-        }
-        path p = (0, 0)--(2, 0)--(2, 1)--(0, 1)--cycle;
-        ddraw(p, 0, 4);
-        ddraw(p, 5, 2);
-        ddraw(p, 3, 0, 90);
-        ddraw(p, 7, 6, 90);
+        ddraw(q);
+        ddraw(p, 1, 5);
+        ddraw(p, 6, 2);
+        ddraw(p, 4, 1, 90);
+        ddraw(p, 8, 7, 90);
     \end{asy}
 \end{center}
 
@@ -457,27 +561,19 @@ Example:
 
 \begin{center}
     \begin{asy}
-        void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x, y)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
-        void dddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x+14, y+1)*rotate(r)*p, linewidth(3.5)+white+miterjoin);
-        	draw(shift(x+14, y+1)*rotate(r)*p, linewidth(1.5)+miterjoin);
-        }
         size(14cm);
         int n = 12;
         for(int i=0; i<=n; ++i){
         	draw((i, 0)--(i, n)^^(0, i)--(n, i));
         }
         path p = (4, 4)--(8, 4)--(8, 8)--(4, 8)--cycle;
-        draw(p, linewidth(4.5)+hsv(0, 1, 1)+miterjoin);
+        draw(p, linewidth(4.5)+col3[0]+miterjoin);
         
         p = (2, 2)--(10, 2)--(10, 10)--(2, 10)--cycle;
-        draw(p, linewidth(4.5)+hsv(120, 1, 1)+miterjoin);
+        draw(p, linewidth(4.5)+col3[1]+miterjoin);
         
         p = (0, 0)--(12, 0)--(12, 12)--(0, 12)--cycle;
-        draw(p, linewidth(4.5)+hsv(240, 1, 1)+miterjoin);
+        draw(p, linewidth(4.5)+col3[2]+miterjoin);
         
         p = (0, 0)--(2, 0)--(2, 1)--(0, 1)--cycle;
         ddraw(p, 1, 10, 90);
@@ -510,32 +606,32 @@ Example:
         	draw((i+14, 1)--(i+14, n+1)^^(14, i+1)--(n+14, i+1));
         }
         p = (4, 4)--(6, 4)--(6, 6)--(4, 6)--cycle;
-        draw(shift(14, 1)*p, linewidth(4.5)+hsv(0, 1, 1)+miterjoin);
+        draw(shift(14, 1)*p, linewidth(4.5)+col3[0]+miterjoin);
         
         p = (2, 2)--(8, 2)--(8, 8)--(2, 8)--cycle;
-        draw(shift(14, 1)*p, linewidth(4.5)+hsv(120, 1, 1)+miterjoin);
+        draw(shift(14, 1)*p, linewidth(4.5)+col3[1]+miterjoin);
         
         p = (0, 0)--(10, 0)--(10, 10)--(0, 10)--cycle;
-        draw(shift(14, 1)*p, linewidth(4.5)+hsv(240, 1, 1)+miterjoin);
+        draw(shift(14, 1)*p, linewidth(4.5)+col3[2]+miterjoin);
         
         p = (0, 0)--(2, 0)--(2, 1)--(0, 1)--cycle;
-        dddraw(p, 1, 5, 90);
-        dddraw(p, 1, 1, 90);
-        dddraw(p, 10, 5, 90);
-        dddraw(p, 10, 1, 90);
-        dddraw(p, 0, 9);
-        dddraw(p, 4, 9);
-        dddraw(p, 8, 9);
-        dddraw(p, 2, 0);
-        dddraw(p, 6, 0);
+        ddraw(p, 15, 6, 90);
+        ddraw(p, 15, 2, 90);
+        ddraw(p, 24, 6, 90);
+        ddraw(p, 24, 2, 90);
+        ddraw(p, 14, 10);
+        ddraw(p, 18, 10);
+        ddraw(p, 22, 10);
+        ddraw(p, 16, 1);
+        ddraw(p, 20, 1);
         
-        dddraw(p, 3, 3, 90);
-        dddraw(p, 8, 3, 90);
-        dddraw(p, 2, 7);
-        dddraw(p, 6, 7);
-        dddraw(p, 4, 2);
+        ddraw(p, 17, 4, 90);
+        ddraw(p, 22, 4, 90);
+        ddraw(p, 16, 8);
+        ddraw(p, 20, 8);
+        ddraw(p, 18, 3);
         
-        dddraw(p, 4, 5);
+        ddraw(p, 18, 6);
         label(shift(14, 1)*(5, -1), "for odd $n$");
     \end{asy}
 \end{center}
@@ -544,12 +640,12 @@ Example:
     Let $n$ be an odd integer. In a $2n\times 2n$ board, we color $2(n-1)^2$ cells. What is the largest number of three-square corners that can surely be cut out of the uncolored figure?
 \end{example}
 
-Answer: $2n-1$.
-\\\\
+\ansf{2n-1}
+
 Bound:
 
 Divide the grid into $2\times 2$ squares. In order to stop a three corner from being cut out from one of these squares, there must be at least two squares shaded. Notice, there can only by $(n-1)^2$ such squares with at least two squares shaded. Thus, we can cut out three corners form at least $n^2-(n-1)^2=2n-1$ of them.
-\\\\
+
 Construction:
 
 We will proceed by induction. For $n=3$, by bound we \textit{should} be able to place only 5 three-square corners. so we need to distribute 5 empty $2\times 2$ squares in such a way, that we cannot place any additional three-square corners.
@@ -558,17 +654,13 @@ Note that if we have 2 of empty $2\times 2$ squares next to each other, it is ve
 
 \begin{center}
     \begin{asy}
-        size(8cm);
         int n = 6;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                if(abs(2.5 - i) + abs(2.5 - j) == 2 && i != j && i + j != 5) fill(p, hsv(180, 1, 1));
-                else fill(p, hsv(0, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                if(abs(2.5 - i) + abs(2.5 - j) == 2 && i != j && i + j != 5) filldraw(sq, col2[1]);
+                else filldraw(sq, col2[0]);
             }
-        }
-        for(int i=0; i<=n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
         }
     \end{asy}
 \end{center}
@@ -577,17 +669,13 @@ When going from $n\to n+2$ since we are using induction it makes sense to use pr
 
 \begin{center}
     \begin{asy}
-        size(8cm);
         int n = 10;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                if((max(abs(4.5 - i), abs(4.5 - j)) == 1.5 || max(abs(4.5 - i), abs(4.5 - j)) == 3.5) && i != j && i + j != 9) fill(p, hsv(180, 1, 1));
-                else fill(p, hsv(0, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                if((max(abs(4.5 - i), abs(4.5 - j)) == 1.5 || max(abs(4.5 - i), abs(4.5 - j)) == 3.5) && i != j && i + j != 9) filldraw(sq, col2[1]);
+                else filldraw(sq, col2[0]);
             }
-        }
-        for(int i=0; i<=n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
         }
     \end{asy}
 \end{center}
@@ -596,8 +684,8 @@ When going from $n\to n+2$ since we are using induction it makes sense to use pr
     A chip is placed in the lower left-corner cell of the $15\times 15$ board. We can move to the cells that are adjacent to the sides or the corners of its current cell. We must also alternate between horizontal and diagonal moves the first move must be diagonal What is the maximum number of moves it can make without stepping on the same cell twice
 \end{example}
 
-Answer: the chip can make 196 moves, having visited 197 cells (including the original one).
-\\\\
+\anst{the chip can make 196 moves, having visited 197 cells (including the original one)}
+
 Bound:
 
 For the motivation, notice that we can change vertical position only by moving diagonally, so after 2 moves you change your horizontal position by 0 or 2, and your vertical position by 1. So to get to your initial position you must spend al least 4 moves. From this point you should consider all positions that you can get to after even number of moves. And from that point notice pattern in every 4th move.
@@ -611,19 +699,15 @@ First, the chip (moving up) goes around the two left columns without two cells, 
 \begin{center}
     \begin{asy}
         void ddraw(path p, real x=0, real y=0, real r=0){
-			draw(shift(x, y)*rotate(r)*p, linewidth(2.5)+yellow);
+			draw(shift(x, y)*rotate(r)*p, linewidth(2.5)+col3[1]);
         }
-        size(8cm);
         int n = 11;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                if(i % 2 == 1 && j % 2 == 1) fill(p, hsv(180, 1, 1));
-                else fill(p, hsv(0, 1, 1));
+                path sq = shift(i,j)*unitsquare;
+                if(i % 2 == 1 && j % 2 == 1) filldraw(sq, col3[2]);
+                else filldraw(sq, col3[0]);
             }
-        }
-        for(int i=0; i<=n; ++i){
-        	draw((i, 0)--(i, n)^^(0, i)--(n, i));
         }
         for(int i=0; i<=n-2; i+=4){
         	for(int j=0; j<=n-2; ++j){
@@ -648,9 +732,13 @@ First, the chip (moving up) goes around the two left columns without two cells, 
     In the $100\times 100$ grid $k$ cells are colored in black color. If at any moment 3 of the 4 cells that lie as the corners of rectangle with sides parallel to sides of the initial square are black, after a minute the fourth cell will also become black. What is the minimum $k$, such that after some time the whole square will turn black?
 \end{example}
 
-Answer: \boxed{199}.
+\ansf{199}
 
-First idea in graphs is turning table into bipartite graph, by assigning a vertex to each row and column and drawing an edge between them if corresponding intersection of row and column is colored.
+First idea in graphs is
+
+\begin{fact}
+    Turning table into bipartite graph by assigning a vertex to each row and column and drawing an edge between them if corresponding intersection of row and column is colored.
+\end{fact}
 
 Because of the way we set up rows and columns this idea works well if we are working with something related to horizontal or vertical movements. And this problem is perfect for demonstrating it.
 
@@ -662,7 +750,6 @@ So the move now consists of completing the cycle of length 4.
 
 \begin{center}
     \begin{asy}
-        size(8cm, 0);
         draw((0, 4)--(2, 5));
         draw((0, 3)--(2, 4));
         draw((0, 3)--(2, 3));
@@ -713,7 +800,7 @@ Now let the degree of each vertex be at least 2. Let us leave an arbitrary verte
     In each cell of an $m\times n$ rectangle, two diagonals were drawn, resulting in the rectangle being divided into $4mn$ triangles. All triangles were painted black or white so that each white triangle has a common side with at least one black triangle. What is the smallest number of black triangles that could be in such a coloring?
 \end{example}
 
-Answer: $\boxed{mn+\min(m, n)}$.
+\ansf{mn+\min(m, n)}
 
 Example:
 
@@ -721,13 +808,13 @@ WLOG assume that table has $m$ rows and $n$ columns, where $m<n$. In each cell w
 
 \begin{center}
     \begin{asy}
-        size(8cm);
         int n = 5, m = 4;
+        fill((0,0)--(n,0)--(n,m)--(0,m)--cycle, col2[0]);
         for(int i=0; i<n; ++i){
             for(int j=0; j<m; ++j){
                 path p = (i,j)--(i+0.5,j+0.5)--(i,j+1)--cycle;
-                fill(p, hsv(180, 1, 1));
-                if(i==n-1) fill(shift(1, 1)*rotate(180, (i, j))*p, hsv(180, 1, 1));
+                fill(p, col2[1]);
+                if(i==n-1) fill(shift(1, 1)*rotate(180, (i, j))*p, col2[1]);
                 draw((i, j)--(i+1, j+1)^^(i+1, j)--(i, j+1));
         	}
         }
@@ -736,7 +823,7 @@ WLOG assume that table has $m$ rows and $n$ columns, where $m<n$. In each cell w
     \end{asy}
 \end{center}
 
-Bound:
+\sol Bound:
 
 Consider any row of a rectangle. It contains $2n$ "vertical" triangles (triangles with a vertical side). If such a triangle is painted white, draw an arrow leading from it to the adjacent black triangle (it lies in the same row). If the vertical triangle is black, draw an arrow from it to itself.
 
@@ -750,7 +837,7 @@ However, a row with exactly $n$ black triangles and a column with exactly $m$ bl
     Each cell of a $100\times 100$ board is painted either black or white, and all cells adjacent to the board's border are black. It turns out that there is no single-color $2\times 2$ checkered square anywhere on the board. Prove that there is a $2\times 2$ checkered square on the board whose cells are painted in a checkerboard pattern.
 \end{example}
 
-FTSoC assume that there are no single-colored or checkerboard-colored $2\times 2$ squares on the board.
+\sol FTSoC assume that there are no single-colored or checkerboard-colored $2\times 2$ squares on the board.
 
 Consider all the grid segments separating two cells of different colors (let's call them separators); let their number be $N$.
 
@@ -761,37 +848,48 @@ There are $99^2$ $2\times 2$ squares in total, and each separator lies inside ex
 Therefore, $N = \frac{2(99^2)}{2} = 99^2$. In each row and each column, the first and last cell are black; therefore, there must be an even number of color changes, so the total number of separators must be even. Contradiction.
 
 \begin{example} [BMOSL 2019]
-Determine the largest natural number $ N $ having the following property: every $ 5\times 5 $ array consisting of pairwise distinct natural numbers from $ 1 $ to $ 25 $ contains a $ 2\times 2 $ subarray of numbers whose sum is, at least, $ N. $
+    Determine the largest natural number $N$ having the following property: every $5\times 5$ array consisting of pairwise distinct natural numbers from $1$ to $25$ contains a $2\times 2$ subarray of numbers whose sum is, at least, $N$.
 \end{example}
-\sol
-Answer: $k_{max} = 45$.
-First if all, we will enumerate the columns and rows. Then, we will select all possible $3^2 = 9$ choices for the odd column with an odd row.
-By collecting all such pairs of an odd column with an odd row, we double count some squares. Indeed, we took some $3^2$ squares $5$ times, some $12$ squares $3$ times, and there are
-some $4$ squares (namely all the intersections of an even column with an even row) that we did not take in such pairs.
-It follows that the maximum total sum over all $32$ choices of an odd column with an odd row is
-$5\times (17+18+\dots +25) + 3 \times (5+6+ \dots +16) = 1323$.
-So, by averaging argument, there exists a pair of an odd column with an odd row $\frac{1323}{9}$ with sum at most = 147. 
-Then all the other squares of the array will have sum at least
-$(1+2+ \dots +25) - 147 = 178$. However, for these squares there is a tiling with $2 \times 2 arrays$, which are 4 in total. So there is an 2 x 2 array, whose numbers have a sum at least $\frac{178}{4} > 44$. So, there is a $2 \times 2$ array whose numbers have a sum at least 45. This argument gives that $k_{max} \geq 45$.
-Here, we have a bound that $k_{max} \geq 45$, but now we should prove that $k=45$ is optimal. Fortunately, this part looks less impressive than the previous part: we can do this by providing an example:
-\[
-\begin{bmatrix}
-23 & 13 & 19 & 12 & 24 \\
-7 & 2 & 9 & 4 & 5 \\
-18 & 16 & 17 & 15 & 21 \\
-8 & 1 & 10 & 3 & 6 \\
-22 & 14 & 20 & 11 & 25
-\end{bmatrix}
-\]
 
+\ansf{45}
+
+First, enumerate the columns and rows. Then, we will select all possible $3^2 = 9$ choices for the odd column with an odd row.
+
+By collecting all such pairs of an odd column with an odd row, we double count some squares. Indeed, we took some $3^2$ squares $5$ times, some $12$ squares $3$ times, and there are some $4$ squares (namely all the intersections of an even column with an even row) that we did not take in such pairs.
+
+It follows that the maximum total sum over all $32$ choices of an odd column with an odd row is $5\times (17+18+\dots +25) + 3 \times (5+6+ \dots +16) = 1323$.
+
+So, by averaging argument, there exists a pair of an odd column with an odd row $\frac{1323}{9}$ with sum at most = 147. 
+
+Then all the other squares of the array will have sum at least $(1+2+ \dots +25)-147=178$. However, for these squares there is a tiling with $2 \times 2 arrays$, which are 4 in total. So there is an 2 x 2 array, whose numbers have a sum at least $\frac{178}{4} > 44$. So, there is a $2 \times 2$ array whose numbers have a sum at least 45. This argument gives that $k_{max} \geq 45$.
+
+Here, we have a bound that $k_{\text{max}} \geq 45$, but now we should prove that $k=45$ is optimal. Fortunately, this part looks less impressive than the previous part: we can do this by providing an example:
+
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        23 & 13 & 19 & 12 & 24 \\
+        \hline
+        7 & 2 & 9 & 4 & 5 \\
+        \hline
+        18 & 16 & 17 & 15 & 21 \\
+        \hline
+        8 & 1 & 10 & 3 & 6 \\
+        \hline
+        22 & 14 & 20 & 11 & 25\\
+        \hline
+    \end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
 
 \section{Induction}
 
 \begin{example}
-    On an $n\times n$ chart where $n\geq 4$, stand $n$ "+" signs in cells of one diagonal and a '--' sign in all the other cells. In a move, one can change all the signs in one row or in one column, (-- changes to + and + changes to --). Prove that it is impossible to reach a stage where there are fewer than $n$ pluses on the board.
+    On an $n\times n$ chart where $n\geq 4$, stand $n$ ''+'' signs in cells of one diagonal and a ''--'' sign in all the other cells. In a move, one can change all the signs in one row or in one column, (-- changes to + and + changes to --). Prove that it is impossible to reach a stage where there are fewer than $n$ pluses on the board.
 \end{example}
 
-Note that operating twice on a row is equivalent to not operating on it at all. So we can assume that each row and column has been operated upon 0 or 1 times. Now we use induction on $n$.
+\sol Note that operating twice on a row is equivalent to not operating on it at all. So we can assume that each row and column has been operated upon 0 or 1 times. Now we use induction on $n$.
 
 The base case $n=4$ is not entirely trivial, but is left to the reader in keeping with my general habit of dismissing base cases.
 
@@ -813,19 +911,26 @@ WLOG the first row has been operated upon. Then columns $2, 3, \dots, n$ have al
 
 We claim that $9\mid n$ is the only answer.
 
-For $n=9$, consider the following table\[
-\begin{array}{|ccc|ccc|ccc|} \hline
-I & I & I & M & M & M & O & O & O \\
-M & M & M & O & O & O & I & I & I \\
-O & O & O & I & I & I & M & M & M \\\hline
-I & I & I & M & M & M & O & O & O \\
-M & M & M & O & O & O & I & I & I \\
-O & O & O & I & I & I & M & M & M \\\hline
-I & I & I & M & M & M & O & O & O \\
-M & M & M & O & O & O & I & I & I \\
-O & O & O & I & I & I & M & M & M \\\hline
-\end{array}
-\]
+For $n=9$, consider the following table
+
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+    \begin{tabular}{|ccc|ccc|ccc|}
+        \hline
+        I & I & I & M & M & M & O & O & O \\
+        M & M & M & O & O & O & I & I & I \\
+        O & O & O & I & I & I & M & M & M \\ \hline
+        I & I & I & M & M & M & O & O & O \\
+        M & M & M & O & O & O & I & I & I \\
+        O & O & O & I & I & I & M & M & M \\ \hline
+        I & I & I & M & M & M & O & O & O \\
+        M & M & M & O & O & O & I & I & I \\
+        O & O & O & I & I & I & M & M & M \\
+        \hline
+    \end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
 Bound:
 
 Since each of I, M, O appears the same number of times, $3\mid n^2$ and so $3\mid n\implies n=3k$.
@@ -877,12 +982,11 @@ Thus, $3\mid x+y+z=k^2$ and $3\mid k$. It follows that $9\mid n$.
             for(int i=0; i<n; ++i){
                 for(int j=0; j<n; ++j){
                     path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                    if((i==0&&j==0)||(i==1&&j!=1)||i==2) draw(p);
+                    if((i,j)==(0,0)||(i==1&&j!=1)||i==2) draw(p);
                 }
             }
         \end{asy}
     \end{center}
-    
     Determine all $m\times n$ rectangles that can be covered without gaps and without overlaps with hooks such that
     \begin{itemize}
         \item the rectangle is covered without gaps and without overlaps
@@ -894,23 +998,22 @@ Thus, $3\mid x+y+z=k^2$ and $3\mid k$. It follows that $9\mid n$.
     With the following shapes we tile a $1993\times 2000$ board. Let $s$ be the number of shapes used of the first two types. Find the largest possible value of $s$.
     \begin{center}
         \begin{asy}
-            size(8cm);
             for(int i=0; i<2; ++i){
                 for(int j=0; j<2; ++j){
-                    path p = (j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle;
-                    draw(p);
+                    path sq = shift(i,j)*unitsquare;
+                    draw(sq);
                 }
             }
             for(int i=0; i<3; ++i){
                 for(int j=0; j<2; ++j){
-                    path p = (i,j)--(i,j+1)--(i+1,j+1)--(i+1,j)--cycle;
-                    if((j==0&&i!=2)||(j==1&&i!=0)) draw(shift(3, 0)*p);
+                    path sq = shift(3, 0)*shift(i,j)*unitsquare;
+                    if((j==0&&i!=2)||(j==1&&i!=0)) draw(sq);
                 }
             }
             for(int i=0; i<3; ++i){
                 for(int j=0; j<2; ++j){
-                    path p = (i,j)--(i,j+1)--(i+1,j+1)--(i+1,j)--cycle;
-                    if(j==0||(j==1&&i!=2)) draw(shift(7, 0)*p);
+                    path sq = shift(7, 0)*shift(i,j)*unitsquare;
+                    if(j==0||(j==1&&i!=2)) draw(sq);
                 }
             }
         \end{asy}
@@ -922,7 +1025,7 @@ Thus, $3\mid x+y+z=k^2$ and $3\mid k$. It follows that $9\mid n$.
 \end{problem}
 
 \begin{problem} [USAJMO 2023]
-Consider an $n$-by-$n$ board of unit squares for some odd positive integer $n$. We say that a collection $C$ of identical dominoes is a maximal grid-aligned configuration on the board if $C$ consists of $(n^2-1)/2$ dominoes where each domino covers exactly two neighboring squares and the dominoes don't overlap: $C$ then covers all but one square on the board. We are allowed to slide (but not rotate) a domino on the board to cover the uncovered square, resulting in a new maximal grid-aligned configuration with another square uncovered. Let $k(C)$ be the number of distinct maximal grid-aligned configurations obtainable from $C$ by repeatedly sliding dominoes. Find the maximum value of $k(C)$ as a function of $n$
+    Consider an $n$-by-$n$ board of unit squares for some odd positive integer $n$. We say that a collection $C$ of identical dominoes is a maximal grid-aligned configuration on the board if $C$ consists of $(n^2-1)/2$ dominoes where each domino covers exactly two neighboring squares and the dominoes don't overlap: $C$ then covers all but one square on the board. We are allowed to slide (but not rotate) a domino on the board to cover the uncovered square, resulting in a new maximal grid-aligned configuration with another square uncovered. Let $k(C)$ be the number of distinct maximal grid-aligned configurations obtainable from $C$ by repeatedly sliding dominoes. Find the maximum value of $k(C)$ as a function of $n$
 \end{problem}
 
 \begin{problem}[IZhO 2024]
@@ -968,6 +1071,7 @@ Determine the smallest number of pieces Paul needs to make in order to accomplis
 
 \begin{problem}[All-Russian 2013]
     400 three-cell corners (rotated as desired) and another 500 cells were cut out of 55×55 checkered square along the borders of the cells.
+    
     Prove that some two cut out figures have common boundary segments.
 \end{problem}
 
