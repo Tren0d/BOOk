@@ -2,7 +2,8 @@
 
 Algorithms are vast part of olympiad combinatorics. It might seem that algorithms are not so important, or even algorithms are full intuition, but this is only part of the story. In this chapter, we will present crucial ideas for cracking complicated algorithm problems. However, as usual, we will start with the most intuitive approach to crack algorithms.  
 
-\section{Greedy algorithms}
+\section{How to construct own algorithms?}
+\subsection{Greedy algorithms}
 
 Greedy algorithms are algorithms that make the best possible short -- term choices, hence in each step maximizing short -- term gain. These words will seem clearer in next chapter:
 
@@ -83,6 +84,159 @@ If the $x+a+b$ element has been covered, then that means that on the previous st
 If the $x+b$ has already been covered, then either we used the small set on $x+b-a$, or we used any set on $x-a$. Clearly the first one is impossible as $x+b-a>x$. Now we consider the second case. If we used the small set on $x-a$, then it would imply that we would have already covered $x$, a contradiction. If we used the large set, then that means that some element in the small set was already covered. If $x+b$ was already covered, then this implies that $x$ was already covered, contradiction. Otherwise, this implies that $x$ was already covered, another contradiction.
 
 Therefore, a situation where both sets do not work, and the algorithm always works
+
+\begin{example} [239 Olympiad 2017]
+    An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
+\end{example}
+
+\anst{Yes, it can}
+
+\sol Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
+
+Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pictures, the stars show the squares at which the next shot is fired, and the crosses mark the squares on which the tank cannot be \textit{before this shot}.
+
+\begin{center}
+    \begin{asy}
+        int n = 10;
+        void check(pair x){
+            for(int i=0; i<n; ++i){
+                for(int j=0; j<n; ++j){
+                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
+                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
+                    else fill(p, hsv(180, 1, 1));
+                }
+            }
+        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
+        }
+        size(16cm, 0);
+        pair a[] = {(0, n+1), (n+1, n+1), (2*(n+1), n+1), (3*(n+1), n+1), (0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
+        for(int i=0; i<8; ++i){
+        	check(a[i]);
+            real x=0, y=i%2;
+            for(int j=0; j<i; ++j){
+                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
+                draw(shift(a[i])*shift(x, y)*p);
+                y += 2;
+                if(y > 9){
+                    y = (y+1)%2;
+                    ++x;
+                }
+            }
+            for(int j=0; j<6; ++j){
+                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
+                y += 2;
+                if(y > 9){
+                    y = (y+1)%2;
+                    ++x;
+                }
+            }
+        }
+    \end{asy}
+\end{center}
+
+After each move tank changes the color of the cell it is in, and 1 more cross is placed.
+
+Here are 4 last moves for $n=5$:
+
+\begin{center}
+    \begin{asy}
+        int n = 10;
+        void check(pair x){
+            for(int i=0; i<n; ++i){
+                for(int j=0; j<n; ++j){
+                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
+                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
+                    else fill(p, hsv(180, 1, 1));
+                }
+            }
+        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
+        }
+        size(16cm, 0);
+        pair a[] = {(0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
+        for(int i=0; i<3; ++i){
+        	check(a[i]);
+            real x=0, y=(i+42)%2;
+            for(int j=0; j<i+42; ++j){
+                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
+                draw(shift(a[i])*shift(x, y)*p);
+                y += 2;
+                if(y > 9){
+                    y = (y+1)%2;
+                    ++x;
+                }
+            }
+            for(int j=0; j<6; ++j){
+                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
+                y += 2;
+                if(y > 9){
+                    y = (y+1)%2;
+                    ++x;
+                }
+            }
+        }
+        check(a[3]);
+        real x=0, y=1;
+        for(int j=0; j<50; ++j){
+            path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
+            draw(shift(a[3])*shift(x, y)*p);
+            y += 2;
+            if(y > 9){
+                y = (y+1)%2;
+                ++x;
+            }
+        }
+    \end{asy}
+\end{center}
+
+After some (finite) amount of moves every cell of one color (in our case -- cyan) is marked with cross. So if tank was not hit by the cannon, then our original assumption (tank is on the red) was wrong. But we can just repeat the process with the opposite color and now surely hit the tank.
+
+\subsection{Pairings or divide and conquer}
+
+\begin{example}
+
+
+\end{example}
+
+\begin{example} [Russia 2002]
+There is one red cell and $k (k > 1)$ blue cells, as well as a deck of $2n$ cards numbered from $1$ to $2n$. Initially, the entire deck lies in the red cell in an arbitrary order. From any cell, you may take the top card and move it either to an empty cell or onto a card whose number is exactly one greater. What is the largest $n$ for which it is possible, using such operations, to move the entire deck into one of the blue cells?
+\end{example}
+\sol
+Let us construct an example showing that if $n > k$, it is impossible.  
+Suppose the cards (from top to bottom) are initially arranged so that first come all the odd cards (in arbitrary order), and then all the even cards, with the very top of them being card number $2n$. Then the first $k$ moves are uniquely determined: the odd cards are placed into the free positions. The next move, if $n > k$, is impossible; and if $n = k$, the only possible move is to place card number $2n-1$ back into the original pile, which is pointless because we return to the previous position. Therefore, in this arrangement, the pile cannot be transferred.
+
+Now suppose $n < k$. We show how the transfer can be organized.  
+Divide all the cards into pairs $(1, 2), (3, 4), \ldots, (2n-1, 2n)$ and assign to each pair a separate empty cell (there will be at least one cell left unassigned; we call it the free cell). Now we attempt to place each card taken from the top of the red pile into its assigned cell. This may fail only if the card has number $2i$, while card $2i-1$ is already in that cell; in that case we can move card $2i$ into the free cell, then place card $2i-1$ on top of it, assign this cell to the pair, and declare the previously assigned cell to be the new free one. In this way, eventually all the cards are distributed among the cells in pairs. After that, using the free cell, it is easy to collect them into a single deck in the correct order.
+
+\begin{example} [All-Russian 2005]
+    There are $100$ representatives of $50$ countries sitting at the rounded table, two from each country. Prove that they can be divided into two groups in such a way that each group will have one representative from each country, and each person was in the same group with no more than one of his neighbors.
+\end{example}
+\sol
+At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
+
+\begin{center}
+    \begin{asy}
+        size(8cm, 0);
+        int n = 10;
+        real a = 360 / n;
+        path p = ellipse((dir(2*a)+dir(3*a)) / 2, 0.5, 0.3);
+        int s[] = {5, 1, 4, 3, 4, 3, 1, 5, 2, 2};
+        int x[] = {0, 1, 0, 1, 1, 0, 0, 1, 0, 1};
+        for(int i = 0; i < 5; ++ i) draw(rotate(2*i*a)*p);
+        for(int i = 0; i < 10; ++ i){
+        	if(x[i]==1) fill(circle(dir(i*a), 0.15), red);
+            else fill(circle(dir(i*a), 0.15), cyan);
+        	dot((string)s[i], dir(i*a), dir(i*a));
+        }
+        draw(dir(0)--dir(7*a));
+        draw(dir(a)--dir(6*a));
+        draw(dir(2*a)--dir(4*a));
+        draw(dir(3*a)--dir(5*a));
+        draw(dir(8*a)--dir(9*a));
+    \end{asy}
+\end{center}
+
+Now we will present algorithm to solve our problem:
+Color $1$ black, then color his countryman white, then color $1$'s countryman's neighbor black, then his countryman white, and so on, until we reach $2$, whom we color white. We have colored several of our pairs completely, and we can initiate another process, starting from another pair.
 
 \newpage
 
@@ -209,110 +363,6 @@ Let the sum of all the digits in the odd positions have a remainder $s$ divided 
 
 \section{Crazy algorithms}
 
-\begin{example} [239 Olympiad 2017]
-    An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
-\end{example}
-
-\anst{Yes, it can}
-
-\sol Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
-
-Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pictures, the stars show the squares at which the next shot is fired, and the crosses mark the squares on which the tank cannot be \textit{before this shot}.
-
-\begin{center}
-    \begin{asy}
-        int n = 10;
-        void check(pair x){
-            for(int i=0; i<n; ++i){
-                for(int j=0; j<n; ++j){
-                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
-                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
-                    else fill(p, hsv(180, 1, 1));
-                }
-            }
-        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
-        }
-        size(16cm, 0);
-        pair a[] = {(0, n+1), (n+1, n+1), (2*(n+1), n+1), (3*(n+1), n+1), (0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
-        for(int i=0; i<8; ++i){
-        	check(a[i]);
-            real x=0, y=i%2;
-            for(int j=0; j<i; ++j){
-                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-                draw(shift(a[i])*shift(x, y)*p);
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-            for(int j=0; j<6; ++j){
-                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-        }
-    \end{asy}
-\end{center}
-
-After each move tank changes the color of the cell it is in, and 1 more cross is placed.
-
-Here are 4 last moves for $n=5$:
-
-\begin{center}
-    \begin{asy}
-        int n = 10;
-        void check(pair x){
-            for(int i=0; i<n; ++i){
-                for(int j=0; j<n; ++j){
-                    path p = shift(x)*((j,i)--(j,i+1)--(j+1,i+1)--(j+1,i)--cycle);
-                    if((i + j) % 2 == 0) fill(p, hsv(0, 1, 1));
-                    else fill(p, hsv(180, 1, 1));
-                }
-            }
-        	for(int i=0; i<=n; ++i) draw(shift(x)*((i, 0)--(i, n)^^(0, i)--(n, i)));
-        }
-        size(16cm, 0);
-        pair a[] = {(0, 0), (n+1, 0), (2*(n+1), 0), (3*(n+1), 0)};
-        for(int i=0; i<3; ++i){
-        	check(a[i]);
-            real x=0, y=(i+42)%2;
-            for(int j=0; j<i+42; ++j){
-                path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-                draw(shift(a[i])*shift(x, y)*p);
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-            for(int j=0; j<6; ++j){
-                label("$\star$", shift(a[i])*(x+0.5, y+0.5));
-                y += 2;
-                if(y > 9){
-                    y = (y+1)%2;
-                    ++x;
-                }
-            }
-        }
-        check(a[3]);
-        real x=0, y=1;
-        for(int j=0; j<50; ++j){
-            path p[] = (0, 0)--(1, 1)^^(0, 1)--(1, 0);
-            draw(shift(a[3])*shift(x, y)*p);
-            y += 2;
-            if(y > 9){
-                y = (y+1)%2;
-                ++x;
-            }
-        }
-    \end{asy}
-\end{center}
-
-After some (finite) amount of moves every cell of one color (in our case -- cyan) is marked with cross. So if tank was not hit by the cannon, then our original assumption (tank is on the red) was wrong. But we can just repeat the process with the opposite color and now surely hit the tank.
 
 \begin{example} [JetBrains 2024]
     In the vertices of a polygon $A_1, A_2,\dots, A_{100}$, there are initially 30 zeros and 70 ones. There are 100 tokens numbered from 1 to 100. In one move, it is allowed to perform one of the following actions:
@@ -391,36 +441,6 @@ FTSoC assume that at some point 2 tokens lie in the same cell on the 3rd row. No
 
 Now look at the first time 3 tokens visited some cell (call it A, and the cell on the left of it -- B), only one of them could have come from above, so at least 2 of them came from B. But by the same logic, for 2 tokens to move right, we need 1 token to move down, so at least 3 tokens visited B -- contradiction.
 
-\begin{example} [All-Russian 2005]
-    There are $100$ representatives of $50$ countries sitting at the rounded table, two from each country. Prove that they can be divided into two groups in such a way that each group will have one representative from each country, and each person was in the same group with no more than one of his neighbors.
-\end{example}
-
-\sol At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
-
-\begin{center}
-    \begin{asy}
-        size(8cm, 0);
-        int n = 10;
-        real a = 360 / n;
-        path p = ellipse((dir(2*a)+dir(3*a)) / 2, 0.5, 0.3);
-        int s[] = {5, 1, 4, 3, 4, 3, 1, 5, 2, 2};
-        int x[] = {0, 1, 0, 1, 1, 0, 0, 1, 0, 1};
-        for(int i = 0; i < 5; ++ i) draw(rotate(2*i*a)*p);
-        for(int i = 0; i < 10; ++ i){
-        	if(x[i]==1) fill(circle(dir(i*a), 0.15), red);
-            else fill(circle(dir(i*a), 0.15), cyan);
-        	dot((string)s[i], dir(i*a), dir(i*a));
-        }
-        draw(dir(0)--dir(7*a));
-        draw(dir(a)--dir(6*a));
-        draw(dir(2*a)--dir(4*a));
-        draw(dir(3*a)--dir(5*a));
-        draw(dir(8*a)--dir(9*a));
-    \end{asy}
-\end{center}
-
-Now we will present algorithm to solve our problem:
-Color $1$ black, then color his countryman white, then color $1$'s countryman's neighbor black, then his countryman white, and so on, until we reach $2$, whom we color white. We have colored several of our pairs completely, and we can initiate another process, starting from another pair.
 
 \begin{example} [Kazakhstan 2023]
     Let G be a graph whose vertices are 2000 points in the plane, no three of which are collinear, that are colored in red and blue and there are exactly 1000 red points and 1000 blue points. Given that there exist 100 red points that form a convex polygon with every other point of G lying inside of it. Prove that one can connect some points of the same color such that segments connecting vertices of different colors do not intersect, and one can move from a vertex to any vertex of the same color using these segments.
@@ -542,4 +562,15 @@ No segments (two segments can intersect only if they have a common vertex, but t
 
 \begin{problem} [239 olympiad 2025]
     The numbers from $1$ to $2025$ are arranged in some order in the cells of the $1 \times 2025$ strip. Let's call a flip an operation that takes two arbitrary cells of a strip and swaps the numbers written in them, but only if the larger of these numbers is located to the left of the smaller one. A flop is a set of several flips that do not contain common cells that are executed simultaneously. (For example, a simultaneous flip between the 2nd and 8th cells and a flip between the 5th and 101st cells.) Prove that there exists a sequence of $66$ flops such that for any initial arrangement, applying this sequence of flops to it will result in the numbers being ordered from left to right in ascending order.
+\end{problem}
+
+\begin{problem} [Russia 2004]
+On the table there are $2004$ boxes, each containing one ball. It is known that some of the balls are white, and their total number is even. You are allowed to point to any two boxes and ask whether there is at least one white ball among them. What is the minimum number of questions that is sufficient to guarantee identifying at least one box that contains a white ball?
+\end{problem}
+
+\begin{problem}[Russia 2018]
+In a card game, each card is assigned a numerical value from 1 to 100, 
+where each card beats a smaller one, with one exception: card 1 beats card 100. The player knows that there are 100 cards with distinct values placed face down in front of him. The dealer, who knows the exact order of these cards, can, for any chosen pair of cards, inform the player which one beats the other. 
+Prove that the dealer can make one hundred such announcements, after which 
+the player will be able to determine the exact value of every card.
 \end{problem}
