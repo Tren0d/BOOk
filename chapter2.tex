@@ -88,12 +88,15 @@ Therefore, a situation where both sets do not work, and the algorithm always wor
 \begin{example} [239 Olympiad 2017]
     An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
 \end{example}
+Answer: Yes, it can.
+\sol
+First of all, for fresh eye, there is no connection between 100 and 60. Therefore, an idea for generalization is located nearby. Indeed, it is possible to solve this problem for $2n\times 2n$ table and with $n+1$ cells in each shoot. We will present solution for this generalization of problem. 
 
-\anst{Yes, it can}
-
-\sol Actually to shoot the tank on the $2n\times2n$ board $n+1$ cells at a time is enough.
-
-Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pictures, the stars show the squares at which the next shot is fired, and the crosses mark the squares on which the tank cannot be \textit{before this shot}.
+Okay, the tank moves to one of the adjacent cells after each cannon shooting, so there should be something that can regulate and bound the displacement of the tank. For an experienced eye, checkerboard coloring might seem a great option. Indeed, after each canon shooting, tank changes its color, so we can eliminate at least half of the cells in our table. We will discuss more about such strategies in next chapter!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.
+\\\\
+Let's back to our algorithm. Because we should guaranty, we should eliminate every possibility of tank hiding, and this is our greedy approach: we can check other cells, only if we make sure that there is no tank in previous cells. 
+\\\\
+With this idea in mind and other basic instruments of combinatorics, it is not hard to construct this algorithm that is depicted below. We presented algorithm for $n=5$, but elaboration of this algorithm for $n=50$ is obvious. 
 
 \begin{center}
     \begin{asy}
@@ -134,7 +137,7 @@ Let's consider a checkerboard coloring. WLOG tank is on the red tile. In the pic
     \end{asy}
 \end{center}
 
-After each move tank changes the color of the cell it is in, and 1 more cross is placed.
+After each move tank changes the color of the cell it is in, so we change the cells that we shoot. 
 
 Here are 4 last moves for $n=5$:
 
