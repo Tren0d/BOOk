@@ -108,11 +108,46 @@ Consider the node $v$ that is first fired; we have $f(v) \geq \deg(v)$. Fire $v$
 
 Also note that if such a node u was deficient then $T$ actually decreases; if none of these was deficient then the set of deficient nodes did not change. As remarked, this proves the theorem
 
-\section{Ignore or redefine}
-
-\begin{example}
-
+\begin{example} [China TST 2018]
+Two positive integers $p,q \in \mathbf{Z}^{+}$ are given. There is a blackboard with $n$ positive integers written on it. A operation is to choose two same number $a,a$ written on the blackboard, and replace them with $a+p,a+q$. Determine the smallest $n$ so that such operation can go on infinitely.
 \end{example}
+
+\section{Ignore or redefine}
+Now, we will alter the problem statement slightly in such a way that the result we need to show does not change, but the process becomes much easier to analyze. In other words, we simplify the process to be analyzed while leaving the aspect of the process that we want to prove something about invariant. 
+\begin{example}
+There are n ants on a stick of length one unit, each facing left or 
+right. At time t = 0, each ant starts moving with a speed of 1 unit 
+per second in the direction it is facing. If an ant reaches the end of 
+the stick, it falls off and doesn’t reappear. When two ants moving 
+in opposite directions collide, they both turn around and continue 
+moving with the same speed (but in the opposite direction). Show 
+that all ants will fall off the stick in at most 1 second.
+\end{example}
+The key observation is that the problem does not change if we alter 
+it as follows: when two ants moving in opposite directions meet, 
+they simply pass through each other and continue moving at the 
+same speed. Thus, instead of rebounding, if the ants pass through 
+each other, the only difference from the original problem is that 
+the identities of the ants get exchanged, which is inconsequential. 
+Now the statement is obvious: each ant is unaffected by the 
+others, and so each ant will fall of the stick of length one unit in at 
+most 1 second. 
+
+\begin{example} [USAJMO 2018]
+Karl starts with $n$ cards labeled $1,2,3,\dots,n$ lined up in a random order on his desk. He calls a pair $(a,b)$ of these cards swapped if $a>b$ and the card labeled $a$ is to the left of the card labeled $b$. For instance, in the sequence of cards $3,1,4,2$, there are three swapped pairs of cards, $(3,1)$, $(3,2)$, and $(4,2)$.
+
+He picks up the card labeled 1 and inserts it back into the sequence in the opposite position: if the card labeled 1 had $i$ card to its left, then it now has $i$ cards to its right. He then picks up the card labeled $2$ and reinserts it in the same manner, and so on until he has picked up and put back each of the cards $1,2,\dots,n$ exactly once in that order. (For example, the process starting at $3,1,4,2$ would be $3,1,4,2\to 3,4,1,2\to 2,3,4,1\to 2,4,3,1\to 2,3,4,1$.)
+
+Show that, no matter what lineup of cards Karl started with, his final lineup has the same number of swapped pairs as the starting lineup.
+\end{example}
+
+ There’s almost no way we can control where the cards land and how inversions change after the first turn. Only inversions involving the smallest and largest number are easy to control. The turns are made
+ in successive order, from smallest to largest, and the number that is written plays role. This suggests 1 to modify the number written on the card at each step. Since we are interested in the order of the cards and want to work with largest/smallest, we will just make this card
+ have the largest label, so after each step we will be moving the smallest card and altering it to the largest card, which makes the process more definite. We will alter it by adding n. If we will be able to prove something in this case, then we can repeat it at each step, because all the steps are the same. It turns out that we can, and the main claim is:
+ \\\\
+ Claim — In the modified process, the number of inversions doesn’t change at each step.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ \\\\
+ Proof. We just have to show that for the first step, because, how I already said, all the steps are the same: We take the smallest number, reflect it and make it the largest. Inversions involving the smallest number are exactly the pairs with the numbers to the left of it. After we reflect it and make it largest, only inversions will be the ones that already existed and the ones with the new largest number with numbers to the right of it, but this quantity is equal to the inversions involving the unmoved smallest number, since we reflected the position. Spamming the claim, we see that in the end of the modified process, we will have the same number of inversions as in the beginning, and the numbers will be the initial numbers incremented by n, so if we decrease them by n, we will not change any of the inversions, so the number of inversions is the same even for the unmodified process.
 
 \section{Graphs}
 
@@ -154,4 +189,5 @@ Also note that if such a node u was deficient then $T$ actually decreases; if no
 \begin{problem} [Serbia 2022]
     On the board are written $n$ natural numbers, $n\in \NN$. In one move it is possible to choose two equal written numbers and increase one by $1$ and decrease the other by $1$. Prove that in this the game cannot be played more than $\frac{n^3}{6}$ moves.
 \end{problem}
+
 
