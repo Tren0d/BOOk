@@ -63,7 +63,7 @@ However, remember that while deleting a vertex we are also deleting the edges in
 
 Hence, it is impossible to reach a stage when only one vertex is remaining, since in this case the $\frac{\text{edges}}{\text{vertices}}$ ratio is 0. So, at some point, our algorithm must terminate, leaving us with a graph with more than one vertex, all of whose vertices have degree at least $\frac{E}{V}$. 
 
-\begin{example} [ISL 2001]
+\begin{example}[ISL 2001]
     A set of three nonnegative integers ${x, y, z}$ with $x<y<z$ satisfying ${z-y, y-x} = {a, b}$, where $a$ and $b$ are distinct positive integers and $a < b$, is called a historic set. Show that the set of all nonnegative integers can be written as a disjoint union of historic sets. 
 \end{example}
 
@@ -85,17 +85,18 @@ If the $x+b$ has already been covered, then either we used the small set on $x+b
 
 Therefore, a situation where both sets do not work, and the algorithm always works
 
-\begin{example} [239 Olympiad 2017]
+\begin{example}[239 Olympiad 2017]
     An invisible tank is on a $100 \times 100 $ table. A cannon can fire at any $60$ cells of the board after that the tank will move to one of the adjacent cells (by side). Then the process is repeated. Can the cannon grantee to shoot the tank?
 \end{example}
-Answer: Yes, it can.
-\sol
-First of all, for fresh eye, there is no connection between 100 and 60. Therefore, an idea for generalization is located nearby. Indeed, it is possible to solve this problem for $2n\times 2n$ table and with $n+1$ cells in each shoot. We will present solution for this generalization of problem. 
 
-Okay, the tank moves to one of the adjacent cells after each cannon shooting, so there should be something that can regulate and bound the displacement of the tank. For an experienced eye, checkerboard coloring might seem a great option. Indeed, after each canon shooting, tank changes its color, so we can eliminate at least half of the cells in our table. We will discuss more about such strategies in next chapter!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.
-\\\\
+\anst{Yes, it can}
+
+\sol First of all, for fresh eye, there is no connection between 100 and 60. Therefore, an idea for generalization is located nearby. Indeed, it is possible to solve this problem for $2n\times 2n$ table and with $n+1$ cells in each shoot. We will present solution for this generalization of problem.
+
+Okay, the tank moves to one of the adjacent cells after each cannon shooting, so there should be something that can regulate and bound the displacement of the tank. For an experienced eye, checkerboard coloring might seem a great option. Indeed, after each canon shooting, tank changes its color, so we can eliminate at least half of the cells in our table. We will discuss more about such strategies in next chapter!
+
 Let's back to our algorithm. Because we should guaranty, we should eliminate every possibility of tank hiding, and this is our greedy approach: we can check other cells, only if we make sure that there is no tank in previous cells. 
-\\\\
+
 With this idea in mind and other basic instruments of combinatorics, it is not hard to construct this algorithm that is depicted below. We presented algorithm for $n=5$, but elaboration of this algorithm for $n=50$ is obvious. 
 
 \begin{center}
@@ -137,7 +138,7 @@ With this idea in mind and other basic instruments of combinatorics, it is not h
     \end{asy}
 \end{center}
 
-After each move tank changes the color of the cell it is in, so we change the cells that we shoot. 
+After each move tank changes the color of the cell it is in, so we change the cells that we shoot.
 
 Here are 4 last moves for $n=5$:
 
@@ -197,24 +198,25 @@ After some (finite) amount of moves every cell of one color (in our case -- cyan
 
 \begin{example}
 
-
 \end{example}
 
 \begin{example} [Russia 2002]
-There is one red cell and $k (k > 1)$ blue cells, as well as a deck of $2n$ cards numbered from $1$ to $2n$. Initially, the entire deck lies in the red cell in an arbitrary order. From any cell, you may take the top card and move it either to an empty cell or onto a card whose number is exactly one greater. What is the largest $n$ for which it is possible, using such operations, to move the entire deck into one of the blue cells?
+    There is one red cell and $k (k > 1)$ blue cells, as well as a deck of $2n$ cards numbered from $1$ to $2n$. Initially, the entire deck lies in the red cell in an arbitrary order. From any cell, you may take the top card and move it either to an empty cell or onto a card whose number is exactly one greater. What is the largest $n$ for which it is possible, using such operations, to move the entire deck into one of the blue cells?
 \end{example}
-\sol
-Let us construct an example showing that if $n > k$, it is impossible.  
+
+\sol Let us construct an example showing that if $n > k$, it is impossible.
+
 Suppose the cards (from top to bottom) are initially arranged so that first come all the odd cards (in arbitrary order), and then all the even cards, with the very top of them being card number $2n$. Then the first $k$ moves are uniquely determined: the odd cards are placed into the free positions. The next move, if $n > k$, is impossible; and if $n = k$, the only possible move is to place card number $2n-1$ back into the original pile, which is pointless because we return to the previous position. Therefore, in this arrangement, the pile cannot be transferred.
 
-Now suppose $n < k$. We show how the transfer can be organized.  
+Now suppose $n < k$. We show how the transfer can be organized.
+
 Divide all the cards into pairs $(1, 2), (3, 4), \ldots, (2n-1, 2n)$ and assign to each pair a separate empty cell (there will be at least one cell left unassigned; we call it the free cell). Now we attempt to place each card taken from the top of the red pile into its assigned cell. This may fail only if the card has number $2i$, while card $2i-1$ is already in that cell; in that case we can move card $2i$ into the free cell, then place card $2i-1$ on top of it, assign this cell to the pair, and declare the previously assigned cell to be the new free one. In this way, eventually all the cards are distributed among the cells in pairs. After that, using the free cell, it is easy to collect them into a single deck in the correct order.
 
 \begin{example} [All-Russian 2005]
     There are $100$ representatives of $50$ countries sitting at the rounded table, two from each country. Prove that they can be divided into two groups in such a way that each group will have one representative from each country, and each person was in the same group with no more than one of his neighbors.
 \end{example}
-\sol
-At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
+
+\sol At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's pair them in groups of two consecutive guys: $\{1,2\},\{3,4\},\dots,\{99,100\}$.
 
 \begin{center}
     \begin{asy}
@@ -239,6 +241,7 @@ At first, we will label 100 people by numbers from 1 to 100 clockwise, and let's
 \end{center}
 
 Now we will present algorithm to solve our problem:
+
 Color $1$ black, then color his countryman white, then color $1$'s countryman's neighbor black, then his countryman white, and so on, until we reach $2$, whom we color white. We have colored several of our pairs completely, and we can initiate another process, starting from another pair.
 
 \newpage
@@ -248,19 +251,23 @@ Color $1$ black, then color his countryman white, then color $1$'s countryman's 
 In the previous chapter, we have considered the simplest algorithms, without any additional ideas. In this chapter, we will look through various examples that will deal with the reference to smaller cases.
 
 \begin{example}
-    Cards numbered 1 to $n$ are arranged at random in a row with $n \geq 5$. In a move, one may choose any block of consecutive cards whose numbers are in ascending or descending order and switch the block around. \\ For example, if $n=9$, then \\ (9 1 \underline{6 5 3} 2 7 4 8) might be changed to (9 1 \underline{3 5 6} 2 7 4 8). \\ Prove that in at most $2n-6$ moves, one can arrange the $n$ cards so that their numbers are in ascending or descending order.
+    Cards numbered 1 to $n$ are arranged at random in a row with $n \geq 5$. In a move, one may choose any block of consecutive cards whose numbers are in ascending or descending order and switch the block around.
+    
+    For example, if $n=9$, then (9 1 \underline{6 5 3} 2 7 4 8) might be changed to (9 1 \underline{3 5 6} 2 7 4 8).
+    
+    Prove that in at most $2n-6$ moves, one can arrange the $n$ cards so that their numbers are in ascending or descending order.
 \end{example}
 
 \sol Let $f(n)$ be the minimum number of moves required to 'arrange' any permutation of the $n$ cards. Suppose we have a permutation with starting card  $k$. In $f(n-1)$ moves we can arrange the remaining $(n-1)$ cards to get either the sequence $(k, 1, 2, \dots, k-1, k+1, \dots, n)$ or $(k, n, n-1, \dots, k+1, k-1, \dots, 2, 1)$. In one move, we can make the former sequence $(k, k-1, k-2, \dots, 1, k+1, k+2, \dots, n)$ and with one more move we get the sequence $(1, 2, 3, \dots, n)$ and we are done. Similarly in the latter case we need only two additional moves to get $(n, n-1, \dots, 1)$. Thus, in either case, we can complete the task using $f(n-1) + 2$ moves, so $f(n) \leq f(n-1) + 2$.
 
 Now, to prove the bound for general $n \geq 5$, it suffices to prove it for $n=5$ and then induct using $f(n) \leq f(n-1) + 2$. The proof of $f(5)=4$ we left to the reader as an exercise.
 
-\begin{example} [IMO 2017]
-    An integer $N \ge 2$ is given. A collection of $N(N + 1)$ soccer players, no two of whom are of the same height, stand in a row. Sir Alex wants to remove $N(N - 1)$ players from this row leaving a new row of $2N$ players in which the following $N$ conditions hold:\\
+\begin{example}[IMO 2017]
+    An integer $N \ge 2$ is given. A collection of $N(N + 1)$ soccer players, no two of whom are of the same height, stand in a row. Sir Alex wants to remove $N(N - 1)$ players from this row leaving a new row of $2N$ players in which the following $N$ conditions hold:
     \begin{itemize}
         \item[1.] no one stands between the two tallest players
         \item[2.] no one stands between the third and fourth tallest players
-        \item[] \vdots
+        \item[] \dots
         \item[$N$.] no one stands between the two shortest players.
     \end{itemize}
     Show that this is always possible.
@@ -299,24 +306,23 @@ Here, we will introduce another crucial idea in algorithm problems: invariants a
 Let $A$ and $B$ be the two robots on the grid. We will provide an algorithm that, when repeatedly invoked, eventually decreases the distance between $A$ and $B$. In particular, the algorithm is to give the commands that would move $A$ to $B$'s position with the minimum distance. This works since $A$ will not hit a wall (otherwise there is a ''faster'' way to move $A$), but since the rectangular grid is finite, $B$ will eventually hit a wall after a few runs of this algorithm. Therefore, the distance between $A$ and $B$ after running the algorithm eventually decreases, and we are done.
 
 \begin{example} [Russia 2009]
-Around a circle there are $2009$ integer nonnegative numbers, each at most $100$. You are allowed to add $1$ to two neighboring numbers, and any given pair of neighbors may be operated on at most $k$ times. For which minimal $k$ is it guaranteed that one can make all the numbers equal?
+    Around a circle there are 2009 integer nonnegative numbers, each at most 100. You are allowed to add 1 to two neighboring numbers, and any given pair of neighbors may be operated on at most $k$ times. For which minimal $k$ is it guaranteed that one can make all the numbers equal?
 \end{example}
-\sol 
-Let the numbers on the circle be $a_1,a_2,\dots,a_{2009}$, and extend them periodically by $a_{n+2009}=a_n$. Put $N=100400$.
+
+\sol Let the numbers on the circle be $a_1,a_2,\dots,a_{2009}$, and extend them periodically by $a_{n+2009}=a_n$. Put $N=100400$.
 
 For the lower bound take $a_2=a_4=\dots=a_{2008}=100$ and $a_1=a_3=\dots=a_{2009}=0$.
+
 Consider the sum $S=(a_2-a_3)+(a_4-a_5)+\dots+(a_{2008}-a_{2009}).$
+
 This sum increases by $1$ when we add $1$ to the pair $(a_1,a_2)$, decreases by $1$ when we add $1$ to the pair $(a_{2009},a_1)$, and does not change for any other operation. The initial value equals $S_0=100\cdot1004=N$, while the final value (when all numbers are equal) must be $0$. Hence the pair $(a_{2009},a_1)$ must have been increased at least $N$ times, so $k\ge N$.
 
-For sufficiency let $a_1,\dots,a_{2009}$ be arbitrary. For each $i$ increase the pair $(a_i,a_{i+1})$ exactly
-$s_i=a_{i+2}+a_{i+4}+\dots+a_{i+2008}$ times. Then each $a_i$ becomes
-$$ a_i+s_{i-1}+s_i
-= a_i+(a_{i+1}+a_{i+3}+\dots+a_{i+2007})+(a_{i+2}+a_{i+4}+\dots+a_{i+2008})
-= a_1+\dots+a_{2009},
-$$
-so all numbers become equal. Finally, $s_i\le 1004\cdot100=N$, therefore $k=N$ suffices.
+For sufficiency let $a_1,\dots,a_{2009}$ be arbitrary. For each $i$ increase the pair $(a_i,a_{i+1})$ exactly $s_i=a_{i+2}+a_{i+4}+\dots+a_{i+2008}$ times. Then each $a_i$ becomes
+\[a_i+s_{i-1}+s_i = a_i+(a_{i+1}+a_{i+3}+\dots+a_{i+2007})+(a_{i+2}+a_{i+4}+\dots+a_{i+2008}) = a_1+\dots+a_{2009}\]
 
-\begin{example} [APMO 1997]
+so all numbers become equal. Finally, $s_i\leq 1004\cdot100=N$, therefore $k=N$ suffices.
+
+\begin{example}[APMO 1997]
     $n$ people are seated in a circle. A total of $nk$ coins have been distributed among them, but not necessarily equally. A move is the transfer of a single coin between two adjacent people. Find an algorithm for making the minimum possible number of moves which result in everyone ending up with the same number of coins. 
 \end{example}
 
@@ -346,11 +352,52 @@ Let's start with easy one:
     You have 9 coins that look the same, one of them is fake, and weights less than real ones. Can you find the fake coin in 2 weightings on a balance scale.
 \end{example}
 
-First, split coins in 3 groups of 3 coins each, and compare first group with the second.
+\begin{remark}
+    Before beginning the solution we need to understand that in this types of questions it only makes sense to compare the equal number of coins at one time, for example 3 coins vs 3 coins.
 
-If the first 
+    We do not know the actual weights of the real and fake coins, so if we were to compare non-equal number of coins with each other, we can manipulate the numerical values of weights to get every possible outcome.
+\end{remark}
 
-\begin{example} [Russia 2005]
+\anst{Yes}
+
+What is the best way of solving easy problem -- make even easier problem!
+
+Consider that you have 3 coins and need to find a fake one in just one comparison.
+
+Do the only thing you can do -- compare 1st and 2nd coins, if either of them is lighter than the other, then it is the fake one, if they weight the same, then fake one must be the last, 3rd coin.
+
+Now, back to the original question: first, split coins in 3 groups of 3 coins each, and by treating each group as individual big coin use previous problem to find a group with a fake one in just one move, spend the second move to find the fake one in the group, again, using the previous problem.
+
+Let's solve the harder version of this problem:
+
+\begin{example}
+    You have $n$ coins that look the same, one of them is fake, and weights less than real ones. What is the minimal number of comparisons to find the fake coin?
+\end{example}
+
+\ansf{\ceil{\log_{3}(n)}}
+
+To proof that such number of moves is enough, repeatedly split coins into 3 groups of roughly the same size and compare two of them (transfer 1 coin if needed).
+
+Now, to the bound -- say that we need at least $m$ comparisons to find the coin.
+
+Every possible strategy of finding fake coin in a fixed number of comparisons can be written like this:
+
+\begin{itemize}
+    \item ($a_1$-th + $a_2$-th + \dots + $a_k$-th) vs ($b_1$-th + $b_2$-th + \dots + $ab_k$-th)
+    \begin{itemize}
+        \item if we get ''$>$'' the compare \dots
+        \item if we get ''$<$'' the compare \dots
+        \item if we get ''$=$'' the compare \dots
+    \end{itemize}
+\end{itemize}
+
+After $m$ comparisons we have a sequence of $>$, $<$, $=$ and from that we need to conclude which coins is the fake one.
+
+The total number of sequences that can be formed is $3^{m}$, and number of coins is $n$.
+
+Since every coin can be fake -- that is you can swap the any two coins and still be able to find the fake one -- one we must have $3^m\geq n$, so $k\geq\ceil{\log_{3}(n)}$.
+
+\begin{example}[Russia 2005]
     Different numbers are written on the backs of the 2005 cards (one on each one). In one question, you can point to any three cards and find out the set of numbers written on them. What is the minimum number of questions to find out which numbers are written on each card?
 \end{example}
 
@@ -364,7 +411,7 @@ Then the numbers on cards 1, 3, and 5 occur in two answers (for different cards,
 
 It remains to ask about the deferred card along with any two already known ones.
 
-\begin{example} [Russia 1997]
+\begin{example}[Russia 1997]
     Magician and magician helper perform a magic trick as follows. A spectator writes on a board a sequence of $N$ (decimal) digits. Magician helper covers two adjacent digits with a black disc. Then, a magician comes and says both closed digits (and their order). For which minimal $N$ can this trick always work? 
 \end{example}
 
@@ -376,7 +423,7 @@ Strategy for $n=101$:
 
 Let the sum of all the digits in the odd positions have a remainder $s$ divided by 10, and the sum of all the digits in the even positions have a remainder $t$ divided by 10 (the positions are numbered from left to right by numbers from 0 to 100). Let's assume $p = 10s + t$. At this moment, assistant closes the numbers at positions $p$ and $p + 1$.  After seeing which numbers are closed, the magician will determine $p$, and therefore $s$ and $t$. Note that one closed digit is in an odd position, and the other is in an even position. Thus, by calculating the sum of the open digits in the odd positions and knowing $s$, the magician will determine the closed digit in the odd position. Similarly, a closed digit is determined in an even position.
 
-\begin{example} [IMSC 2025]
+\begin{example}[IMSC 2025]
     There are $3^n+1$ pebbles of $11$ grams in a row. Two of them are \textbf{fat} and weigh 12 grams, and they are neighbors. In one query, it is possible to ask the weight of any set of pebbles. Find the minimum number of queries to determine the fat pair regardless of the answers to the queries. In addition, queries must be determined in advance. In other words, it is not possible to change queries depending on the answers for them. 
 \end{example}
 
@@ -384,8 +431,7 @@ Let the sum of all the digits in the odd positions have a remainder $s$ divided 
 
 \section{Crazy algorithms}
 
-
-\begin{example} [JetBrains 2024]
+\begin{example}[JetBrains 2024]
     In the vertices of a polygon $A_1, A_2,\dots, A_{100}$, there are initially 30 zeros and 70 ones. There are 100 tokens numbered from 1 to 100. In one move, it is allowed to perform one of the following actions:
     \begin{enumerate}
         \item If token $i$ has not been used yet, then it can be placed on vertex $A_i$.
@@ -394,11 +440,15 @@ Let the sum of all the digits in the odd positions have a remainder $s$ divided 
     At no point may two tokens occupy the same vertex. After several moves, all 100 tokens have been discarded. How many zeros can be present in the vertices at this moment?
 \end{example}
 
-Answer: $\boxed{30}$.
+\ansf{30}
 
 Redefine the problem statement: 
 
-\textit{We have $3\times 100$ board with the top row filled with tokens and initially 30 zeros and 70 ones on the second row. On any move tokens changes the number of the cell (from 0 to 1 or from 1 to 0). If the number changes from 0 to 1, the token is moved to the right, if the number changes from 1 to 0, the token moves down. After some number of moves every token is now on the third row. How many zeros can be present in the second row at this moment?\\Note: we allow for the collisions between tokens.}
+\begin{fact}
+    We have $3\times 100$ board with the top row filled with tokens and initially 30 zeros and 70 ones on the second row. On any move tokens changes the number of the cell (from 0 to 1 or from 1 to 0). If the number changes from 0 to 1, the token is moved to the right, if the number changes from 1 to 0, the token moves down. After some number of moves every token is now on the third row. How many zeros can be present in the second row at this moment?
+
+    Note: we allow for the collisions between tokens.
+\end{fact}
 
 \begin{center}
     \begin{asy}
@@ -462,8 +512,7 @@ FTSoC assume that at some point 2 tokens lie in the same cell on the 3rd row. No
 
 Now look at the first time 3 tokens visited some cell (call it A, and the cell on the left of it -- B), only one of them could have come from above, so at least 2 of them came from B. But by the same logic, for 2 tokens to move right, we need 1 token to move down, so at least 3 tokens visited B -- contradiction.
 
-
-\begin{example} [Kazakhstan 2023]
+\begin{example}[Kazakhstan 2023]
     Let G be a graph whose vertices are 2000 points in the plane, no three of which are collinear, that are colored in red and blue and there are exactly 1000 red points and 1000 blue points. Given that there exist 100 red points that form a convex polygon with every other point of G lying inside of it. Prove that one can connect some points of the same color such that segments connecting vertices of different colors do not intersect, and one can move from a vertex to any vertex of the same color using these segments.
 \end{example}
 
@@ -488,15 +537,15 @@ No segments (two segments can intersect only if they have a common vertex, but t
 
 \section{Problems}
 
-\begin{problem} [APMO 2022]
+\begin{problem}[APMO 2022]
     Let $n$ and $k$ be positive integers. Cathy is playing the following game. There are $n$ marbles and $k$ boxes, with the marbles labeled $1$ to $n$. Initially, all marbles are placed inside one box. Each turn, Cathy chooses a box and then moves the marbles with the smallest label, say $i$, to either any empty box or the box containing marble $i + 1$. Cathy wins if at any point there is a box containing only marble $n$. Determine all pairs of integers $(n, k)$ such that Cathy can win this game.
 \end{problem}
 
-\begin{problem} [All-Russian 2014]
+\begin{problem}[All-Russian 2014]
     There are $n$ cities in the state, and an express runs between each two of them (in both directions). For any express train, the prices of round-trip and round-trip tickets are equal, and for any different express trains these prices are different. Prove that a traveler can choose the starting city, leave it and travel sequentially on $n-1$ express trains, paying less for the fare on each next one than for the fare on the previous one. (A traveler may enter the same city several times.)
 \end{problem}
 
-\begin{problem} [IMO 2023]
+\begin{problem}[IMO 2023]
     Let $n$ be a positive integer. A Japanese triangle consists of $1 + 2 + \dots + n$ circles arranged in an equilateral triangular shape such that for each $i = 1$, $2$, $\dots$, $n$, the $i$-th row contains exactly $i$ circles, exactly one of which is colored red. A ninja path in a Japanese triangle is a sequence of $n$ circles obtained by starting in the top row, then repeatedly going from a circle to one of the two circles immediately below it and finishing in the bottom row. Here is an example of a Japanese triangle with $n = 6$, along with a ninja path in that triangle containing two red circles.
     \begin{center}
         \begin{asy}
@@ -519,19 +568,19 @@ No segments (two segments can intersect only if they have a common vertex, but t
     In terms of $n$, find the greatest $k$ such that in each Japanese triangle there is a ninja path containing at least $k$ red circles.
 \end{problem}
 
-\begin{problem} [IMO 2020]
-    There are $4n$ pebbles of weights $1, 2, 3, \dots, 4n.$ Each pebble is colored in one of $n$ colors and there are four pebbles of each color. Show that we can arrange the pebbles into two piles so that the following two conditions are both satisfied:
+\begin{problem}[IMO 2020]
+    There are $4n$ pebbles of weights $1, 2, 3, \dots, 4n$. Each pebble is colored in one of $n$ colors and there are four pebbles of each color. Show that we can arrange the pebbles into two piles so that the following two conditions are both satisfied:
     \begin{itemize}
         \item The total weights of both piles are the same.
         \item Each pile contains two pebbles of each color.
     \end{itemize}
 \end{problem}
 
-\begin{problem} [All-Russian 2005]
+\begin{problem}[All-Russian 2005]
     100 people from 25 countries, four from each country, sit in a circle. Prove that one may partition them onto 4 groups in such way that no two countrymen, nor two neighboring people in the circle, are in the same group. 
 \end{problem}
 
-\begin{problem} [IMO 2010]
+\begin{problem}[IMO 2010]
     Each of the six boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$, $B_6$ initially contains one coin. The following operations are allowed
     \begin{itemize}
         \item Choose a non-empty box $B_j$, $1\leq j \leq 5$, remove one coin from $B_j$ and add two coins to $B_{j+1}$
@@ -540,35 +589,44 @@ No segments (two segments can intersect only if they have a common vertex, but t
     Determine if there exists a finite sequence of operations of the allowed types, such that the five boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$ become empty, while box $B_6$ contains exactly $2010^{2010^{2010}}$ coins.
 \end{problem}
 
-\begin{problem} [ISL 2024 C3]
+\begin{problem}
+    You have $n$ coins, one of them is fake one, but you do not know if it is lighter or heavier than the real coins. Can you find the fake coin and determine if it is lighter or heavier than the real one if:
+    \begin{itemize}
+        \item[a)] $n=12$
+        \item[b)] $n=14$
+        \item[c)] $n=13$
+    \end{itemize}
+\end{problem}
+
+\begin{problem}[ISL 2024 C3]
     Let $n$ be a positive integer. There are $2n$ knights sitting at a round table. They consist of $n$ pairs of partners, each pair of which wishes to shake hands. A pair can shake hands only when next to each other. Every minute, one pair of adjacent knights swaps places. Find the minimum number of exchanges of adjacent knights such that, regardless of the initial arrangement, every knight can meet her partner and shake hands at some time.
 \end{problem}
 
-\begin{problem} [USAJMO 2020]
+\begin{problem}[USAJMO 2020]
     Let $n \geq 2$ be an integer. Carl has $n$ books arranged on a bookshelf. Each book has a height and a width. No two books have the same height, and no two books have the same width. Initially, the books are arranged in increasing order of height from left to right. In a move, Carl picks any two adjacent books where the left book is wider and shorter than the right book, and swaps their locations. Carl does this repeatedly until no further moves are possible. Prove that regardless of how Carl makes his moves, he must stop after a finite number of moves, and when he does stop, the books are sorted in increasing order of width from left to right.
 \end{problem}
 
-\begin{problem} [IMO 2024]
-    Turbo the snail plays a game on a board with $2024$ rows and $2023$ columns. There are hidden monsters in $2022$ of the cells. Initially, Turbo does not know where any of the monsters are, but he knows that there is exactly one monster in each row except the first row and the last row, and that each column contains at most one monster.\\
+\begin{problem}[IMO 2024]
+    Turbo the snail plays a game on a board with $2024$ rows and $2023$ columns. There are hidden monsters in $2022$ of the cells. Initially, Turbo does not know where any of the monsters are, but he knows that there is exactly one monster in each row except the first row and the last row, and that each column contains at most one monster.
 
-    Turbo makes a series of attempts to go from the first row to the last row. On each attempt, he chooses to start on any cell in the first row, then repeatedly moves to an adjacent cell sharing a common side. (He is allowed to return to a previously visited cell.) If he reaches a cell with a monster, his attempt ends and he is transported back to the first row to start a new attempt. The monsters do not move, and Turbo remembers whether or not each cell he has visited contains a monster. If he reaches any cell in the last row, his attempt ends and the game is over.\\
+    Turbo makes a series of attempts to go from the first row to the last row. On each attempt, he chooses to start on any cell in the first row, then repeatedly moves to an adjacent cell sharing a common side. (He is allowed to return to a previously visited cell.) If he reaches a cell with a monster, his attempt ends and he is transported back to the first row to start a new attempt. The monsters do not move, and Turbo remembers whether or not each cell he has visited contains a monster. If he reaches any cell in the last row, his attempt ends and the game is over.
 
     Determine the minimum value of $n$ for which Turbo has a strategy that guarantees reaching the last row on the $n$-th attempt or earlier, regardless of the locations of the monsters.
 \end{problem}
 
-\begin{problem} [Kazakhstan 2025, Regional]
+\begin{problem}[Kazakhstan 2025, Regional]
     $A$ and $B$ are playing a game on a $100 \times 100$ checkered board. Each player has a chip. At the beginning of the game, player A's chip is in the lower-left corner, and player B's chip is in the lower-right corner. The players take turns making moves, starting with $A$. In one turn, the player moves his chip to any square of the board adjacent to the square of the previous position. Prove that player $A$ can achieve in a finite number of moves that at some point his chip will be on the same square as player $B$ chip, regardless of the moves of the second player.
 \end{problem}
 
-\begin{problem} [All-Russian 2015]
+\begin{problem}[All-Russian 2015]
     The field is a $41 \times 41$ checkered square, in one of the cells of which a tank is disguised. The fighter fires at one cell in one shot. If a hit occurs, the tank crawls over to the cell next to the side of the field, if not, it remains in the same cell. At the same time, after the shot, the fighter pilot does not know if a hit has occurred. To destroy a tank, you need to hit it twice. What is the least number of shots you can do to ensure that the tank is destroyed?
 \end{problem}
 
-\begin{problem} [Saint-Petersburg 1994]
+\begin{problem}[Saint-Petersburg 1994]
     The pluses and minuses are placed in the cells of the  $1995 \times 1995$ table. It is allowed to select $1995$ cells, no two of which are in the same row or column, and change the signs in the selected cells. Prove that using such operations it is possible to ensure that no more than $1994$ pluses remain in the table.
 \end{problem}
 
-\begin{problem} [Saint-Petersburg 2018]
+\begin{problem}[Saint-Petersburg 2018]
     In a $9\times 9$ table, all cells contain zeros. The following operations can be performed on the table:
     \begin{enumerate}
         \item Choose an arbitrary row, add one to all the numbers in that row, and shift all these numbers one cell to the right (and place the last number in the first position).
@@ -577,29 +635,24 @@ No segments (two segments can intersect only if they have a common vertex, but t
     Is it possible to obtain a table in which all cells, except two, contain zeros, with 1 in the bottom-left cell and -1 in the top-right cell after several such operations?
 \end{problem}
 
-\begin{problem} [USAMO 2011]
+\begin{problem}[USAMO 2011]
     An integer is assigned to each vertex of a regular pentagon so that the sum of the five integers is 2011. A turn of a solitaire game consists of subtracting an integer $m$ from each of the integers at two neighboring vertices and adding $2m$ to the opposite vertex, which is not adjacent to either of the first two vertices. (The amount $m$ and the vertices chosen can vary from turn to turn.) The game is won at a certain vertex if, after some number of turns, that vertex has the number 2011 and the other four vertices have the number 0. Prove that for any choice of the initial integers, there is exactly one vertex at which the game can be won.
 \end{problem}
 
-\begin{problem} [239 olympiad 2025]
+\begin{problem}[239 olympiad 2025]
     The numbers from $1$ to $2025$ are arranged in some order in the cells of the $1 \times 2025$ strip. Let's call a flip an operation that takes two arbitrary cells of a strip and swaps the numbers written in them, but only if the larger of these numbers is located to the left of the smaller one. A flop is a set of several flips that do not contain common cells that are executed simultaneously. (For example, a simultaneous flip between the 2nd and 8th cells and a flip between the 5th and 101st cells.) Prove that there exists a sequence of $66$ flops such that for any initial arrangement, applying this sequence of flops to it will result in the numbers being ordered from left to right in ascending order.
 \end{problem}
 
-\begin{problem} [Russia 2004]
-On the table there are $2004$ boxes, each containing one ball. It is known that some of the balls are white, and their total number is even. You are allowed to point to any two boxes and ask whether there is at least one white ball among them. What is the minimum number of questions that is sufficient to guarantee identifying at least one box that contains a white ball?
+\begin{problem}[Russia 2004]
+    On the table there are $2004$ boxes, each containing one ball. It is known that some of the balls are white, and their total number is even. You are allowed to point to any two boxes and ask whether there is at least one white ball among them. What is the minimum number of questions that is sufficient to guarantee identifying at least one box that contains a white ball?
 \end{problem}
 
 \begin{problem}[Russia 2018]
-In a card game, each card is assigned a numerical value from 1 to 100, 
-where each card beats a smaller one, with one exception: card 1 beats card 100. The player knows that there are 100 cards with distinct values placed face down in front of him. The dealer, who knows the exact order of these cards, can, for any chosen pair of cards, inform the player which one beats the other. 
-Prove that the dealer can make one hundred such announcements, after which 
-the player will be able to determine the exact value of every card.
+    In a card game, each card is assigned a numerical value from 1 to 100, where each card beats a smaller one, with one exception: card 1 beats card 100. The player knows that there are 100 cards with distinct values placed face down in front of him. The dealer, who knows the exact order of these cards, can, for any chosen pair of cards, inform the player which one beats the other. 
+
+    Prove that the dealer can make one hundred such announcements, after which the player will be able to determine the exact value of every card.
 \end{problem}
 
 \begin{problem}[Russia 2019]
-There are $n$ coins of pairwise distinct weights and $n$ balance scales, where $n > 2$. 
-In each weighing, you may choose any one of the scales, place one coin on each of its pans, 
-observe the result, and then remove the coins. Some of the scales (unknown which) are faulty 
-and may randomly show either the correct or an incorrect result. 
-What is the smallest number of weighings that guarantees finding the heaviest coin?
+    There are $n$ coins of pairwise distinct weights and $n$ balance scales, where $n > 2$. In each weighing, you may choose any one of the scales, place one coin on each of its pans, observe the result, and then remove the coins. Some of the scales (unknown which) are faulty and may randomly show either the correct or an incorrect result. What is the smallest number of weighings that guarantees finding the heaviest coin?
 \end{problem}
