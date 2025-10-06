@@ -75,7 +75,7 @@ You can easily get to one of multiple working examples.
 
 \begin{center}
     \begin{asy}
-        size(12cm, 0);
+        size(12cm);
         int n = 4;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
@@ -86,14 +86,14 @@ You can easily get to one of multiple working examples.
         }
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path sq = shift(i,j)*unitsquare;
+                path sq = shift(5,0)*shift(i,j)*unitsquare;
                 int c = (i+2*j) % 4;
                 filldraw(sq, col4[c]);
             }
         }
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
-                path sq = shift(i,j)*unitsquare;
+                path sq = shift(10,0)*shift(i,j)*unitsquare;
                 int c = (i+3*j) % 4;
                 filldraw(sq, col4[c]);
             }
@@ -200,7 +200,7 @@ There are 50 cyan squares and 50 red squares. We call the figure cyan if it cove
 
 The number of cyan figure is equal to the number of red figure. This tells us that the total number of figure must be even. This would mean that the number of squares should be divisible by 8. Since there are 100 squares, there is no possible cover.
 
-\begin{example} [ISL 2023 C1]
+\begin{example}[ISL 2023 C1]
     Let $m$ and $n$ be positive integers greater than 1. In each unit square of an $m\times n$ grid lies a coin with its tail side up. A move consists of the following steps.
     \begin{enumerate}
         \item select a $2\times 2$ square in the grid;
@@ -353,8 +353,10 @@ Therefore, each square of the $3\times 3$ marking can be divided into $1\times 3
 
 It might seem that invariant problems are kinda easy: just spam one of the basic colorings or cuts. However, invariant problems frequently can be extremely non-obvious and tricky, with mind-blowing colorings or cuts. In next 2 examples that idea will be clearer. 
 
-\begin{example} [APMO 2007]
-    A regular $5\times 5$ array of lights is defective, so that toggling the switch for one light causes each adjacent light in the same row and in the same column as well as the light itself to change state, from on to off, or from off to on. Initially all the lights are switched off.\\ After a certain number of toggles, exactly one light is switched on. Find all the possible positions of this light.
+\begin{example}[APMO 2007]
+    A regular $5\times 5$ array of lights is defective, so that toggling the switch for one light causes each adjacent light in the same row and in the same column as well as the light itself to change state, from on to off, or from off to on. Initially all the lights are switched off.
+    
+    After a certain number of toggles, exactly one light is switched on. Find all the possible positions of this light.
 \end{example}
 
 Consider the following coloring:
@@ -448,7 +450,7 @@ Example for the middle cell:
     \end{asy}
 \end{center}
 
-\begin{example} [ISL 2014 C4]
+\begin{example}[ISL 2014 C4]
     Construct a tetromino by attaching two $2\times 1$ dominoes along their longer sides such that the midpoint of the longer side of one domino is a corner of the other domino. This construction yields two kinds of tetrominoes with opposite orientations. Let us call them $S-$ and $Z-$tetrominoes, respectively.
     
     Assume that a lattice polygon $P$ can be tiled with $S-$ tetrominoes. Prove that no matter how we tile $P$ using only $S-$ and $Z-$tetrominoes, we always use an even number of $Z-$tetrominoes.
@@ -508,7 +510,7 @@ Observe that any $S-$tetromino covers even number of cyan cells, so $P$ also cov
 
 \subsection{Invariants as a method of counting or bounding}
 
-\begin{example} [EGMO 2019]
+\begin{example}[EGMO 2019]
     Given a natural number $n$, find the largest possible number of dominoes that can be placed on a $2n\times 2n$ checkered board so that any cell is adjacent to or belongs to exactly one domino.
 \end{example}
 
@@ -530,22 +532,25 @@ But the outer squares can be cut off if the domino lies on the outer region of t
 
 \begin{center}
     \begin{asy}
-        int n = 10;
+        int n = 8;
         path p = (0,0)--(2,0)--(2,1)--(0,1)--cycle;
-        path q = (1,1)--(9,1)--(9,9)--(1,9)--cycle;
+        path q = (0,0)--(n,0)--(n,n)--(0,n)--cycle;
         for(int i=0; i<n; ++i){
             for(int j=0; j<n; ++j){
                 path sq = shift(i,j)*unitsquare;
                 if((max(abs(i-(n-1)/2), abs(j-(n-1)/2))+0.5)%2==0) filldraw(sq, col2[0]);
-                else if((max(abs(i-(n-1)/2), abs(j-(n-1)/2))+0.5)==5) fill(sq, white+col2[1]);
                 else filldraw(sq, col2[1]);
             }
         }
+        axialshade((n,0)--(n,n)--(n+1,n+1)--(n+1,-1)--cycle, col2[1], (n,n/2), white, (n+1,n/2));
+        axialshade((n,n)--(0,n)--(-1,n+1)--(n+1,n+1)--cycle, col2[1], (n/2,n), white, (n/2,n+1));
+        axialshade((0,n)--(0,0)--(-1,-1)--(-1,n+1)--cycle, col2[1], (0,n/2), white, (-1,n/2));
+        axialshade((0,0)--(n,0)--(n+1,-1)--(-1,-1)--cycle, col2[1], (n/2,0), white, (n/2,-1));
         ddraw(q);
         ddraw(p, 1, 5);
         ddraw(p, 6, 2);
         ddraw(p, 4, 1, 90);
-        ddraw(p, 8, 7, 90);
+        ddraw(p, 7, 5, 90);
     \end{asy}
 \end{center}
 
@@ -636,7 +641,7 @@ Example:
     \end{asy}
 \end{center}
 
-\begin{example} [All-Russian 2023]
+\begin{example}[All-Russian 2023]
     Let $n$ be an odd integer. In a $2n\times 2n$ board, we color $2(n-1)^2$ cells. What is the largest number of three-square corners that can surely be cut out of the uncolored figure?
 \end{example}
 
@@ -796,7 +801,7 @@ Now let the degree of each vertex be at least 2. Let us leave an arbitrary verte
 
 \section{Double counting}
 
-\begin{example} [Saint Petersburg 2017]
+\begin{example}[Saint Petersburg 2017]
     In each cell of an $m\times n$ rectangle, two diagonals were drawn, resulting in the rectangle being divided into $4mn$ triangles. All triangles were painted black or white so that each white triangle has a common side with at least one black triangle. What is the smallest number of black triangles that could be in such a coloring?
 \end{example}
 
@@ -833,7 +838,7 @@ Let's go further. Note that if there are exactly $n$ black triangles in some row
 
 However, a row with exactly $n$ black triangles and a column with exactly $m$ black triangles cannot exist simultaneously: the cell at their intersection would contain exactly one black triangle, which must be both horizontal and vertical. In other words, either in each row there are at least $n+1$ black triangles, or in each column there are at least $m+1$ black triangles. In one case, there are no less than $m(n+1)=mn+m$ black triangles in total, in the other, no less than $n(m+1)=mn+n$, in any case, no less than $mn+\min(m,n)$.
 
-\begin{example} [All-Russian 2017]
+\begin{example}[All-Russian 2017]
     Each cell of a $100\times 100$ board is painted either black or white, and all cells adjacent to the board's border are black. It turns out that there is no single-color $2\times 2$ checkered square anywhere on the board. Prove that there is a $2\times 2$ checkered square on the board whose cells are painted in a checkerboard pattern.
 \end{example}
 
@@ -847,8 +852,8 @@ There are $99^2$ $2\times 2$ squares in total, and each separator lies inside ex
 
 Therefore, $N = \frac{2(99^2)}{2} = 99^2$. In each row and each column, the first and last cell are black; therefore, there must be an even number of color changes, so the total number of separators must be even. Contradiction.
 
-\begin{example} [BMOSL 2019]
-    Determine the largest natural number $N$ having the following property: every $5\times 5$ array consisting of pairwise distinct natural numbers from $1$ to $25$ contains a $2\times 2$ subarray of numbers whose sum is, at least, $N$.
+\begin{example}[BMO SL 2019]
+    Determine the largest natural number $N$ having the following property: every $5\times 5$ array consisting of pairwise distinct natural numbers from $1$ to $25$ contains a $2\times 2$ sub-array of numbers whose sum is, at least, $N$.
 \end{example}
 
 \ansf{45}
@@ -869,16 +874,11 @@ Here, we have a bound that $k_{\text{max}} \geq 45$, but now we should prove tha
 \begin{center}
     \begin{tabular}{|c|c|c|c|c|}
         \hline
-        23 & 13 & 19 & 12 & 24 \\
-        \hline
-        7 & 2 & 9 & 4 & 5 \\
-        \hline
-        18 & 16 & 17 & 15 & 21 \\
-        \hline
-        8 & 1 & 10 & 3 & 6 \\
-        \hline
-        22 & 14 & 20 & 11 & 25\\
-        \hline
+        23 & 13 & 19 & 12 & 24 \\\hline
+        7  & 2  & 9  & 4  & 5  \\\hline
+        18 & 16 & 17 & 15 & 21 \\\hline
+        8  & 1  & 10 & 3  & 6  \\\hline
+        22 & 14 & 20 & 11 & 25 \\\hline
     \end{tabular}
 \end{center}
 \renewcommand{\arraystretch}{1}
@@ -901,7 +901,7 @@ WLOG the first row has been operated upon. Then columns $2, 3, \dots, n$ have al
 
 \section{Complex numbers}
 
-\begin{example} [IMO 2016]
+\begin{example}[IMO 2016]
     Find all integers $n$ for which each cell of $n\times n$ table can be filled with one of the letters I, M and O in such a way that:
     \begin{itemize}
         \item in each row and each column, one third of the entries are I, one third are M and one third are O
@@ -937,7 +937,7 @@ Since each of I, M, O appears the same number of times, $3\mid n^2$ and so $3\mi
 
 Tile the board with $3\times 3$ sub-grids. For each $3\times 3$ grid call the central square its representative cell. Assign the numbers $1, \omega$ and $\omega^2$ to I, M and O, respectively.
 
-Add the numbers assigned to all rows and columns indexed with numbers $\equiv 2 \pmod{3}$ and all numbers assigned to the diagonals with number of entries a multiple of 3. This total sum must be zero since each of the summands is zero for a row and a column and any diagonal having number of elements a multiple of 3.
+Add the numbers assigned to all rows and columns indexed with numbers $\equiv 2 \pmod{3}$ and all numbers assigned to the diagonals with number of entries a multiple of 3. This total sum must be zero since each of the terms is zero for a row and a column and any diagonal having number of elements a multiple of 3.
 
 However, the total sum is the sum of all entries of the $n\times n$ board and the sum of all numbers assigned to the representative cells. As the sum of all entries is zero, it follows that the sum of all numbers assigned to the representative cells is zero. Let $x$ of them be labeled I, $y$ of them be labeled M, $z$ of them be labelled O. We have $x+y+z=k^2$ and $x+y\omega+z\omega^2=0$.
 
@@ -954,7 +954,9 @@ Thus, $3\mid x+y+z=k^2$ and $3\mid k$. It follows that $9\mid n$.
 \section{Problems}
 
 \begin{problem}[All-Russian 2016]
-    1950 dominoes were cut out from $100\times 100$ sheet of paper. Prove that it is possible to cut out a four-cell figure from the remaining part.\\ (If such a figure is already among the remaining parts, it is considered that it was cut out.)
+    1950 dominoes were cut out from $100\times 100$ sheet of paper. Prove that it is possible to cut out a four-cell figure from the remaining part.
+
+    (If such a figure is already among the remaining parts, it is considered that it was cut out.)
 \end{problem}
 
 \begin{problem}[EGMO 2016]
@@ -1024,7 +1026,7 @@ Thus, $3\mid x+y+z=k^2$ and $3\mid k$. It follows that $9\mid n$.
      In an $n\times n$ board the squares are painted black or white. Three of the squares in the corners are white and one is black. Show that there is a $2\times 2$ square with an odd number of white unit squares.
 \end{problem}
 
-\begin{problem} [USAJMO 2023]
+\begin{problem}[USAJMO 2023]
     Consider an $n$-by-$n$ board of unit squares for some odd positive integer $n$. We say that a collection $C$ of identical dominoes is a maximal grid-aligned configuration on the board if $C$ consists of $(n^2-1)/2$ dominoes where each domino covers exactly two neighboring squares and the dominoes don't overlap: $C$ then covers all but one square on the board. We are allowed to slide (but not rotate) a domino on the board to cover the uncovered square, resulting in a new maximal grid-aligned configuration with another square uncovered. Let $k(C)$ be the number of distinct maximal grid-aligned configurations obtainable from $C$ by repeatedly sliding dominoes. Find the maximum value of $k(C)$ as a function of $n$
 \end{problem}
 
@@ -1078,13 +1080,13 @@ Determine the smallest number of pieces Paul needs to make in order to accomplis
 \begin{problem}[IZhO 2020]
     Some squares of a $n \times n$ table ($n>2$) are black, the rest are white. In every white square we write the number of all the black squares having at least one common vertex with it. Find the maximum possible sum of all these numbers.
 \end{problem}
+
 \begin{problem}[USAJMO 2025]
-Let $m$ and $n$ be positive integers, and let $\mathcal R$ be a $2m\times{2n}$ grid of unit squares.
+    Let $m$ and $n$ be positive integers, and let $\mathcal R$ be a $2m\times{2n}$ grid of unit squares.
 
-A domino is a $1\times2{}$ or $2\times{1}$ rectangle. A subset $S$ of grid squares in $\mathcal R$ is domino-tileable if dominoes can be placed to cover every square of $S$ exactly once with no domino extending outside of $S$. Note: The empty set is domino tileable.
+    A domino is a $1\times2$ or $2\times1$ rectangle. A subset $S$ of grid squares in $\mathcal R$ is domino-tileable if dominoes can be placed to cover every square of $S$ exactly once with no domino extending outside of $S$. Note: The empty set is domino tileable.
 
-An up-right path is a path from the lower-left corner of $\mathcal R$ to the upper-right corner of $\mathcal R$ formed by exactly $2m+2n$ edges of the grid squares.
+    An up-right path is a path from the lower-left corner of $\mathcal R$ to the upper-right corner of $\mathcal R$ formed by exactly $2m+2n$ edges of the grid squares.
 
-Determine, with proof, in terms of $m$ and $n$, the number of up-right paths that divide $\mathcal R$ into two domino-tileable subsets.
+    Determine, with proof, in terms of $m$ and $n$, the number of up-right paths that divide $\mathcal R$ into two domino-tileable subsets.
 \end{problem}
-
