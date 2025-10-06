@@ -5,7 +5,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[hmargin=2cm, vmargin=2.5cm, tmargin=70pt, headsep=30pt, lmargin=2cm, rmargin=2cm, bmargin=80pt]{geometry}
 \usepackage[skip=10pt]{parskip}
-\usepackage{tikz, fancyhdr, amssymb, amsmath, amsthm, tcolorbox, asymptote, hyperref, draftwatermark, lmodern, parskip}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems}
+\usepackage{tikz, fancyhdr, amssymb, amsmath, amsthm, asymptote, hyperref, draftwatermark, lmodern, parskip}
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=blue, urlcolor=black}
 
 \raggedbottom
@@ -54,7 +56,7 @@
 {\itshape}                                         % name of font to use in the body of the theorem
 {}                                                 % measure of space to indent
 {\bfseries}                                        % name of head font
-{\\}                                             % punctuation between head and body
+{\\}                                               % punctuation between head and body
 { }                                                % space after theorem head; " " = normal interword space
 {\thmname{#1}\thmnumber{ #2}\textnormal{\thmnote{ \textbf{(#3)}}}}
 
