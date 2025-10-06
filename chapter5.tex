@@ -1,0 +1,96 @@
+\chapter{Double Counting}
+
+Often you find yourself in front of the problem that requires you to find number of ways to do something or to prove that 2 super complicated sums are equal to each other.
+
+In the problems like this we define some number, and try to count it in two different ways. One of the ways is often easily calculatable, which allows us to find the sum very easily.
+
+\section{Binomial Stuff}
+
+One big part of such problems is proving some equalities with binomial coefficients.
+
+\begin{example}
+    Prove that \[\binom nk = \binom{n-1}k+\binom{n-1}{k-1}.\]
+\end{example}
+
+Suppose you have $n$ white balls, and you want to color $k$ of them black, in how many ways you can do that?
+
+We want to chose $k$ from $n$, and the order at which we pick the balls does not matter. So the answer (kind of) by definition is $\binom nk$. So the LHS is done.
+
+Now to the RHS, point at one specific ball (let's say rightmost one), it has 2 possibilities -- to be colored or not to be colored.
+\begin{itemize}
+    \item If we color it we need to color $k-1$ balls from the leftover $n-1$ balls -- $\binom{n-1}{k-1}$.
+    \item If we do not color it, we need to chose all of $k$ balls from the leftover -- $\binom{n-1}k$.
+\end{itemize}
+
+Adding this two up we get to the initial equality.
+
+\begin{example}
+    Prove that for all $n\in\NN$ \[\sum_{k=0}^n\binom nk=2^n.\]
+\end{example}
+
+Again, suppose you have $n$ white balls, and you want to color $k$ of them black. But in this case, $k$ may be varied from 0 $0$ to $n$.
+
+Let $T$ be the number of ways to do so.
+
+On one hand, every ball may or may not be colored, so it has 2 options, which are independent of each other, so in total $T=2^n$.
+
+On the other hand,
+\begin{itemize}
+    \item What is the number of ways to color 0 balls -- $\binom n0$.
+    \item What is the number of ways to color 1 balls -- $\binom n1$.
+    \item What is the number of ways to color 2 balls -- $\binom n2$.
+    \item \dots
+\end{itemize}
+So the total is $\displaystyle T=\binom n0+\binom n1+\dots+\binom nn=\sum_{k=0}^n\binom nk$.
+
+\begin{example}
+    Prove that \[\binom n1+2\binom n2+3\binom n3+\dots+n\binom nn=n\cdot2^{n-1}.\]
+\end{example}
+
+Firstly write LHS as a sum -- $\displaystyle \sum_{k=1}^nk\binom nk$. Notice that we can replace $k$ with $\binom k1$. This may seem to overcomplicate the sum, but actually it provides motivation for what to count.
+
+Suppose you have $n$ white balls, and you want to color one of them black, and some number of them blue.
+
+Let $T$ be the number of ways to do so.
+
+We have two routes to count $T$:
+\begin{itemize}
+    \item Firstly chose the ball which is to be colored black, and the chose some number of balls to be colored blue from the rest.
+    \item Chose which balls we color, and then from this set chose which ball we color black.
+\end{itemize}
+
+In the first way we can chose black ball in $n$ different ways, and the rest is $n-1$ balls from which we chose some, so $T=n\cdot2^{n-1}$.
+
+In the second,
+\begin{itemize}
+    \item If we chose to color only 1 of the balls, there is $\binom n1$ ways to do so, and we need to chose 1 from the set of 1 balls -- $\binom n1\binom 11$.
+    \item If we chose to color 2 balls, there is $\binom n2$ ways to do so, and we need to chose 1 to be colored black -- $\binom n2\binom 21$.
+    \item \dots
+\end{itemize}
+So in total we have $T=\sum_{k=1}^n\binom nk\binom k1$.
+
+You can actually generalize this problem to get $\displaystyle \sum_{k=d}^n\binom nk\binom kd=2^{n-d}\binom nd$.
+
+\begin{example}
+    Prove that \[\sum_{k=0}^{\floor{\frac n2}}\binom{n-k}k=F_n.\]
+\end{example}
+
+In a combinatorical way $F_n$ can be expressed as number of ways to tile $1\times n$ strip of squares with $1\times1$ and $1\times2$ rectangles.
+
+So we just need to prove that LHS also count the same number.
+
+If we use $k$ $1\times2$ tiles, then we must have $n-2k$ $1\times1$ tiles. So we need to arrange these $k+n-2k=n-k$ tiles in some order. The ways to do so is -- $\binom{n-k}k$. Summing all of them up we get the identity.
+
+\section{Clubs}
+
+
+
+\section{Problems}
+
+\begin{problem}
+    Prove that \[\sum_{i=0}^k\binom mi\binom n{k-i}=\binom{m+n}k.\]
+\end{problem}
+
+\begin{problem}
+    Prove that \[\sum_{k=m}^n\binom km=\binom{n+1}{m+1}.\]
+\end{problem}
