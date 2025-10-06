@@ -57,6 +57,26 @@ In previous examples we have seen the problems related to monovariant, and of co
 \begin{example}
 
 \end{example}
+Although not only direct induction exists, you might encounter problems that use nested induction or double induction. The next example involves this idea.
+\begin{example} [EGMO 2018]
+The $n$ contestant of EGMO are named $C_1, C_2, \cdots C_n$. After the competition, they queue in front of the restaurant according to the following rules.
+\begin{enumerate}
+    \item The Jury chooses the initial order of the contestants in the queue.
+    \item Every minute, the Jury chooses an integer $i$ with $1 \leq i \leq n$.
+    If contestant $C_i$ has at least $i$ other contestants in front of her, she pays one euro to the Jury and moves forward in the queue by exactly $i$ positions.
+    \item If contestant $C_i$ has fewer than $i$ other contestants in front of her, the restaurant opens and process ends.
+\end{enumerate}
+Prove that the process cannot continue indefinitely, regardless of the Jury’s choices.
+\end{example}
+
+\sol
+Starting from the position farthest from the restaurant, label the positions $P_1,P_2, \dots ,P_n$ (i.e. the contestant at position $P_n$ is closest to the restaurant).
+\\\\
+ First induct on $n$. The result is obvious when $n=1,2$. Therefore, assume that the result is true for $n-1$. Suppose that initially contestant $C_n$ is at the position $P_m$. The main observation is that the Jury never can choose $C_n$. We claim that $C_n$ must reach $P_1$ sooner or later. To show this we again induct, this time on $m$. For $m=1$, the claim is true ($C_n$ is at $P_1$ initially only!!). Suppose our claim is true for $m-1$.
+ \\\\
+ Now, let $A$ denote the set of students placed at $P_1,P_2, \dots ,P_{m-1}$; and $B$ denote the set of students placed at $P_{m+1},P_{m+2}, \dots ,P_n$. If at any moment of time, some contestant from $A$ jumps over to $B$ (i.e. crosses $C_n$), then $C_n$ will move to position $P_{m-1}$, and we can apply the second inductive hypothesis to conclude that $C_n$ must reach $P_1$. Once, $C_n$ reaches $P_1$, we can effectively ignore its presence (as it can never be the cause of any contestant's jump). Then using the first inductive hypothesis, we get that the game must terminate.
+\\\\
+ Otherwise no contestant from the group $A$ ever crosses over to $B$. Then these two group of contestants will never interact with each other, and so the presence of $C_n$ is superfluous (once again it does not cause anyone's move). Hence, we can ignore $C_n$, and apply the first inductive hypothesis on the remaining $n-1$ contestants to get the desired conclusion. Hence, done. 
 
 \section{Chip firing}
 
@@ -157,13 +177,11 @@ Show that, no matter what lineup of cards Karl started with, his final lineup ha
     Pirates have an infinite number of chests, numbered in natural numbers. Initially, the first chest contains $2023$ coins. Every day, the captain selects a chest with the number $k$, in which there are at least 2 more coins than in the next one, and transfers one coin from it to the next. One of these days, the captain won't be able to find such a chest. How could the coins have been distributed at this point?
 \end{example}
 
-\section{Discrete continuity}
-
-\begin{example}[Russia 2009]
-    On a circle there are $2009$ nonnegative integers not greater than $100$. If two numbers sit next to each other, we can increase both of them by $1$. We can do this at most $ k$ times. What is the minimum $ k$ so that we can make all the numbers on the circle equal?
-\end{example}
-
 \section{Problems}
+
+\begin{problem} [Russia 1995]
+There are three piles of stones. Sisyphus moves one stone at a time from one pile to another. For each transfer, he receives from Zeus a number of coins equal to the difference between the number of stones in the pile to which he moves the stone and the number of stones in the pile from which he takes it (the stone being moved is not counted in either pile during this calculation). If this difference is negative, Sisyphus must pay Zeus the corresponding amount. (If Sisyphus cannot pay, the generous Zeus allows him to make the move on credit.) At some point, it turned out that all the stones lay in the same piles as they did initially. What is the maximum total profit Sisyphus could have earned by that moment?
+\end{problem}
 
 \begin{problem} [Russia 2008]
 In the cells of a $5 \times 5$ square, zeros were initially written. Each minute, Vasya chose two cells sharing a common side and either added one to both of their numbers or subtracted one from both. After some time, it turned out that the sums of the numbers in all rows and columns were equal. Prove that this happened after an even number of minutes.
@@ -196,9 +214,7 @@ In the cells of a $5 \times 5$ square, zeros were initially written. Each minute
 \begin{problem} [ELMOSL 2013]
 There are 20 people at a party. Each person holds some number of coins. Every minute, each person who has at least 19 coins simultaneously gives one coin to every other person at the party. (So, it is possible that $A$ gives $B$ a coin and $B$ gives $A$ a coin at the same time.) Suppose that this process continues indefinitely. That is, for any positive integer $n$, there exists a person who will give away coins during the $n$th minute. What is the smallest number of coins that could be at the party?
 \end{problem}
-\begin{problem} [IZHO 2021]
-  Let $n \geq 2$ be an integer. Elwyn is given an n × n table filled with real numbers (each cell of the table contains exactly one number). We define a rook set as a set of n cells of the table situated in n distinct rows as well as in n distinct columns. Assume that, for every rook set, the sum of n numbers in the cells forming the set is nonnegative. By a move, Elwyn chooses a row, a column, and a real number a, and then he adds a to each number in the chosen row, and subtracts a from each number in the chosen column (thus, the number at the intersection of the chosen row and column does not change). Prove that Elwyn can perform a sequence of moves so that all numbers in the table become nonnegative.
-\end{problem}
+
 \begin{problem} [ISL 2018]
 Let $a$ and $b$ be distinct positive integers. The following infinite process takes place on an initially empty board.
 \begin{enumerate}
@@ -207,6 +223,7 @@ Let $a$ and $b$ be distinct positive integers. The following infinite process ta
 \end{enumerate}
 Prove that, no matter how we make the choices in $(i)$, operation $(ii)$ will be performed only finitely many times.
 \end{problem}
+
 
 
 
