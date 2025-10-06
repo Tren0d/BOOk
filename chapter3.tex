@@ -1,17 +1,16 @@
 \chapter{Processes}
 
-In this chapter, we will consider processes. It might seem that processes and algorithms are similar topics, but the main difference is that we should construct something by ourselves, whereas in processes we can not create something new in problem, instead we can make judgements on which we have.
+In this chapter, we will consider processes. It might seem that processes and algorithms are similar topics, but the main difference is that we should construct something by ourselves, whereas in processes we can not create something new in problem, instead we can make judgments on which we have.
 
 \section{Invariants and monovariants}
 
 As always, we will start with invariants, and monovariants. Fortunately, the idea of invariants is a very useful approach to practically every process problem: it might be very helpful to make several observations on processes.
 
-begin{example} [ISL 2014]
-We have $2^m$ sheets of paper, with the number $1$ written on each of them. We perform the following operation. In every step we choose two distinct sheets; if the numbers on the two sheets are $a$ and $b$, then we erase these numbers and write the number $a + b$ on both sheets. Prove that after $m2^{m -1}$ steps, the sum of the numbers on all the sheets is at least $4^m$ .
+\begin{example}[ISL 2014]
+    We have $2^m$ sheets of paper, with the number $1$ written on each of them. We perform the following operation. In every step we choose two distinct sheets; if the numbers on the two sheets are $a$ and $b$, then we erase these numbers and write the number $a + b$ on both sheets. Prove that after $m2^{m -1}$ steps, the sum of the numbers on all the sheets is at least $4^m$ .
 \end{example}
 
-\sol 
-Ok, this problem is felt like it can be fully cracked by invariants, so let us try to find this. The first thought that comes to mind is to consider the sum of numbers written on cards, but it is a wrong approach; rather, we should consider the product of the $2^m$ numbers, instead of the sum.
+\sol Ok, this problem is felt like it can be fully cracked by invariants, so let us try to find this. The first thought that comes to mind is to consider the sum of numbers written on cards, but it is a wrong approach; rather, we should consider the product of the $2^m$ numbers, instead of the sum.
 
 Claim: Whenever the operation is performed, the resulting product of the $2^m$ increases by at least $4$ times.
 
@@ -27,13 +26,9 @@ Now, at the end of the $m2^{m-1}$ steps, the product will be at least $4^{m2^{m-
 
 First, if all our numbers on the pentagon are labeled $x_i$, all the indices have taken the undo module 5. Let in the first step $(x_1,x_2,x_3,x_4,x_5) \to (x_1,x_2+x_3,-x_3,x_4+x_3,x_5)$
 
-We will solve this problem using monovariants. It is not hard to see that sum of all numbers written on the pentagon remains invariant. Because the sum is positive and remains invariant and at the end all numbers are also positive, this leads to the thought that pairwise differences should be small, so it can be an idea to consider pairwise differnces.  After several trials we can end with such monovariant:
+We will solve this problem using monovariants. It is not hard to see that sum of all numbers written on the pentagon remains invariant. Because the sum is positive and remains invariant and at the end all numbers are also positive, this leads to the thought that pairwise differences should be small, so it can be an idea to consider pairwise differences. After several trials we can end with such monovariant: \[f_0(x_1,x_2,x_3,x_4,x_5)=\] \[\frac{1}{2} \sum_{i=1}^5 (x_{i+1}-x_i)^2.\]
 
-$f_0(x_1,x_2,x_3,x_4,x_5)=$
-
-$ \frac{1}{2} \sum_{i=1}^5 (x_{i+1}-x_i)^2$.
-
-WlOG assume that $x_4<0$, and after meticulous opening brackets it is not hard to see that our quantitiy is decrasing step by step. Because: $f_{\text{new}}-f_{\text{old}}=Sx_4<0$, where $S$ is sum of all numbers in pentagon. Because our quantity is decreasing, the process terminates after finite number of steps.
+WlOG assume that $x_4<0$, and after meticulous opening brackets it is not hard to see that our quantity is decreasing step by step. Because: $f_{\text{new}}-f_{\text{old}}=Sx_4<0$, where $S$ is sum of all numbers in pentagon. Because our quantity is decreasing, the process terminates after finite number of steps.
 
 In previous examples we have seen the problems related to monovariant, and of course we can solve certain algorithmical problems with invariants,
 
@@ -57,26 +52,27 @@ In previous examples we have seen the problems related to monovariant, and of co
 \begin{example}
 
 \end{example}
+
 Although not only direct induction exists, you might encounter problems that use nested induction or double induction. The next example involves this idea.
-\begin{example} [EGMO 2018]
-The $n$ contestant of EGMO are named $C_1, C_2, \cdots C_n$. After the competition, they queue in front of the restaurant according to the following rules.
-\begin{enumerate}
-    \item The Jury chooses the initial order of the contestants in the queue.
-    \item Every minute, the Jury chooses an integer $i$ with $1 \leq i \leq n$.
-    If contestant $C_i$ has at least $i$ other contestants in front of her, she pays one euro to the Jury and moves forward in the queue by exactly $i$ positions.
-    \item If contestant $C_i$ has fewer than $i$ other contestants in front of her, the restaurant opens and process ends.
-\end{enumerate}
-Prove that the process cannot continue indefinitely, regardless of the Jury’s choices.
+
+\begin{example}[EGMO 2018]
+    The $n$ contestant of EGMO are named $C_1, C_2, \cdots C_n$. After the competition, they queue in front of the restaurant according to the following rules.
+    \begin{enumerate}
+        \item The Jury chooses the initial order of the contestants in the queue.
+        \item Every minute, the Jury chooses an integer $i$ with $1 \leq i \leq n$.
+        If contestant $C_i$ has at least $i$ other contestants in front of her, she pays one euro to the Jury and moves forward in the queue by exactly $i$ positions.
+        \item If contestant $C_i$ has fewer than $i$ other contestants in front of her, the restaurant opens and process ends.
+    \end{enumerate}
+    Prove that the process cannot continue indefinitely, regardless of the Jury’s choices.
 \end{example}
 
-\sol
-Starting from the position farthest from the restaurant, label the positions $P_1,P_2, \dots ,P_n$ (i.e. the contestant at position $P_n$ is closest to the restaurant).
-\\\\
- First induct on $n$. The result is obvious when $n=1,2$. Therefore, assume that the result is true for $n-1$. Suppose that initially contestant $C_n$ is at the position $P_m$. The main observation is that the Jury never can choose $C_n$. We claim that $C_n$ must reach $P_1$ sooner or later. To show this we again induct, this time on $m$. For $m=1$, the claim is true ($C_n$ is at $P_1$ initially only!!). Suppose our claim is true for $m-1$.
- \\\\
- Now, let $A$ denote the set of students placed at $P_1,P_2, \dots ,P_{m-1}$; and $B$ denote the set of students placed at $P_{m+1},P_{m+2}, \dots ,P_n$. If at any moment of time, some contestant from $A$ jumps over to $B$ (i.e. crosses $C_n$), then $C_n$ will move to position $P_{m-1}$, and we can apply the second inductive hypothesis to conclude that $C_n$ must reach $P_1$. Once, $C_n$ reaches $P_1$, we can effectively ignore its presence (as it can never be the cause of any contestant's jump). Then using the first inductive hypothesis, we get that the game must terminate.
-\\\\
- Otherwise no contestant from the group $A$ ever crosses over to $B$. Then these two group of contestants will never interact with each other, and so the presence of $C_n$ is superfluous (once again it does not cause anyone's move). Hence, we can ignore $C_n$, and apply the first inductive hypothesis on the remaining $n-1$ contestants to get the desired conclusion. Hence, done. 
+\sol Starting from the position farthest from the restaurant, label the positions $P_1,P_2, \dots ,P_n$ (i.e. the contestant at position $P_n$ is closest to the restaurant).
+
+First induct on $n$. The result is obvious when $n=1,2$. Therefore, assume that the result is true for $n-1$. Suppose that initially contestant $C_n$ is at the position $P_m$. The main observation is that the Jury never can choose $C_n$. We claim that $C_n$ must reach $P_1$ sooner or later. To show this we again induct, this time on $m$. For $m=1$, the claim is true ($C_n$ is at $P_1$ initially only!!). Suppose our claim is true for $m-1$.
+
+Now, let $A$ denote the set of students placed at $P_1,P_2, \dots ,P_{m-1}$; and $B$ denote the set of students placed at $P_{m+1},P_{m+2}, \dots ,P_n$. If at any moment of time, some contestant from $A$ jumps over to $B$ (i.e. crosses $C_n$), then $C_n$ will move to position $P_{m-1}$, and we can apply the second inductive hypothesis to conclude that $C_n$ must reach $P_1$. Once, $C_n$ reaches $P_1$, we can effectively ignore its presence (as it can never be the cause of any contestant's jump). Then using the first inductive hypothesis, we get that the game must terminate.
+
+Otherwise no contestant from the group $A$ ever crosses over to $B$. Then these two group of contestants will never interact with each other, and so the presence of $C_n$ is superfluous (once again it does not cause anyone's move). Hence, we can ignore $C_n$, and apply the first inductive hypothesis on the remaining $n-1$ contestants to get the desired conclusion. Hence, done.
 
 \section{Chip firing}
 
@@ -103,15 +99,15 @@ Solution for part b) This is simple using invariants. Let a coin with girl $i$ h
 For the experienced combinatorics solver the problem might seem cropped. Definitely, there exists generalization of this problem: what if graph is not a mere cycle, but an arbitrary, connected graph? Or what if the graph is disconnected? Now, we will provide a generalized version of problem:
 
 \begin{example}
-    Let us fix a connected graph \( G \) with $n$ nodes and $m$ edges, and let us have N chips (without loops or multiple edges) on node set \( 1, \dots, n \), and start by putting \( a_i \) chips on node \( i \), \( i = 1, \dots, n \). So \( a \in \mathbb{Z}^n_+ \) and \( \sum_i a_i = N \). Recall that firing the node \( i \) means that we decrease \( a_i \) by the degree \( \text{deg}(i) \) of node \( i \), and increase \( a_j \) by 1 for each neighbor \( j \) of \( i \).  Which chip firing games are infinite and which are finite?.
+    Given a connected graph $G$ with $n$ nodes and $m$ edges (without loops or double edges), and $N$ chips. Start by putting $a_i$ chips on node $i$, $i=1, 2, \dots, n$. Such that $a \in \ZZ_0$ and $\displaystyle\sum_{i=1}^n a_i = N$. Recall that firing the node $i$ means that we decrease $a_i$ by the $\deg(i)$, and for each neighbor $j$ of $i$ increase $a_j$ by 1. Which chip firing games are infinite and which are finite?
 \end{example}
 
 \sol 
 
 \begin{itemize}
-    \item[a] If $N > 2m - n$ then the game is infinite.
-    \item[b] If $m \leq N \leq 2m - n$ then there exists an initial configuration guaranteeing finite termination and also one guaranteeing infinite game.
-    \item[c] If $N < m$ then the game is finite
+    \item[a)] If $N > 2m - n$ then the game is infinite.
+    \item[b)] If $m \leq N \leq 2m - n$ then there exists an initial configuration guaranteeing finite termination and also one guaranteeing infinite game.
+    \item[c)] If $N < m$ then the game is finite.
 \end{itemize}
 
 It is obvious that if $N > 2m-n$ then the game cannot terminate: there is always a node $v$ with at least $\deg(v)$ chips on it. It is also obvious that if $N \leq 2m-n$ then we can place at most $\deg(v)-1$ chips on each node $v$, and so there are configurations with no legal move.
@@ -124,50 +120,41 @@ The proof of (c) is motivated by the previous construction. Consider any distrib
 
 We say that a node $u$ is \emph{deficient} if $f(u) < \deg^+(u)$; by our hypothesis that $N < m$, there must exist a deficient node. We are going to show that we can modify the orientation during the game so that $T$ never increases and if the set of deficient nodes changes then $T$ must actually decrease. If the game is infinite then every node gets fired infinitely often, and hence the set of deficient nodes must change infinitely often (since a deficient node cannot be fired). Since $T$ cannot decrease infinitely often, this implies that the game is finite.
 
-Consider the node $v$ that is first fired; we have $f(v) \geq \deg(v)$. Fire $v$ and reverse the orientation of all edges leaving $v$. We do not create any cycle. Moreover, we do not increase $T$ since the term in $T$ corresponding to $v$ decreases by $\deg(v) - \deg^+(v)$ while each of the $\deg(v)-\deg(v)$ terms corresponding to the nodes u for which $uv \in E(G)$ increases by at most 1.
+Consider the node $v$ that is first fired; we have $f(v) \geq \deg(v)$. Fire $v$ and reverse the orientation of all edges leaving $v$. We do not create any cycle. Moreover, we do not increase $T$ since the term in $T$ corresponding to $v$ decreases by $\deg(v) - \deg^+(v)$ while each of the $\deg(v)-\deg^+(v)$ terms corresponding to the nodes $u$ for which $uv \in E(G)$ increases by at most 1.
 
 Also note that if such a node u was deficient then $T$ actually decreases; if none of these was deficient then the set of deficient nodes did not change. As remarked, this proves the theorem
 
 \begin{example} [China TST 2018]
-Two positive integers $p,q \in \mathbf{Z}^{+}$ are given. There is a blackboard with $n$ positive integers written on it. A operation is to choose two same number $a,a$ written on the blackboard, and replace them with $a+p,a+q$. Determine the smallest $n$ so that such operation can go on infinitely.
+    Two positive integers $p,q \in \mathbf{Z}^{+}$ are given. There is a blackboard with $n$ positive integers written on it. A operation is to choose two same number $a,a$ written on the blackboard, and replace them with $a+p,a+q$. Determine the smallest $n$ so that such operation can go on infinitely.
 \end{example}
 
 \section{Ignore or redefine}
-Now, we will alter the problem statement slightly in such a way that the result we need to show does not change, but the process becomes much easier to analyze. In other words, we simplify the process to be analyzed while leaving the aspect of the process that we want to prove something about invariant. 
+
+Now, we will alter the problem statement slightly in such a way that the result we need to show does not change, but the process becomes much easier to analyze. In other words, we simplify the process to be analyzed while leaving the aspect of the process that we want to prove something about invariant.
+
 \begin{example}
-There are n ants on a stick of length one unit, each facing left or 
-right. At time t = 0, each ant starts moving with a speed of 1 unit 
-per second in the direction it is facing. If an ant reaches the end of 
-the stick, it falls off and doesn’t reappear. When two ants moving 
-in opposite directions collide, they both turn around and continue 
-moving with the same speed (but in the opposite direction). Show 
-that all ants will fall off the stick in at most 1 second.
+    There are $n$ ants on a stick of length one unit, each facing left or right. At time $t = 0$, each ant starts moving with a speed of 1 unit per second in the direction it is facing. If an ant reaches the end of the stick, it falls off and doesn’t reappear. When two ants moving in opposite directions collide, they both turn around and continue moving with the same speed (but in the opposite direction).
+    
+    Show that all ants will fall off the stick in at most 1 second.
 \end{example}
-The key observation is that the problem does not change if we alter 
-it as follows: when two ants moving in opposite directions meet, 
-they simply pass through each other and continue moving at the 
-same speed. Thus, instead of rebounding, if the ants pass through 
-each other, the only difference from the original problem is that 
-the identities of the ants get exchanged, which is inconsequential. 
-Now the statement is obvious: each ant is unaffected by the 
-others, and so each ant will fall of the stick of length one unit in at 
-most 1 second. 
+
+The key observation is that the problem does not change if we alter it as follows: when two ants moving in opposite directions meet, they simply pass through each other and continue moving at the same speed. Thus, instead of rebounding, if the ants pass through each other, the only difference from the original problem is that the identities of the ants get exchanged, which is inconsequential.
+
+Now the statement is obvious: each ant is unaffected by the others, and so each ant will fall of the stick of length one unit in at most 1 second. 
 
 \begin{example} [USAJMO 2018]
-Karl starts with $n$ cards labeled $1,2,3,\dots,n$ lined up in a random order on his desk. He calls a pair $(a,b)$ of these cards swapped if $a>b$ and the card labeled $a$ is to the left of the card labeled $b$. For instance, in the sequence of cards $3,1,4,2$, there are three swapped pairs of cards, $(3,1)$, $(3,2)$, and $(4,2)$.
+    Karl starts with $n$ cards labeled $1,2,3,\dots,n$ lined up in a random order on his desk. He calls a pair $(a,b)$ of these cards swapped if $a>b$ and the card labeled $a$ is to the left of the card labeled $b$. For instance, in the sequence of cards $3,1,4,2$, there are three swapped pairs of cards, $(3,1)$, $(3,2)$, and $(4,2)$.
 
-He picks up the card labeled 1 and inserts it back into the sequence in the opposite position: if the card labeled 1 had $i$ card to its left, then it now has $i$ cards to its right. He then picks up the card labeled $2$ and reinserts it in the same manner, and so on until he has picked up and put back each of the cards $1,2,\dots,n$ exactly once in that order. (For example, the process starting at $3,1,4,2$ would be $3,1,4,2\to 3,4,1,2\to 2,3,4,1\to 2,4,3,1\to 2,3,4,1$.)
+    He picks up the card labeled 1 and inserts it back into the sequence in the opposite position: if the card labeled 1 had $i$ card to its left, then it now has $i$ cards to its right. He then picks up the card labeled $2$ and reinserts it in the same manner, and so on until he has picked up and put back each of the cards $1,2,\dots,n$ exactly once in that order. (For example, the process starting at $3,1,4,2$ would be $3,1,4,2\to 3,4,1,2\to 2,3,4,1\to 2,4,3,1\to 2,3,4,1$.)
 
-Show that, no matter what lineup of cards Karl started with, his final lineup has the same number of swapped pairs as the starting lineup.
+    Show that, no matter what lineup of cards Karl started with, his final lineup has the same number of swapped pairs as the starting lineup.
 \end{example}
 
- There’s almost no way we can control where the cards land and how inversions change after the first turn. Only inversions involving the smallest and largest number are easy to control. The turns are made
- in successive order, from smallest to largest, and the number that is written plays role. This suggests 1 to modify the number written on the card at each step. Since we are interested in the order of the cards and want to work with largest/smallest, we will just make this card
- have the largest label, so after each step we will be moving the smallest card and altering it to the largest card, which makes the process more definite. We will alter it by adding n. If we will be able to prove something in this case, then we can repeat it at each step, because all the steps are the same. It turns out that we can, and the main claim is:
- \\\\
- Claim — In the modified process, the number of inversions doesn’t change at each step.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- \\\\
- Proof. We just have to show that for the first step, because, how I already said, all the steps are the same: We take the smallest number, reflect it and make it the largest. Inversions involving the smallest number are exactly the pairs with the numbers to the left of it. After we reflect it and make it largest, only inversions will be the ones that already existed and the ones with the new largest number with numbers to the right of it, but this quantity is equal to the inversions involving the unmoved smallest number, since we reflected the position. Spamming the claim, we see that in the end of the modified process, we will have the same number of inversions as in the beginning, and the numbers will be the initial numbers incremented by n, so if we decrease them by n, we will not change any of the inversions, so the number of inversions is the same even for the unmodified process.
+There’s almost no way we can control where the cards land and how inversions change after the first turn. Only inversions involving the smallest and largest number are easy to control. The turns are made in successive order, from smallest to largest, and the number that is written plays role. This suggests 1 to modify the number written on the card at each step. Since we are interested in the order of the cards and want to work with largest/smallest, we will just make this card have the largest label, so after each step we will be moving the smallest card and altering it to the largest card, which makes the process more definite. We will alter it by adding n. If we will be able to prove something in this case, then we can repeat it at each step, because all the steps are the same. It turns out that we can, and the main claim is:
+
+Claim -- In the modified process, the number of inversions doesn’t change at each step.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Proof. We just have to show that for the first step, because, how I already said, all the steps are the same: We take the smallest number, reflect it and make it the largest. Inversions involving the smallest number are exactly the pairs with the numbers to the left of it. After we reflect it and make it largest, only inversions will be the ones that already existed and the ones with the new largest number with numbers to the right of it, but this quantity is equal to the inversions involving the unmoved smallest number, since we reflected the position. Spamming the claim, we see that in the end of the modified process, we will have the same number of inversions as in the beginning, and the numbers will be the initial numbers incremented by $n$, so if we decrease them by $n$, we will not change any of the inversions, so the number of inversions is the same even for the unmodified process.
 
 \section{Graphs}
 
@@ -179,20 +166,26 @@ Show that, no matter what lineup of cards Karl started with, his final lineup ha
 
 \section{Problems}
 
-\begin{problem} [Russia 1995]
-There are three piles of stones. Sisyphus moves one stone at a time from one pile to another. For each transfer, he receives from Zeus a number of coins equal to the difference between the number of stones in the pile to which he moves the stone and the number of stones in the pile from which he takes it (the stone being moved is not counted in either pile during this calculation). If this difference is negative, Sisyphus must pay Zeus the corresponding amount. (If Sisyphus cannot pay, the generous Zeus allows him to make the move on credit.) At some point, it turned out that all the stones lay in the same piles as they did initially. What is the maximum total profit Sisyphus could have earned by that moment?
+\begin{problem}[Russia 1995]
+    There are three piles of stones. Sisyphus moves one stone at a time from one pile to another. For each transfer, he receives from Zeus a number of coins equal to the difference between the number of stones in the pile to which he moves the stone and the number of stones in the pile from which he takes it (the stone being moved is not counted in either pile during this calculation). If this difference is negative, Sisyphus must pay Zeus the corresponding amount. (If Sisyphus cannot pay, the generous Zeus allows him to make the move on credit.) At some point, it turned out that all the stones lay in the same piles as they did initially. What is the maximum total profit Sisyphus could have earned by that moment?
 \end{problem}
 
-\begin{problem} [Russia 2008]
-In the cells of a $5 \times 5$ square, zeros were initially written. Each minute, Vasya chose two cells sharing a common side and either added one to both of their numbers or subtracted one from both. After some time, it turned out that the sums of the numbers in all rows and columns were equal. Prove that this happened after an even number of minutes.
+\begin{problem}[Russia 2008]
+    In the cells of a $5 \times 5$ square, zeros were initially written. Each minute, Vasya chose two cells sharing a common side and either added one to both of their numbers or subtracted one from both. After some time, it turned out that the sums of the numbers in all rows and columns were equal. Prove that this happened after an even number of minutes.
 \end{problem}
 
 \begin{problem}[IMO 2019]
-   The Bank of Bath issues coins with an $H$ on one side and a $T$ on the other. Harry has $n$ of these coins arranged in a line from left to right. He repeatedly performs the following operation: if there are exactly $k>0$ coins showing $H$, then he turns over the $k$-th coin from the left; otherwise, all coins show $T$ and he stops. \\ For example, if $n=3$ the process starting with the configuration $THT$ would be $THT \to HHT \to HTT \to TTT$, which stops after three operations. \\ Show that, for each initial configuration, Harry stops after a finite number of operations.
+    The Bank of Bath issues coins with an $H$ on one side and a $T$ on the other. Harry has $n$ of these coins arranged in a line from left to right. He repeatedly performs the following operation: if there are exactly $k>0$ coins showing $H$, then he turns over the $k$-th coin from the left; otherwise, all coins show $T$ and he stops.
+
+    For example, if $n=3$ the process starting with the configuration $THT$ would be $THT \to HHT \to HTT \to TTT$, which stops after three operations.
+
+    Show that, for each initial configuration, Harry stops after a finite number of operations.
 \end{problem}
 
 \begin{problem}[IMO 2022]
-    The Bank of Oslo issues two types of coin: aluminum (denoted A) and bronze (denoted B). Marianne has $n$ aluminum coins and $n$ bronze coins arranged in a row in some arbitrary initial order. A chain is any subsequence of consecutive coins of the same type. Given a fixed positive integer $k \leq 2n$, Gilberty repeatedly performs the following operation: he identifies the longest chain containing the $k^{th}$ coin from the left and moves all coins in that chain to the left end of the row. For example, if $n=4$ and $k=4$, the process starting from the ordering $AABBBABA$ would be $AABBBABA \to BBBAAABA \to AAABBBBA \to BBBBAAAA \to \dots$
+    The Bank of Oslo issues two types of coin: aluminum (denoted A) and bronze (denoted B). Marianne has $n$ aluminum coins and $n$ bronze coins arranged in a row in some arbitrary initial order. A chain is any subsequence of consecutive coins of the same type. Given a fixed positive integer $k \leq 2n$, Gilberty repeatedly performs the following operation: he identifies the longest chain containing the $k^{th}$ coin from the left and moves all coins in that chain to the left end of the row.
+
+    For example, if $n=4$ and $k=4$, the process starting from the ordering $AABBBABA$ would be $AABBBABA \to BBBAAABA \to AAABBBBA \to BBBBAAAA \to \dots$
 
     Find all pairs $(n,k)$ with $1 \leq k \leq 2n$ such that for every initial ordering, at some moment during the process, the leftmost $n$ coins will all be of the same type.
 \end{problem}
@@ -208,24 +201,19 @@ In the cells of a $5 \times 5$ square, zeros were initially written. Each minute
     If the rooster is on a cell $C$, then the rooster would go around the circle exactly three times, stopping again at $C$. Moreover, every cell would be assigned the same number as it was assigned right before the rooster went around the circle three times.
 \end{problem}
 
-\begin{problem} [Serbia 2022]
+\begin{problem}[Serbia 2022]
     On the board are written $n$ natural numbers, $n\in \NN$. In one move it is possible to choose two equal written numbers and increase one by $1$ and decrease the other by $1$. Prove that in this the game cannot be played more than $\frac{n^3}{6}$ moves.
 \end{problem}
-\begin{problem} [ELMOSL 2013]
-There are 20 people at a party. Each person holds some number of coins. Every minute, each person who has at least 19 coins simultaneously gives one coin to every other person at the party. (So, it is possible that $A$ gives $B$ a coin and $B$ gives $A$ a coin at the same time.) Suppose that this process continues indefinitely. That is, for any positive integer $n$, there exists a person who will give away coins during the $n$th minute. What is the smallest number of coins that could be at the party?
+
+\begin{problem}[ELMOSL 2013]
+    There are 20 people at a party. Each person holds some number of coins. Every minute, each person who has at least 19 coins simultaneously gives one coin to every other person at the party. (So, it is possible that $A$ gives $B$ a coin and $B$ gives $A$ a coin at the same time.) Suppose that this process continues indefinitely. That is, for any positive integer $n$, there exists a person who will give away coins during the $n$th minute. What is the smallest number of coins that could be at the party?
 \end{problem}
 
-\begin{problem} [ISL 2018]
-Let $a$ and $b$ be distinct positive integers. The following infinite process takes place on an initially empty board.
-\begin{enumerate}
-    \item If there is at least a pair of equal numbers on the board, we choose such a pair and increase one of its components by $a$ and the other by $b$.
-    \item If no such pair exists, we write two times the number $0$.   
-\end{enumerate}
-Prove that, no matter how we make the choices in $(i)$, operation $(ii)$ will be performed only finitely many times.
+\begin{problem}[ISL 2018]
+    Let $a$ and $b$ be distinct positive integers. The following infinite process takes place on an initially empty board.
+    \begin{enumerate}
+        \item If there is at least a pair of equal numbers on the board, we choose such a pair and increase one of its components by $a$ and the other by $b$.
+        \item If no such pair exists, we write two times the number $0$.   
+    \end{enumerate}
+    Prove that, no matter how we make the choices in $(i)$, operation $(ii)$ will be performed only finitely many times.
 \end{problem}
-
-
-
-
-
-
